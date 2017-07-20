@@ -33,7 +33,18 @@ const isDevelopmentVersion = (version: string) => {
 	return /(\.|\+|-)dev/.test(version);
 };
 
-export const compare = memoize((versionA: string, versionB: string) => {
+export const compare = memoize((versionA: string | null, versionB: string | null) => {
+	if (versionA === null && versionB === null) {
+		return 0;
+	}
+	if (versionA === null && versionB !== null) {
+		return -1;
+	}
+	if (versionA !== null && versionB === null) {
+		return 1;
+	}
+	versionA = <string>versionA;
+	versionB = <string>versionB;
 	const isAValid = semver.valid(versionA);
 	const isBValid = semver.valid(versionB);
 	if (isAValid && !isBValid) {
