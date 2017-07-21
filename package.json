@@ -1,6 +1,6 @@
 {
   "name": "resin-semver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "resin specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
