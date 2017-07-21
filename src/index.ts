@@ -50,17 +50,17 @@ const isDevelopmentVersion = (version: string) => {
  * If both values are invalid semver values, then the values are compared alphabetically
  *
  * @example
- * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); // -1
+ * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
  *
- * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); // -1
+ * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
  *
- * resinSemver.compare('Version A', 'Version B'); // 1
+ * resinSemver.compare('Version A', 'Version B'); //--> 1
  *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); // 1
+ * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
  *
- * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); // -1
+ * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> -1
  *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); // 0
+ * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
  */
 export const compare = memoize((versionA: string | null, versionB: string | null) => {
 	if (versionA === null && versionB === null) {
@@ -109,3 +109,49 @@ export const compare = memoize((versionA: string | null, versionB: string | null
 	}
 	return versionA.localeCompare(versionB);
 }, (a: string, b: string) => `${a} && ${b}`);
+
+/**
+ * @summary Return the major version number
+ * @name compare
+ * @public
+ * @function
+ *
+ * @description Returns the major version number in a semver string.
+ * If the presented version is a falsey value, it returns `0`. If the version is
+ * not a valid semver string, it returns the first number it finds in the string.
+ * If there are no numbers in the provided string, it returns `1`.
+ *
+ * @param {string|null} version - The version string to evaluate
+ *
+ * @returns {number} - The major version number
+ *
+ * @example
+ * resinSemver.major(null); //--> 0
+ *
+ * resinSemver.major('Resin OS v2.0.5'); //--> 2
+ *
+ * resinSemver.major('Resin OS v2.0.5'); //--> 2
+ *
+ * resinSemver.major('Linux 14.04'); //--> 14
+ *
+ * resinSemver.major('My development version'); //--> 1
+ */
+export const major = (version: string | null): number => {
+	if (!version) {
+		return 0;
+	}
+
+	version = trimOsText(safeSemver(version));
+
+	if (semver.valid(version)) {
+		return semver.major(version);
+	}
+
+	const matches = version.match(/\d+/);
+
+	if (matches) {
+		return Number(matches[0]);
+	}
+
+	return 1;
+};
