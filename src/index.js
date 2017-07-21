@@ -26,6 +26,17 @@ var isDevelopmentVersion = function (version) {
     return /(\.|\+|-)dev/.test(version);
 };
 exports.compare = memoize(function (versionA, versionB) {
+    if (versionA === null && versionB === null) {
+        return 0;
+    }
+    if (versionA === null && versionB !== null) {
+        return -1;
+    }
+    if (versionA !== null && versionB === null) {
+        return 1;
+    }
+    versionA = versionA;
+    versionB = versionB;
     var isAValid = semver.valid(versionA);
     var isBValid = semver.valid(versionB);
     if (isAValid && !isBValid) {

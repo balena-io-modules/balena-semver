@@ -1,11 +1,11 @@
 {
   "name": "resin-semver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "resin specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register --outDir tmp test/index.spec.ts",
     "build": "tsc src/index.ts"
   },
   "author": "Lucian Buzzo <lucian@resin.io>",
@@ -15,8 +15,13 @@
     "semver": "^5.3.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.1",
     "@types/lodash.memoize": "^4.1.2",
+    "@types/mocha": "^2.2.41",
     "@types/semver": "^5.3.32",
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.2.1",
     "typescript": "^2.4.2"
   }
 }
