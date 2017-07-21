@@ -1,6 +1,10 @@
 resin-semver
 ============
 
+> Resin.io specific semver utility methods
+
+[![Build Status](https://travis-ci.org/resin-io-modules/resin-semver.svg?branch=master)](https://travis-ci.org/resin-io-modules/resin-semver)
+
 Role
 ----
 
