@@ -2,7 +2,6 @@
 	"compilerOptions": {
 		"module": "commonjs",
 		"target": "es2015",
-		"outDir": "build",
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
@@ -10,7 +9,6 @@
 		"removeComments": true,
 		"sourceMap": true,
 		"strictNullChecks": true,
-		"allowJs": true,
 		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
