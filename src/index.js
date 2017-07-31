@@ -4,7 +4,7 @@ var semver = require("semver");
 var memoize = require("lodash.memoize");
 var trimOsText = function (version) {
     return version.replace(/^resin\sos\s/gi, '')
-        .replace(/\(\W\)$/, '');
+        .replace(/\s+\(\w+\)$/, '');
 };
 var safeSemver = function (version) {
     return version.replace(/(\.[0-9]+)\.rev/, '$1+rev');
@@ -31,8 +31,8 @@ var isDevelopmentVersion = function (version) {
  * @public
  * @function
  *
- * @description Accepts string or null values and compares them, returning a numnber indicating sort order.
- * Values are parsed for valid semver strings.
+ * @description Accepts string or null values and compares them, returning a number
+ * indicating sort order. Values are parsed for valid semver strings.
  *
  * @param {string|null} versionA - The first version to compare
  * @param {string|null} versionB - The second version to compare
@@ -42,17 +42,17 @@ var isDevelopmentVersion = function (version) {
  * If both values are invalid semver values, then the values are compared alphabetically
  *
  * @example
- * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); // -1
+ * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
  *
- * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); // -1
+ * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
  *
- * resinSemver.compare('Version A', 'Version B'); // 1
+ * resinSemver.compare('Version A', 'Version B'); //--> 1
  *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); // 1
+ * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
  *
- * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); // -1
+ * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> -1
  *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); // 0
+ * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
  */
 exports.compare = memoize(function (versionA, versionB) {
     if (versionA === null && versionB === null) {
@@ -101,3 +101,40 @@ exports.compare = memoize(function (versionA, versionB) {
     }
     return versionA.localeCompare(versionB);
 }, function (a, b) { return a + " && " + b; });
+/**
+ * @summary Return the major version number
+ * @name major
+ * @public
+ * @function
+ *
+ * @description Returns the major version number in a semver string.
+ * If the version is not a valid semver string, or a valid semver string cannot be
+ * found, it returns null.
+ *
+ * @param {string|null} version - The version string to evaluate
+ *
+ * @returns {number|null} - The major version number
+ *
+ * @example
+ * resinSemver.major(null); //--> null
+ *
+ * resinSemver.major('4.5.1'); //--> 4
+ *
+ * resinSemver.major('Resin OS v2.0.5'); //--> 2
+ *
+ * resinSemver.major('Resin OS v1.24.0'); //--> 1
+ *
+ * resinSemver.major('Linux 14.04'); //--> null
+ *
+ * resinSemver.major('My development version'); //--> null
+ */
+exports.major = function (version) {
+    if (!version) {
+        return null;
+    }
+    version = trimOsText(safeSemver(version));
+    if (semver.valid(version)) {
+        return semver.major(version);
+    }
+    return null;
+};

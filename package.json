@@ -1,11 +1,11 @@
 {
   "name": "resin-semver",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
   "scripts": {
-    "test": "npm run lint && mocha -r ts-node/register test/index.spec.ts",
+    "test": "npm run build && npm run lint && mocha -r ts-node/register test/index.spec.ts",
     "build": "tsc src/index.ts",
     "lint": "tslint -t stylish -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
     "docs": "npm run build && jsdoc2md --template doc/README.hbs src/index.js > README.md"
