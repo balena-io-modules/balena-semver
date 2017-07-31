@@ -9,9 +9,6 @@ Role
 ----
 
 The intention of this module is to provide a collection of resin specific semver utility methods.
-Where possible, the module will try to extract and use valid semver strings from provided values.
-When using comparison functions, eg `.compare()`, `.eq()`, `.gt()`, non semver strings will always be weighted below semver strings.
-When using extraction functions, eg `.major()`, `.minor()`, `.patch()`, non semver strings will return null.
 
 **THIS MODULE IS LOW LEVEL AND IS NOT MEANT TO BE USED BY END USERS DIRECTLY**.
 
@@ -36,11 +33,10 @@ Documentation
 <dd><p>Accepts string or null values and compares them, returning a number
 indicating sort order. Values are parsed for valid semver strings.</p>
 </dd>
-<dt><a href="#compare">compare(version)</a> ⇒ <code>number</code></dt>
+<dt><a href="#major">major(version)</a> ⇒ <code>number</code> | <code>null</code></dt>
 <dd><p>Returns the major version number in a semver string.
-If the presented version is a falsey value, it returns <code>0</code>. If the version is
-not a valid semver string, it returns the first number it finds in the string.
-If there are no numbers in the provided string, it returns <code>1</code>.</p>
+If the version is not a valid semver string, or a valid semver string cannot be
+found, it returns null.</p>
 </dd>
 </dl>
 
@@ -50,19 +46,19 @@ If there are no numbers in the provided string, it returns <code>1</code>.</p>
 Accepts string or null values and compares them, returning a number
 indicating sort order. Values are parsed for valid semver strings.
 
-**Kind**: global function
-**Summary**: Compare order of versions
+**Kind**: global function  
+**Summary**: Compare order of versions  
 **Returns**: <code>number</code> - one of `1`, `0`, or `-1`. null values are always weighted below
 string values, and string values are always weighted below valid semver values.
-If both values are invalid semver values, then the values are compared alphabetically
-**Access**: public
+If both values are invalid semver values, then the values are compared alphabetically  
+**Access**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | versionA | <code>string</code> \| <code>null</code> | The first version to compare |
 | versionB | <code>string</code> \| <code>null</code> | The second version to compare |
 
-**Example**
+**Example**  
 ```js
 resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
 
@@ -76,34 +72,35 @@ resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> -1
 
 resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
 ```
-<a name="compare"></a>
+<a name="major"></a>
 
-## compare(version) ⇒ <code>number</code>
+## major(version) ⇒ <code>number</code> \| <code>null</code>
 Returns the major version number in a semver string.
-If the presented version is a falsey value, it returns `0`. If the version is
-not a valid semver string, it returns the first number it finds in the string.
-If there are no numbers in the provided string, it returns `1`.
+If the version is not a valid semver string, or a valid semver string cannot be
+found, it returns null.
 
-**Kind**: global function
-**Summary**: Return the major version number
-**Returns**: <code>number</code> - - The major version number
-**Access**: public
+**Kind**: global function  
+**Summary**: Return the major version number  
+**Returns**: <code>number</code> \| <code>null</code> - - The major version number  
+**Access**: public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | version | <code>string</code> \| <code>null</code> | The version string to evaluate |
 
-**Example**
+**Example**  
 ```js
-resinSemver.major(null); //--> 0
+resinSemver.major(null); //--> null
+
+resinSemver.major('4.5.1'); //--> 4
 
 resinSemver.major('Resin OS v2.0.5'); //--> 2
 
-resinSemver.major('Resin OS v2.0.5'); //--> 2
+resinSemver.major('Resin OS v1.24.0'); //--> 1
 
-resinSemver.major('Linux 14.04'); //--> 14
+resinSemver.major('Linux 14.04'); //--> null
 
-resinSemver.major('My development version'); //--> 1
+resinSemver.major('My development version'); //--> null
 ```
 
 
