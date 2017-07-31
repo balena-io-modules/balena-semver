@@ -216,6 +216,7 @@ exports.gte = function (versionA, versionB) {
  * @param {string|null} versionA - The version string to compare against
  * @param {string|null} versionB - The version string to compare to versionA
  *
+ *
  * @returns {boolean} - true if versionA is greater than versionB, otherwise false.
  *
  * @example
@@ -229,4 +230,33 @@ exports.gte = function (versionA, versionB) {
  */
 exports.gt = function (versionA, versionB) {
     return exports.compare(versionA, versionB) > 0;
+};
+/**
+ * @summary Check if a version is less than another
+ * @name lt
+ * @public
+ * @function
+ *
+ * @description Returns true if versionA is less than versionB.
+ * Valid semver versions are always weighted above non semver strings.
+ * Non-semver strings are compared alphabetically.
+ *
+ * @param {string|null} versionA - The version string to compare against
+ * @param {string|null} versionB - The version string to compare to versionA
+ *
+ * @returns {boolean} - true if versionA is less than versionB, otherwise false.
+ *
+ * @example
+ * resinSemver.lt('2.0.5', '1.16.0'); //--> false
+ *
+ * resinSemver.lt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> false
+ *
+ * resinSemver.lt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> true
+ *
+ * resinSemver.lt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
+ *
+ * resinSemver.lt('Version A', 'Version B'); //--> true
+ */
+exports.lt = function (versionA, versionB) {
+    return exports.compare(versionA, versionB) < 0;
 };
