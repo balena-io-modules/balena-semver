@@ -9,6 +9,9 @@ Role
 ----
 
 The intention of this module is to provide a collection of resin specific semver utility methods.
+Where possible, the module will try to extract and use valid semver strings from provided values.
+When using comparison functions, eg `.compare()`, `.eq()`, `.gt()`, non semver strings will always be weighted below semver strings.
+When using extraction functions, eg `.major()`, `.minor()`, `.patch()`, non semver strings will return null.
 
 **THIS MODULE IS LOW LEVEL AND IS NOT MEANT TO BE USED BY END USERS DIRECTLY**.
 
@@ -47,19 +50,19 @@ If there are no numbers in the provided string, it returns <code>1</code>.</p>
 Accepts string or null values and compares them, returning a number
 indicating sort order. Values are parsed for valid semver strings.
 
-**Kind**: global function  
-**Summary**: Compare order of versions  
+**Kind**: global function
+**Summary**: Compare order of versions
 **Returns**: <code>number</code> - one of `1`, `0`, or `-1`. null values are always weighted below
 string values, and string values are always weighted below valid semver values.
-If both values are invalid semver values, then the values are compared alphabetically  
-**Access**: public  
+If both values are invalid semver values, then the values are compared alphabetically
+**Access**: public
 
 | Param | Type | Description |
 | --- | --- | --- |
 | versionA | <code>string</code> \| <code>null</code> | The first version to compare |
 | versionB | <code>string</code> \| <code>null</code> | The second version to compare |
 
-**Example**  
+**Example**
 ```js
 resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
 
@@ -81,16 +84,16 @@ If the presented version is a falsey value, it returns `0`. If the version is
 not a valid semver string, it returns the first number it finds in the string.
 If there are no numbers in the provided string, it returns `1`.
 
-**Kind**: global function  
-**Summary**: Return the major version number  
-**Returns**: <code>number</code> - - The major version number  
-**Access**: public  
+**Kind**: global function
+**Summary**: Return the major version number
+**Returns**: <code>number</code> - - The major version number
+**Access**: public
 
 | Param | Type | Description |
 | --- | --- | --- |
 | version | <code>string</code> \| <code>null</code> | The version string to evaluate |
 
-**Example**  
+**Example**
 ```js
 resinSemver.major(null); //--> 0
 
