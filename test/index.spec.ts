@@ -182,4 +182,65 @@ describe('resin-semver', () => {
 			expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(true);
 		});
 	});
+
+	describe('.gt()', () => {
+		it('should correctly compare valid semver values', () => {
+			expect(semver.gt('2.0.5', '1.16.0')).to.equal(true);
+			expect(semver.gt('1.16.0', '2.0.5')).to.equal(false);
+			expect(semver.gt('1.16.0', '1.16.0')).to.equal(false);
+		});
+
+		it('should correctly compare valid semver values to Resin formatted versions', () => {
+			expect(semver.gt('2.0.5', 'Resin OS v2.0.2+rev2')).to.equal(true);
+			expect(semver.gt('1.16.0', 'Resin OS v2.0.2+rev2')).to.equal(false);
+			expect(semver.gt('Resin OS 1.16.0', '2.0.2')).to.equal(false);
+			expect(semver.gt('Resin OS 1.16.0', '1.16.0')).to.equal(false);
+		});
+
+		it('should correctly compare Resin formatted versions', () => {
+			expect(semver.gt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(true);
+			expect(semver.gt('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(false);
+			expect(semver.gt('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(false);
+		});
+
+		it('should correctly compare invalid semver values', () => {
+			expect(semver.gt('Linux 14.04', 'Resin OS v2.0.2+rev2')).to.equal(false);
+			expect(semver.gt('Linux 14.04', 'A development version')).to.equal(true);
+			expect(semver.gt('Version B', 'Version A')).to.equal(true);
+			expect(semver.gt('Version A', 'Version A')).to.equal(false);
+		});
+
+		it('should correctly compare null values', () => {
+			expect(semver.gt('2.0.5', null)).to.equal(true);
+			expect(semver.gt(null, '1.16.0')).to.equal(false);
+			expect(semver.gt('Resin OS 1.16.0', null)).to.equal(true);
+			expect(semver.gt(null, 'Resin OS 1.16.0')).to.equal(false);
+			expect(semver.gt('Linux 14.04', null)).to.equal(true);
+			expect(semver.gt(null, 'Linux 14.04')).to.equal(false);
+			expect(semver.gt(null, null)).to.equal(false);
+		});
+
+		it('should correctly compare "rev" values', () => {
+			expect(semver.gt('2.0.0+rev6', '2.0.0+rev3')).to.equal(true);
+			expect(semver.gt('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(true);
+			expect(semver.gt('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(true);
+			expect(semver.gt('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(false);
+			expect(semver.gt('2.0.0+rev3', '2.0.0+rev3')).to.equal(false);
+		});
+
+		it('should correctly compare ".dev" versions', () => {
+			expect(semver.gt('2.0.0', '2.0.0+dev')).to.equal(true);
+			expect(semver.gt('2.0.0', '2.0.0-dev')).to.equal(true);
+			expect(semver.gt('2.0.0', '2.0.0.dev')).to.equal(true);
+			expect(semver.gt('2.0.0+rev6', '2.0.0+rev6.dev')).to.equal(true);
+			expect(semver.gt('2.0.0+rev6.dev', '2.0.0+rev6')).to.equal(false);
+			expect(semver.gt('2.0.0+rev6.dev', '2.0.0+rev6.dev')).to.equal(false);
+			expect(semver.gt('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.dev')).to.equal(true);
+			expect(semver.gt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3')).to.equal(false);
+			expect(semver.gt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.equal(false);
+			expect(semver.gt('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(true);
+			expect(semver.gt('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
+			expect(semver.gt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
+		});
+	});
 });
