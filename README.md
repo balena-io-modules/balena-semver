@@ -38,6 +38,9 @@ indicating sort order. Values are parsed for valid semver strings.</p>
 If the version is not a valid semver string, or a valid semver string cannot be
 found, it returns null.</p>
 </dd>
+<dt><a href="#prerelease">prerelease(version)</a> ⇒ <code>Array.&lt;(string|number)&gt;</code> | <code>null</code></dt>
+<dd><p>Returns an array of prerelease components, or null if none exist</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -101,6 +104,38 @@ resinSemver.major('Resin OS v1.24.0'); //--> 1
 resinSemver.major('Linux 14.04'); //--> null
 
 resinSemver.major('My development version'); //--> null
+```
+<a name="prerelease"></a>
+
+## prerelease(version) ⇒ <code>Array.&lt;(string\|number)&gt;</code> \| <code>null</code>
+Returns an array of prerelease components, or null if none exist
+
+**Kind**: global function  
+**Summary**: Return prerelease components  
+**Returns**: <code>Array.&lt;(string\|number)&gt;</code> \| <code>null</code> - - An array of prerelease component, or null if none exist  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| version | <code>string</code> \| <code>null</code> | The version string to evaluate |
+
+**Example**  
+```js
+resinSemver.prerelease('1.16.0-alpha.1'); //--> ['alpha', '1']
+
+resinSemver.prerelease('1.16.0'); //--> null
+
+resinSemver.prerelease('Resin OS 2.0.0-rc5.rev1'); //--> ['rc5', 'rev1']
+
+resinSemver.prerelease('Resin OS 2.0.0'); //--> null
+
+resinSemver.prerelease('My dev version'); //--> null
+
+resinSemver.prerelease('Linux 14.04'); //--> null
+
+resinSemver.prerelease('Software version 42.3.20170726.72bbcf8'); //--> null
+
+resinSemver.prerelease(null)); //--> null
 ```
 
 
