@@ -29,9 +29,10 @@ describe('resin-semver', () => {
 			expect(semver.major(null)).to.equal(null);
 		});
 
-		it('should return null when the version is contains no valid semver value', () => {
+		it('should return null when the version contains no valid semver value', () => {
 			expect(semver.major('My dev version')).to.equal(null);
 			expect(semver.major('Linux 14.04')).to.equal(null);
+			expect(semver.major('Software version 42.3.20170726.72bbcf8')).to.equal(null);
 		});
 	});
 });
