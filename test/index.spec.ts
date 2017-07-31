@@ -15,7 +15,7 @@ describe('resin-semver', () => {
 
 	describe('.major()', () => {
 		it('should correctly match valid semver versions', () => {
-			expect(semver.major('4.05.1')).to.equal(4);
+			expect(semver.major('4.5.1')).to.equal(4);
 		});
 
 		it('should correctly match resinOS prefixed versions', () => {
@@ -25,16 +25,13 @@ describe('resin-semver', () => {
 			expect(semver.major('Resin OS 2.0.0-rc5.rev1')).to.equal(2);
 		});
 
-		it('should return 0 when version is `null`', () => {
-			expect(semver.major(null)).to.equal(0);
+		it('should return null when version is `null`', () => {
+			expect(semver.major(null)).to.equal(null);
 		});
 
-		it('should return the first number in the version if the string is not valid semver', () => {
-			expect(semver.major('Linux 14.04')).to.equal(14);
-		});
-
-		it('should return 1 when the version is contains no number', () => {
-			expect(semver.major('My dev version')).to.equal(1);
+		it('should return null when the version is contains no valid semver value', () => {
+			expect(semver.major('My dev version')).to.equal(null);
+			expect(semver.major('Linux 14.04')).to.equal(null);
 		});
 	});
 });

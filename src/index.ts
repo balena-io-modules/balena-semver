@@ -8,7 +8,7 @@ declare module 'semver' {
 
 const trimOsText = (version: string) => {
 	return version.replace(/^resin\sos\s/gi, '')
-	.replace(/\(\W\)$/, '');
+	.replace(/\s+\(\w+\)$/, '');
 };
 
 const safeSemver = (version: string) => {
@@ -112,33 +112,34 @@ export const compare = memoize((versionA: string | null, versionB: string | null
 
 /**
  * @summary Return the major version number
- * @name compare
+ * @name major
  * @public
  * @function
  *
  * @description Returns the major version number in a semver string.
- * If the presented version is a falsey value, it returns `0`. If the version is
- * not a valid semver string, it returns the first number it finds in the string.
- * If there are no numbers in the provided string, it returns `1`.
+ * If the version is not a valid semver string, or a valid semver string cannot be
+ * found, it returns null.
  *
  * @param {string|null} version - The version string to evaluate
  *
- * @returns {number} - The major version number
+ * @returns {number|null} - The major version number
  *
  * @example
- * resinSemver.major(null); //--> 0
+ * resinSemver.major(null); //--> null
+ *
+ * resinSemver.major('4.5.1'); //--> 4
  *
  * resinSemver.major('Resin OS v2.0.5'); //--> 2
  *
- * resinSemver.major('Resin OS v2.0.5'); //--> 2
+ * resinSemver.major('Resin OS v1.24.0'); //--> 1
  *
- * resinSemver.major('Linux 14.04'); //--> 14
+ * resinSemver.major('Linux 14.04'); //--> null
  *
- * resinSemver.major('My development version'); //--> 1
+ * resinSemver.major('My development version'); //--> null
  */
-export const major = (version: string | null): number => {
+export const major = (version: string | null): number | null => {
 	if (!version) {
-		return 0;
+		return null;
 	}
 
 	version = trimOsText(safeSemver(version));
@@ -147,11 +148,5 @@ export const major = (version: string | null): number => {
 		return semver.major(version);
 	}
 
-	const matches = version.match(/\d+/);
-
-	if (matches) {
-		return Number(matches[0]);
-	}
-
-	return 1;
+	return null;
 };

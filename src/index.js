@@ -4,7 +4,7 @@ var semver = require("semver");
 var memoize = require("lodash.memoize");
 var trimOsText = function (version) {
     return version.replace(/^resin\sos\s/gi, '')
-        .replace(/\(\W\)$/, '');
+        .replace(/\s+\(\w+\)$/, '');
 };
 var safeSemver = function (version) {
     return version.replace(/(\.[0-9]+)\.rev/, '$1+rev');
@@ -103,41 +103,38 @@ exports.compare = memoize(function (versionA, versionB) {
 }, function (a, b) { return a + " && " + b; });
 /**
  * @summary Return the major version number
- * @name compare
+ * @name major
  * @public
  * @function
  *
  * @description Returns the major version number in a semver string.
- * If the presented version is a falsey value, it returns `0`. If the version is
- * not a valid semver string, it returns the first number it finds in the string.
- * If there are no numbers in the provided string, it returns `1`.
+ * If the version is not a valid semver string, or a valid semver string cannot be
+ * found, it returns null.
  *
  * @param {string|null} version - The version string to evaluate
  *
- * @returns {number} - The major version number
+ * @returns {number|null} - The major version number
  *
  * @example
- * resinSemver.major(null); //--> 0
+ * resinSemver.major(null); //--> null
+ *
+ * resinSemver.major('4.5.1'); //--> 4
  *
  * resinSemver.major('Resin OS v2.0.5'); //--> 2
  *
- * resinSemver.major('Resin OS v2.0.5'); //--> 2
+ * resinSemver.major('Resin OS v1.24.0'); //--> 1
  *
- * resinSemver.major('Linux 14.04'); //--> 14
+ * resinSemver.major('Linux 14.04'); //--> null
  *
- * resinSemver.major('My development version'); //--> 1
+ * resinSemver.major('My development version'); //--> null
  */
 exports.major = function (version) {
     if (!version) {
-        return 0;
+        return null;
     }
     version = trimOsText(safeSemver(version));
     if (semver.valid(version)) {
         return semver.major(version);
     }
-    var matches = version.match(/\d+/);
-    if (matches) {
-        return Number(matches[0]);
-    }
-    return 1;
+    return null;
 };
