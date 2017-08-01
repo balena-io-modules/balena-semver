@@ -4,6 +4,16 @@
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
+  "homepage": "https://github.com/resin-io-modules/resin-semver",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/resin-io-modules/resin-semver"
+  },
+  "keywords": [
+    "resin",
+    "resin.io",
+    "semver"
+  ],
   "scripts": {
     "test": "npm run build && npm run lint && mocha -r ts-node/register test/index.spec.ts",
     "build": "tsc src/index.ts",
