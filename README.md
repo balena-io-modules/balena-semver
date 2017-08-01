@@ -51,6 +51,11 @@ Non-semver strings are compared alphabetically.</p>
 Valid semver versions are always weighted above non semver strings.
 Non-semver strings are compared alphabetically.</p>
 </dd>
+<dt><a href="#lt">lt(versionA, versionB)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Returns true if versionA is less than versionB.
+Valid semver versions are always weighted above non semver strings.
+Non-semver strings are compared alphabetically.</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -201,6 +206,35 @@ resinSemver.gt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> true
 resinSemver.gt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> false
 
 resinSemver.gt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
+```
+<a name="lt"></a>
+
+## lt(versionA, versionB) ⇒ <code>boolean</code>
+Returns true if versionA is less than versionB.
+Valid semver versions are always weighted above non semver strings.
+Non-semver strings are compared alphabetically.
+
+**Kind**: global function  
+**Summary**: Check if a version is less than another  
+**Returns**: <code>boolean</code> - - true if versionA is less than versionB, otherwise false.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| versionA | <code>string</code> \| <code>null</code> | The version string to compare against |
+| versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
+
+**Example**  
+```js
+resinSemver.lt('2.0.5', '1.16.0'); //--> false
+
+resinSemver.lt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> false
+
+resinSemver.lt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> true
+
+resinSemver.lt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
+
+resinSemver.lt('Version A', 'Version B'); //--> true
 ```
 
 
