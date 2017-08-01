@@ -106,6 +106,41 @@ exports.compare = memoize(function (versionA, versionB) {
     return versionA.localeCompare(versionB);
 }, function (a, b) { return a + " && " + b; });
 /**
+ * @summary Compare order of versions in reverse
+ * @name rcompare
+ * @public
+ * @function
+ *
+ * @description The reverse of `.compare()`. Accepts string or null values and compares
+ * them, returning a number indicating sort order. Values are parsed for valid semver
+ * strings. Sorts an array of versions in descending order when passed to `Array.sort()`.
+ *
+ * @param {string|null} versionA - The first version to compare
+ * @param {string|null} versionB - The second version to compare
+ *
+ * @returns {number} Returns `0` if `versionA == versionB`,
+ * or `-1` if `versionA` is greater, or `1` if `versionB` is greater.
+ * null values are always weighted above string values, and string values are always
+ * weighted above valid semver values.
+ * If both values are invalid semver values, then the values are compared alphabetically.
+ *
+ * @example
+ * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
+ *
+ * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
+ *
+ * resinSemver.compare('Version A', 'Version B'); //--> -1
+ *
+ * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
+ *
+ * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> 1
+ *
+ * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
+ */
+exports.rcompare = function (versionA, versionB) {
+    return 0 - exports.compare(versionA, versionB);
+};
+/**
  * @summary Return the major version number
  * @name major
  * @public

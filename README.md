@@ -33,6 +33,11 @@ Documentation
 <dd><p>Accepts string or null values and compares them, returning a number
 indicating sort order. Values are parsed for valid semver strings.</p>
 </dd>
+<dt><a href="#rcompare">rcompare(versionA, versionB)</a> ⇒ <code>number</code></dt>
+<dd><p>The reverse of <code>.compare()</code>. Accepts string or null values and compares
+them, returning a number indicating sort order. Values are parsed for valid semver
+strings. Sorts an array of versions in descending order when passed to <code>Array.sort()</code>.</p>
+</dd>
 <dt><a href="#major">major(version)</a> ⇒ <code>number</code> | <code>null</code></dt>
 <dd><p>Returns the major version number in a semver string.
 If the version is not a valid semver string, or a valid semver string cannot be
@@ -90,6 +95,41 @@ resinSemver.compare('Version A', 'Version B'); //--> 1
 resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
 
 resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> -1
+
+resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
+```
+<a name="rcompare"></a>
+
+## rcompare(versionA, versionB) ⇒ <code>number</code>
+The reverse of `.compare()`. Accepts string or null values and compares
+them, returning a number indicating sort order. Values are parsed for valid semver
+strings. Sorts an array of versions in descending order when passed to `Array.sort()`.
+
+**Kind**: global function  
+**Summary**: Compare order of versions in reverse  
+**Returns**: <code>number</code> - Returns `0` if `versionA == versionB`,
+or `-1` if `versionA` is greater, or `1` if `versionB` is greater.
+null values are always weighted above string values, and string values are always
+weighted above valid semver values.
+If both values are invalid semver values, then the values are compared alphabetically.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| versionA | <code>string</code> \| <code>null</code> | The first version to compare |
+| versionB | <code>string</code> \| <code>null</code> | The second version to compare |
+
+**Example**  
+```js
+resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
+
+resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
+
+resinSemver.compare('Version A', 'Version B'); //--> -1
+
+resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
+
+resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> 1
 
 resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
 ```
