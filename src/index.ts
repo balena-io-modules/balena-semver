@@ -150,3 +150,42 @@ export const major = (version: string | null): number | null => {
 
 	return null;
 };
+
+/**
+ * @summary Return prerelease components
+ * @name prerelease
+ * @public
+ * @function
+ *
+ * @description Returns an array of prerelease components, or null if none exist
+ *
+ * @param {string|null} version - The version string to evaluate
+ *
+ * @returns {Array.<string|number>|null} - An array of prerelease component, or null if none exist
+ *
+ * @example
+ * resinSemver.prerelease('1.16.0-alpha.1'); //--> ['alpha', '1']
+ *
+ * resinSemver.prerelease('1.16.0'); //--> null
+ *
+ * resinSemver.prerelease('Resin OS 2.0.0-rc5.rev1'); //--> ['rc5', 'rev1']
+ *
+ * resinSemver.prerelease('Resin OS 2.0.0'); //--> null
+ *
+ * resinSemver.prerelease('My dev version'); //--> null
+ *
+ * resinSemver.prerelease('Linux 14.04'); //--> null
+ *
+ * resinSemver.prerelease('Software version 42.3.20170726.72bbcf8'); //--> null
+ *
+ * resinSemver.prerelease(null)); //--> null
+ */
+export const prerelease = (version: string | null) => {
+	if (!version) {
+		return null;
+	}
+
+	version = trimOsText(safeSemver(version));
+
+	return semver.prerelease(version);
+};
