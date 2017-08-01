@@ -12,6 +12,10 @@ describe('resin-semver', () => {
 			});
 		});
 
+		it('should correctly sort lists of versions', () => {
+			expect(versions.slice().sort(semver.compare)).to.eql(versions);
+		});
+
 		it('should correctly compare valid semver values', () => {
 			expect(semver.compare('2.0.5', '1.16.0')).to.equal(1);
 			expect(semver.compare('2.0.5', '2.0.5')).to.equal(0);
