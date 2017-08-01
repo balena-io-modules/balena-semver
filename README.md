@@ -41,6 +41,11 @@ found, it returns null.</p>
 <dt><a href="#prerelease">prerelease(version)</a> ⇒ <code>Array.&lt;(string|number)&gt;</code> | <code>null</code></dt>
 <dd><p>Returns an array of prerelease components, or null if none exist</p>
 </dd>
+<dt><a href="#gte">gte(versionA, versionB)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Returns true if versionA is greater than or equal to versionB.
+Valid semver versions are always weighted above non semver strings.
+Non-semver strings are compared alphabetically.</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -51,9 +56,12 @@ indicating sort order. Values are parsed for valid semver strings.
 
 **Kind**: global function  
 **Summary**: Compare order of versions  
-**Returns**: <code>number</code> - one of `1`, `0`, or `-1`. null values are always weighted below
-string values, and string values are always weighted below valid semver values.
-If both values are invalid semver values, then the values are compared alphabetically  
+**Returns**: <code>number</code> - Returns `0` if `versionA == versionB`,
+or `1` if `versionA` is greater, or `-1` if `versionB` is greater. Sorts in ascending
+order if passed to `Array.sort()`.
+null values are always weighted below string values, and string values are always
+weighted below valid semver values.
+If both values are invalid semver values, then the values are compared alphabetically.  
 **Access**: public  
 
 | Param | Type | Description |
@@ -136,6 +144,31 @@ resinSemver.prerelease('Linux 14.04'); //--> null
 resinSemver.prerelease('Software version 42.3.20170726.72bbcf8'); //--> null
 
 resinSemver.prerelease(null)); //--> null
+```
+<a name="gte"></a>
+
+## gte(versionA, versionB) ⇒ <code>boolean</code>
+Returns true if versionA is greater than or equal to versionB.
+Valid semver versions are always weighted above non semver strings.
+Non-semver strings are compared alphabetically.
+
+**Kind**: global function  
+**Summary**: Check if a version is greater than or equal to another  
+**Returns**: <code>boolean</code> - - true if versionA is greater than or equal to versionB, otherwise false.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| versionA | <code>string</code> \| <code>null</code> | The version string to compare against |
+| versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
+
+**Example**  
+```js
+resinSemver.gte('2.0.5', '1.16.0'); //--> true
+
+resinSemver.gte('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> true
+
+resinSemver.gte('1.16.0', 'Resin OS 2.0.2+rev2'); //--> false
 ```
 
 
