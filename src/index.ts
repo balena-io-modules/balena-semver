@@ -58,19 +58,6 @@ const isDevelopmentVersion = (version: string) => {
  * Null values are sorted before invalid semver values, and invalid semver values
  * are sorted before valid semver values
  * If both values are invalid semver values, then the values are compared alphabetically.
- *
- * @example
- * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
- *
- * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
- *
- * resinSemver.compare('Version A', 'Version B'); //--> 1
- *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
- *
- * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> -1
- *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
  */
 export const compare = memoize((versionA: string | null, versionB: string | null): number => {
 	if (versionA === null && versionB === null) {
@@ -137,19 +124,6 @@ export const compare = memoize((versionA: string | null, versionB: string | null
  * Valid semver values are sorted before invalid semver values, and invalid semver values are
  * sorted before null values.
  * If both values are non-null invalid semver values, then the values are compared alphabetically.
- *
- * @example
- * resinSemver.rcompare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
- *
- * resinSemver.rcompare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
- *
- * resinSemver.rcompare('Version A', 'Version B'); //--> -1
- *
- * resinSemver.rcompare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
- *
- * resinSemver.rcompare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> 1
- *
- * resinSemver.rcompare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
  */
 export const rcompare = (versionA: string | null, versionB: string | null): number => {
 	return 0 - compare(versionA, versionB);
@@ -168,19 +142,6 @@ export const rcompare = (versionA: string | null, versionB: string | null): numb
  * @param {string|null} version - The version string to evaluate
  *
  * @returns {number|null} - The major version number
- *
- * @example
- * resinSemver.major(null); //--> null
- *
- * resinSemver.major('4.5.1'); //--> 4
- *
- * resinSemver.major('Resin OS v2.0.5'); //--> 2
- *
- * resinSemver.major('Resin OS v1.24.0'); //--> 1
- *
- * resinSemver.major('Linux 14.04'); //--> null
- *
- * resinSemver.major('My development version'); //--> null
  */
 export const major = (version: string | null): number | null => {
 	if (!version) {
@@ -207,23 +168,6 @@ export const major = (version: string | null): number | null => {
  * @param {string|null} version - The version string to evaluate
  *
  * @returns {Array.<string|number>|null} - An array of prerelease component, or null if none exist
- *
- * @example
- * resinSemver.prerelease('1.16.0-alpha.1'); //--> ['alpha', '1']
- *
- * resinSemver.prerelease('1.16.0'); //--> null
- *
- * resinSemver.prerelease('Resin OS 2.0.0-rc5.rev1'); //--> ['rc5', 'rev1']
- *
- * resinSemver.prerelease('Resin OS 2.0.0'); //--> null
- *
- * resinSemver.prerelease('My dev version'); //--> null
- *
- * resinSemver.prerelease('Linux 14.04'); //--> null
- *
- * resinSemver.prerelease('Software version 42.3.20170726.72bbcf8'); //--> null
- *
- * resinSemver.prerelease(null)); //--> null
  */
 export const prerelease = (version: string | null) => {
 	if (!version) {
@@ -249,13 +193,6 @@ export const prerelease = (version: string | null) => {
  * @param {string|null} versionB - The version string to compare to versionA
  *
  * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
- *
- * @example
- * resinSemver.gte('2.0.5', '1.16.0'); //--> true
- *
- * resinSemver.gte('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> true
- *
- * resinSemver.gte('1.16.0', 'Resin OS 2.0.2+rev2'); //--> false
  */
 export const gte = (versionA: string | null, versionB: string | null): boolean => {
 	return compare(versionA, versionB) >= 0;
@@ -276,15 +213,6 @@ export const gte = (versionA: string | null, versionB: string | null): boolean =
  *
  *
  * @returns {boolean} - true if versionA is greater than versionB, otherwise false.
- *
- * @example
- * resinSemver.gt('2.0.5', '1.16.0'); //--> true
- *
- * resinSemver.gt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> true
- *
- * resinSemver.gt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> false
- *
- * resinSemver.gt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
  */
 export const gt = (versionA: string | null, versionB: string | null): boolean => {
 	return compare(versionA, versionB) > 0;
@@ -304,17 +232,6 @@ export const gt = (versionA: string | null, versionB: string | null): boolean =>
  * @param {string|null} versionB - The version string to compare to versionA
  *
  * @returns {boolean} - true if versionA is less than versionB, otherwise false.
- *
- * @example
- * resinSemver.lt('2.0.5', '1.16.0'); //--> false
- *
- * resinSemver.lt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> false
- *
- * resinSemver.lt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> true
- *
- * resinSemver.lt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
- *
- * resinSemver.lt('Version A', 'Version B'); //--> true
  */
 export const lt = (versionA: string | null, versionB: string | null): boolean => {
 	return compare(versionA, versionB) < 0;

@@ -6,6 +6,8 @@ const dedent = require('dedent-js');
 
 let testFileSrc = fs.readFileSync('./test/index.spec.ts', 'utf8');
 let testFile = ts.transpileModule(testFileSrc, {}).outputText;
+// Prettify some parsed values
+testFile = testFile.replace('chai_1', 'chai').replace('versions_1', 'V');
 
 console.log(testFile);
 
