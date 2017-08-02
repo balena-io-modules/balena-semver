@@ -46,16 +46,17 @@ const isDevelopmentVersion = (version: string) => {
  * @function
  *
  * @description Accepts string or null values and compares them, returning a number
- * indicating sort order. Values are parsed for valid semver strings.
+ * indicating sort order. Values are parsed for valid semver strings. Sorts an array
+ * of versions in ascending order if passed to `Array.sort()`.
+ *
  *
  * @param {string|null} versionA - The first version to compare
  * @param {string|null} versionB - The second version to compare
  *
  * @returns {number} Returns `0` if `versionA == versionB`,
- * or `1` if `versionA` is greater, or `-1` if `versionB` is greater. Sorts in ascending
- * order if passed to `Array.sort()`.
- * null values are always weighted below string values, and string values are always
- * weighted below valid semver values.
+ * or `1` if `versionA` is greater, or `-1` if `versionB` is greater.
+ * Null values are sorted before invalid semver values, and invalid semver values
+ * are sorted before valid semver values
  * If both values are invalid semver values, then the values are compared alphabetically.
  *
  * @example
@@ -133,22 +134,22 @@ export const compare = memoize((versionA: string | null, versionB: string | null
  *
  * @returns {number} Returns `0` if `versionA == versionB`,
  * or `-1` if `versionA` is greater, or `1` if `versionB` is greater.
- * null values are always weighted above string values, and string values are always
- * weighted above valid semver values.
- * If both values are invalid semver values, then the values are compared alphabetically.
+ * Valid semver values are sorted before invalid semver values, and invalid semver values are
+ * sorted before null values.
+ * If both values are non-null invalid semver values, then the values are compared alphabetically.
  *
  * @example
- * resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
+ * resinSemver.rcompare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
  *
- * resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
+ * resinSemver.rcompare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
  *
- * resinSemver.compare('Version A', 'Version B'); //--> -1
+ * resinSemver.rcompare('Version A', 'Version B'); //--> -1
  *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
+ * resinSemver.rcompare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
  *
- * resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> 1
+ * resinSemver.rcompare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> 1
  *
- * resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
+ * resinSemver.rcompare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
  */
 export const rcompare = (versionA: string | null, versionB: string | null): number => {
 	return 0 - compare(versionA, versionB);
