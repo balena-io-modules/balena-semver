@@ -60,17 +60,15 @@ const isDevelopmentVersion = (version: string) => {
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
 export const compare = memoize((versionA: string | null, versionB: string | null): number => {
-	if (versionA === null && versionB === null) {
-		return 0;
+	if (versionA === null) {
+		return versionB === null ? 0 : -1;
 	}
-	if (versionA === null && versionB !== null) {
-		return -1;
-	}
-	if (versionA !== null && versionB === null) {
+	if (versionB === null) {
 		return 1;
 	}
-	versionA = normalize(<string>versionA);
-	versionB = normalize(<string>versionB);
+
+	versionA = normalize(versionA);
+	versionB = normalize(versionB);
 
 	const isAValid = semver.valid(versionA);
 	const isBValid = semver.valid(versionB);
