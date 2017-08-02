@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "test": "npm run build && npm run lint && mocha -r ts-node/register test/index.spec.ts",
-    "build": "tsc src/index.ts",
+    "build": "tsc",
     "lint": "tslint -t stylish -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
     "docs": "npm run build && node generateDocs"
   },

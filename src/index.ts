@@ -1,10 +1,5 @@
-import * as semver from 'semver';
 import memoize = require('lodash.memoize');
-
-// TODO: PR to DefinitelyTyped project
-declare module 'semver' {
-	function parse(version: string, loose?: boolean): semver.SemVer;
-}
+import * as semver from 'semver';
 
 const trimOsText = (version: string) => {
 	// Remove "Resin OS" text
@@ -22,7 +17,13 @@ const safeSemver = (version: string) => {
 const normalize = (version: string): string => trimOsText(safeSemver(version));
 
 const getRev = (osVersion: string) => {
-	const rev = semver.parse(osVersion).build.map(function(metadataPart) {
+	const parsedVersion = semver.parse(osVersion);
+
+	if (parsedVersion === null) {
+		return 0;
+	}
+
+	const rev = parsedVersion.build.map(function(metadataPart) {
 		const matches = /rev(\d+)/.exec(metadataPart);
 		return matches && matches[1] || null;
 	})
@@ -292,4 +293,43 @@ export const maxSatisfying = (versions: Array<string | null>, range: string) => 
 	});
 
 	return max;
+};
+
+/*
+ * @typedef {Object} SemverObject
+ * @property {string} raw - The original version string
+ * @property {number} major - The major version number
+ * @property {number} minor - The minor version number
+ * @property {number} patch - The patch version number
+ * @property {Array.<string|number>} prerelease - An array of prerelease values
+ * @property {Array.<string|number>} build - An array of build values
+ * @property {string} version - The version containing just major, minor, patch
+ * and prerelease information
+ */
+
+/**
+ * @summary Parse a version into an object
+ * @name parse
+ * @public
+ * @function
+ *
+ * @description Returns an object representing the semver version. Returns null
+ * if a valid semver string can't be found.
+ *
+ * @param {string|null} version
+ *
+ * @returns {SemverObject|null} - An object representing the version string, or
+ * null if a valid semver string could not be found
+ */
+export const parse = (version: string | null) => {
+	if (version === null) {
+		return null;
+	}
+	const parsed = semver.parse(normalize(version));
+
+	if (parsed) {
+		parsed.raw = version;
+	}
+
+	return parsed;
 };
