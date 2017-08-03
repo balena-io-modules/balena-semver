@@ -47,6 +47,8 @@ exec(fullCMD, (error, stdout, stderr) => {
 		return carry;
 	}, {});
 
+	const hbsTemplate = fs.readFileSync('./doc/README.hbs', 'utf8');
+
 	jsdoc2md.getTemplateData({
 		files: [config.main]
 	})
@@ -57,7 +59,10 @@ exec(fullCMD, (error, stdout, stderr) => {
 				d.examples = [describe[name]];
 			}
 		});
-		return jsdoc2md.render({ data });
+		return jsdoc2md.render({
+			data,
+			template: hbsTemplate
+		});
 	})
 	.then((result) => {
 		fs.writeFile('./test.md', result);
