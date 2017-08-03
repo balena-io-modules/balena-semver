@@ -13,6 +13,9 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const config = require('./package.json');
 
+const OUTFILE = './README.md';
+const TEMPLATE_FILE = './doc/README.hbs';
+
 let testCMD = config.scripts.test
 
 if (!testCMD.includes('mocha')) {
@@ -47,7 +50,7 @@ exec(fullCMD, (error, stdout, stderr) => {
 		return carry;
 	}, {});
 
-	const hbsTemplate = fs.readFileSync('./doc/README.hbs', 'utf8');
+	const hbsTemplate = fs.readFileSync(TEMPLATE_FILE, 'utf8');
 
 	jsdoc2md.getTemplateData({
 		files: [config.main]
@@ -65,6 +68,6 @@ exec(fullCMD, (error, stdout, stderr) => {
 		});
 	})
 	.then((result) => {
-		fs.writeFile('./test.md', result);
+		fs.writeFile(OUTFILE, result);
 	});
 });
