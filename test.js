@@ -1,61 +1,65 @@
+/**
+ * This script assumes that:
+ * - The "main" file declared in your package.json is annotated using JSDoc
+ * - JSDoc annotations use the "@name" attribute
+ * - There is a test script in package.json that uses mocha
+ * - Your mocha tests use the format "describe('my_function_name', () => { }"
+ * where "my_function_name" is the same as the functions "@name" attribute
+ *
+ * Ideally this should be moved to a seperate module.
+ */
 const jsdoc2md = require('jsdoc-to-markdown');
 const fs = require('fs');
-const ts = require('typescript');
-const acorn = require('acorn');
-const dedent = require('dedent-js');
+const { exec } = require('child_process');
+const config = require('./package.json');
 
-let testFileSrc = fs.readFileSync('./test/index.spec.ts', 'utf8');
-let testFile = ts.transpileModule(testFileSrc, {}).outputText;
-// Prettify some parsed values
-testFile = testFile.replace(/chai_1/g, 'chai').replace(/versions_1/g, 'V');
+let testCMD = config.scripts.test
 
-console.log(testFile);
+if (!testCMD.includes('mocha')) {
+	throw new Error('package.json "test" script does not use mocha!');
+}
 
-console.log(acorn.parse(testFile));
-const syntaxTree = acorn.parse(testFile);
+// Strip out any existing reporter option from the command, then add the markdown reporter
+testCMD = testCMD.replace(/--reporter\s+\w+/, '')
+	.replace('mocha', 'mocha --reporter markdown');
 
-const formatFnBody = (body) => {
-	// Strip first and last line
-	let formattedValue = body.replace(/([\r\n].*$|^.*[\r\n])/g, '');
+// Inherit and prefix PATH variable so the command behaves in an expected way
+const pathPrefix = `PATH=${process.cwd()}/node_modules/.bin:${process.env.PATH}:$PATH`;
+const fullCMD = testCMD.split('&&').map((t) => `${pathPrefix} ${t}`).join('&&');
 
-	// Dedent code
-	formattedValue = dedent(formattedValue).replace(/^\s+/, '');
+exec(fullCMD, (error, stdout, stderr) => {
+	if (error) {
+		throw new Error(`exec error: ${error}`);
+	}
+	if (stderr) {
+		throw new Error(`stderr: ${stderr}`);
+	}
 
-	return formattedValue;
-};
+	// Prettify some parsed values
+	const testReport = stdout.replace(/chai_1/g, 'chai');
 
-const describe = syntaxTree.body.reduce((carry, item) => {
-	if (item.expression && item.expression.callee && item.expression.callee.name === 'describe') {
-		item.expression.arguments[1].body.body.forEach((innerItem) => {
-			if (item.expression && item.expression.callee && item.expression.callee.name === 'describe') {
-				console.log(innerItem);
-				const { value } = innerItem.expression.arguments[0];
-				const { start, end } = innerItem.expression.arguments[1];
-				const fnBody = testFile.slice(start, end);
-				console.log(formatFnBody(fnBody));
-				carry[value.replace(/\W/g, '')] = formatFnBody(fnBody);
+	// Transform the report into an object keyed by the function name
+	const describe = testReport.split(/##\s\W/).reduce((carry, item) => {
+		const match = item.match(/^\w+\W+\n/);
+		if (match) {
+			carry[match[0].replace(/\W/g, '')] = item.replace(match[0], '');
+		}
+		return carry;
+	}, {});
+
+	jsdoc2md.getTemplateData({
+		files: [config.main]
+	})
+	.then((data) => {
+		data.forEach((d) => {
+			let name = d.name;
+			if (describe[name]) {
+				d.examples = [describe[name]];
 			}
 		});
-	}
-	return carry;
-}, {});
-
-console.log(describe);
-
-jsdoc2md.getTemplateData({
-	files: ['./src/index.js']
-})
-.then((data) => {
-	console.log(data);
-	data.forEach((d) => {
-		let name = d.name;
-		if (describe[name]) {
-			d.examples = [describe[name]];
-		}
+		return jsdoc2md.render({ data });
+	})
+	.then((result) => {
+		fs.writeFile('./test.md', result);
 	});
-	return jsdoc2md.render({ data });
-})
-.then((result) => {
-//	console.log(result);
-	fs.writeFile('./test.md', result);
 });

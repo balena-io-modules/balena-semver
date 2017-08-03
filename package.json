@@ -31,9 +31,7 @@
     "@types/semver": "^5.3.32"
   },
   "devDependencies": {
-    "acorn": "^5.1.1",
     "chai": "^4.1.0",
-    "dedent-js": "^1.0.1",
     "jsdoc-to-markdown": "^3.0.0",
     "mocha": "^3.4.2",
     "ts-node": "^3.2.1",
