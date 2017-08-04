@@ -49,13 +49,10 @@ var isDevelopmentVersion = function (version) {
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
 exports.compare = memoize(function (versionA, versionB) {
-    if (versionA === null && versionB === null) {
-        return 0;
+    if (versionA === null) {
+        return versionB === null ? 0 : -1;
     }
-    if (versionA === null && versionB !== null) {
-        return -1;
-    }
-    if (versionA !== null && versionB === null) {
+    if (versionB === null) {
         return 1;
     }
     versionA = normalize(versionA);
