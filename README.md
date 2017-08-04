@@ -31,7 +31,13 @@ Documentation
 <dl>
 <dt><a href="#compare">compare(versionA, versionB)</a> ⇒ <code>number</code></dt>
 <dd><p>Accepts string or null values and compares them, returning a number
-indicating sort order. Values are parsed for valid semver strings.</p>
+indicating sort order. Values are parsed for valid semver strings. Sorts an array
+of versions in ascending order if passed to <code>Array.sort()</code>.</p>
+</dd>
+<dt><a href="#rcompare">rcompare(versionA, versionB)</a> ⇒ <code>number</code></dt>
+<dd><p>The reverse of <code>.compare()</code>. Accepts string or null values and compares
+them, returning a number indicating sort order. Values are parsed for valid semver
+strings. Sorts an array of versions in descending order when passed to <code>Array.sort()</code>.</p>
 </dd>
 <dt><a href="#major">major(version)</a> ⇒ <code>number</code> | <code>null</code></dt>
 <dd><p>Returns the major version number in a semver string.
@@ -62,15 +68,15 @@ Non-semver strings are compared alphabetically.</p>
 
 ## compare(versionA, versionB) ⇒ <code>number</code>
 Accepts string or null values and compares them, returning a number
-indicating sort order. Values are parsed for valid semver strings.
+indicating sort order. Values are parsed for valid semver strings. Sorts an array
+of versions in ascending order if passed to `Array.sort()`.
 
 **Kind**: global function  
 **Summary**: Compare order of versions  
 **Returns**: <code>number</code> - Returns `0` if `versionA == versionB`,
-or `1` if `versionA` is greater, or `-1` if `versionB` is greater. Sorts in ascending
-order if passed to `Array.sort()`.
-null values are always weighted below string values, and string values are always
-weighted below valid semver values.
+or `1` if `versionA` is greater, or `-1` if `versionB` is greater.
+Null values are sorted before invalid semver values, and invalid semver values
+are sorted before valid semver values
 If both values are invalid semver values, then the values are compared alphabetically.  
 **Access**: public  
 
@@ -80,19 +86,198 @@ If both values are invalid semver values, then the values are compared alphabeti
 | versionB | <code>string</code> \| <code>null</code> | The second version to compare |
 
 **Example**  
+should not throw when provided with a version.
+
 ```js
-resinSemver.compare(null, 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
-
-resinSemver.compare('Ubuntu dev', 'Resin OS 2.0.0+rev4 (prod)'); //--> -1
-
-resinSemver.compare('Version A', 'Version B'); //--> 1
-
-resinSemver.compare('Resin OS 1.16.0', 'Resin OS 2.0.0+rev4 (prod)'); //--> 1
-
-resinSemver.compare('Resin OS 2.0.0+rev4 (prod)', 'Resin OS 1.16.0'); //--> -1
-
-resinSemver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0'); //--> 0
+versions_1.versions.forEach((version) => {
+    chai.expect(() => semver.compare(version, version)).to.not.throw();
+});
 ```
+
+should correctly compare valid semver values.
+
+```js
+chai.expect(semver.compare('2.0.5', '1.16.0')).to.equal(1);
+chai.expect(semver.compare('2.0.5', '2.0.5')).to.equal(0);
+chai.expect(semver.compare('1.16.0', '2.0.5')).to.equal(-1);
+```
+
+should correctly compare valid semver values to Resin formatted versions.
+
+```js
+chai.expect(semver.compare('2.0.5', 'Resin OS v2.0.2+rev2')).to.equal(1);
+chai.expect(semver.compare('1.16.0', 'Resin OS v2.0.2+rev2')).to.equal(-1);
+chai.expect(semver.compare('1.16.0', 'Resin OS v1.16.0')).to.equal(0);
+chai.expect(semver.compare('Resin OS 1.16.0', '2.0.2')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 1.16.0', '1.16.0')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.2', '1.16.0')).to.equal(1);
+```
+
+should correctly compare Resin formatted versions.
+
+```js
+chai.expect(semver.compare('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
+chai.expect(semver.compare('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
+```
+
+should correctly compare invalid semver values.
+
+```js
+chai.expect(semver.compare('Linux 14.04', 'Resin OS v2.0.2+rev2')).to.equal(-1);
+chai.expect(semver.compare('Linux 14.04', 'A development version')).to.equal(1);
+chai.expect(semver.compare('Version B', 'Version A')).to.equal(1);
+chai.expect(semver.compare('Version A', 'Version A')).to.equal(0);
+```
+
+should correctly compare null values.
+
+```js
+chai.expect(semver.compare('2.0.5', null)).to.equal(1);
+chai.expect(semver.compare(null, '1.16.0')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 1.16.0', null)).to.equal(1);
+chai.expect(semver.compare(null, 'Resin OS 1.16.0')).to.equal(-1);
+chai.expect(semver.compare('Linux 14.04', null)).to.equal(1);
+chai.expect(semver.compare(null, 'Linux 14.04')).to.equal(-1);
+chai.expect(semver.compare(null, null)).to.equal(0);
+```
+
+should correctly compare "rev" values.
+
+```js
+chai.expect(semver.compare('2.0.0+rev6', '2.0.0+rev3')).to.equal(1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(1);
+chai.expect(semver.compare('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(1);
+chai.expect(semver.compare('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(-1);
+chai.expect(semver.compare('2.0.0+rev3', '2.0.0+rev3')).to.equal(0);
+```
+
+should correctly compare ".dev" versions.
+
+```js
+chai.expect(semver.compare('2.0.0', '2.0.0+dev')).to.equal(1);
+chai.expect(semver.compare('2.0.0', '2.0.0-dev')).to.equal(1);
+chai.expect(semver.compare('2.0.0', '2.0.0.dev')).to.equal(1);
+chai.expect(semver.compare('2.0.0+rev6', '2.0.0+rev6.dev')).to.equal(1);
+chai.expect(semver.compare('2.0.0+rev6.dev', '2.0.0+rev6')).to.equal(-1);
+chai.expect(semver.compare('2.0.0+rev6.dev', '2.0.0+rev6.dev')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.dev')).to.equal(1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.equal(0);
+chai.expect(semver.compare('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(1);
+chai.expect(semver.compare('Resin OS 2.0.0.dev', '2.0.0')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(0);
+```
+
+<a name="resin-semver-rcompare"></a>
+
+<a name="rcompare"></a>
+
+## rcompare(versionA, versionB) ⇒ <code>number</code>
+The reverse of `.compare()`. Accepts string or null values and compares
+them, returning a number indicating sort order. Values are parsed for valid semver
+strings. Sorts an array of versions in descending order when passed to `Array.sort()`.
+
+**Kind**: global function  
+**Summary**: Compare order of versions in reverse  
+**Returns**: <code>number</code> - Returns `0` if `versionA == versionB`,
+or `-1` if `versionA` is greater, or `1` if `versionB` is greater.
+Valid semver values are sorted before invalid semver values, and invalid semver values are
+sorted before null values.
+If both values are non-null invalid semver values, then the values are compared alphabetically.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| versionA | <code>string</code> \| <code>null</code> | The first version to compare |
+| versionB | <code>string</code> \| <code>null</code> | The second version to compare |
+
+**Example**  
+should not throw when provided with a version.
+
+```js
+versions_1.versions.forEach((version) => {
+    chai.expect(() => semver.rcompare(version, version)).to.not.throw();
+});
+```
+
+should correctly compare valid semver values.
+
+```js
+chai.expect(semver.rcompare('2.0.5', '1.16.0')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.5', '2.0.5')).to.equal(0);
+chai.expect(semver.rcompare('1.16.0', '2.0.5')).to.equal(1);
+```
+
+should correctly compare valid semver values to Resin formatted versions.
+
+```js
+chai.expect(semver.rcompare('2.0.5', 'Resin OS v2.0.2+rev2')).to.equal(-1);
+chai.expect(semver.rcompare('1.16.0', 'Resin OS v2.0.2+rev2')).to.equal(1);
+chai.expect(semver.rcompare('1.16.0', 'Resin OS v1.16.0')).to.equal(0);
+chai.expect(semver.rcompare('Resin OS 1.16.0', '2.0.2')).to.equal(1);
+chai.expect(semver.rcompare('Resin OS 1.16.0', '1.16.0')).to.equal(0);
+chai.expect(semver.rcompare('Resin OS 2.0.2', '1.16.0')).to.equal(-1);
+```
+
+should correctly compare Resin formatted versions.
+
+```js
+chai.expect(semver.rcompare('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(-1);
+chai.expect(semver.rcompare('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(1);
+chai.expect(semver.rcompare('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
+```
+
+should correctly compare invalid semver values.
+
+```js
+chai.expect(semver.rcompare('Linux 14.04', 'Resin OS v2.0.2+rev2')).to.equal(1);
+chai.expect(semver.rcompare('Linux 14.04', 'A development version')).to.equal(-1);
+chai.expect(semver.rcompare('Version B', 'Version A')).to.equal(-1);
+chai.expect(semver.rcompare('Version A', 'Version A')).to.equal(0);
+```
+
+should correctly compare null values.
+
+```js
+chai.expect(semver.rcompare('2.0.5', null)).to.equal(-1);
+chai.expect(semver.rcompare(null, '1.16.0')).to.equal(1);
+chai.expect(semver.rcompare('Resin OS 1.16.0', null)).to.equal(-1);
+chai.expect(semver.rcompare(null, 'Resin OS 1.16.0')).to.equal(1);
+chai.expect(semver.rcompare('Linux 14.04', null)).to.equal(-1);
+chai.expect(semver.rcompare(null, 'Linux 14.04')).to.equal(1);
+chai.expect(semver.rcompare(null, null)).to.equal(0);
+```
+
+should correctly compare "rev" values.
+
+```js
+chai.expect(semver.rcompare('2.0.0+rev6', '2.0.0+rev3')).to.equal(-1);
+chai.expect(semver.rcompare('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(1);
+chai.expect(semver.rcompare('2.0.0+rev3', '2.0.0+rev3')).to.equal(0);
+```
+
+should correctly compare ".dev" versions.
+
+```js
+chai.expect(semver.rcompare('2.0.0', '2.0.0+dev')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.0', '2.0.0-dev')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.0', '2.0.0.dev')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.0+rev6', '2.0.0+rev6.dev')).to.equal(-1);
+chai.expect(semver.rcompare('2.0.0+rev6.dev', '2.0.0+rev6')).to.equal(1);
+chai.expect(semver.rcompare('2.0.0+rev6.dev', '2.0.0+rev6.dev')).to.equal(0);
+chai.expect(semver.rcompare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.dev')).to.equal(-1);
+chai.expect(semver.rcompare('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3')).to.equal(1);
+chai.expect(semver.rcompare('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.equal(0);
+chai.expect(semver.rcompare('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(-1);
+chai.expect(semver.rcompare('Resin OS 2.0.0.dev', '2.0.0')).to.equal(1);
+chai.expect(semver.rcompare('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(0);
+```
+
+<a name="resin-semver-major"></a>
+
 <a name="major"></a>
 
 ## major(version) ⇒ <code>number</code> \| <code>null</code>
@@ -110,19 +295,37 @@ found, it returns null.
 | version | <code>string</code> \| <code>null</code> | The version string to evaluate |
 
 **Example**  
+should correctly match valid semver versions.
+
 ```js
-resinSemver.major(null); //--> null
-
-resinSemver.major('4.5.1'); //--> 4
-
-resinSemver.major('Resin OS v2.0.5'); //--> 2
-
-resinSemver.major('Resin OS v1.24.0'); //--> 1
-
-resinSemver.major('Linux 14.04'); //--> null
-
-resinSemver.major('My development version'); //--> null
+chai.expect(semver.major('4.5.1')).to.equal(4);
 ```
+
+should correctly match resinOS prefixed versions.
+
+```js
+chai.expect(semver.major('Resin OS v2.0.5')).to.equal(2);
+chai.expect(semver.major('Resin OS 2.0.2+rev2')).to.equal(2);
+chai.expect(semver.major('Resin OS 2.0.0.rev1 (prod)')).to.equal(2);
+chai.expect(semver.major('Resin OS 2.0.0-rc5.rev1')).to.equal(2);
+```
+
+should return null when version is `null`.
+
+```js
+chai.expect(semver.major(null)).to.equal(null);
+```
+
+should return null when the version contains no valid semver value.
+
+```js
+chai.expect(semver.major('My dev version')).to.equal(null);
+chai.expect(semver.major('Linux 14.04')).to.equal(null);
+chai.expect(semver.major('Software version 42.3.20170726.72bbcf8')).to.equal(null);
+```
+
+<a name="resin-semver-prerelease"></a>
+
 <a name="prerelease"></a>
 
 ## prerelease(version) ⇒ <code>Array.&lt;(string\|number)&gt;</code> \| <code>null</code>
@@ -138,23 +341,46 @@ Returns an array of prerelease components, or null if none exist
 | version | <code>string</code> \| <code>null</code> | The version string to evaluate |
 
 **Example**  
+should return an array of prerelease components when provided a semver string.
+
 ```js
-resinSemver.prerelease('1.16.0-alpha.1'); //--> ['alpha', '1']
-
-resinSemver.prerelease('1.16.0'); //--> null
-
-resinSemver.prerelease('Resin OS 2.0.0-rc5.rev1'); //--> ['rc5', 'rev1']
-
-resinSemver.prerelease('Resin OS 2.0.0'); //--> null
-
-resinSemver.prerelease('My dev version'); //--> null
-
-resinSemver.prerelease('Linux 14.04'); //--> null
-
-resinSemver.prerelease('Software version 42.3.20170726.72bbcf8'); //--> null
-
-resinSemver.prerelease(null)); //--> null
+chai.expect(semver.prerelease('1.16.0-alpha.1')).to.eql(['alpha', 1]);
 ```
+
+should return null when provided with a semver string that has no prerelease segment.
+
+```js
+chai.expect(semver.prerelease('1.16.0')).to.eql(null);
+```
+
+should return an array of prerelease components when provided a resinOS prefixed version.
+
+```js
+chai.expect(semver.prerelease('Resin OS 2.0.0-rc5.rev1')).to.eql(['rc5', 'rev1']);
+```
+
+should return null when provided a resinOS prefixed version that has no prerelease segment.
+
+```js
+chai.expect(semver.prerelease('Resin OS 2.0.0')).to.equal(null);
+```
+
+should return null when provided with an invalid version.
+
+```js
+chai.expect(semver.prerelease('My dev version')).to.equal(null);
+chai.expect(semver.prerelease('Linux 14.04')).to.equal(null);
+chai.expect(semver.prerelease('Software version 42.3.20170726.72bbcf8')).to.equal(null);
+```
+
+should return null when provided with a null value.
+
+```js
+chai.expect(semver.prerelease(null)).to.equal(null);
+```
+
+<a name="resin-semver-gte"></a>
+
 <a name="gte"></a>
 
 ## gte(versionA, versionB) ⇒ <code>boolean</code>
@@ -173,13 +399,78 @@ Non-semver strings are compared alphabetically.
 | versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
 
 **Example**  
+should correctly compare valid semver values.
+
 ```js
-resinSemver.gte('2.0.5', '1.16.0'); //--> true
-
-resinSemver.gte('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> true
-
-resinSemver.gte('1.16.0', 'Resin OS 2.0.2+rev2'); //--> false
+chai.expect(semver.gte('2.0.5', '1.16.0')).to.equal(true);
+chai.expect(semver.gte('1.16.0', '2.0.5')).to.equal(false);
 ```
+
+should correctly compare valid semver values to Resin formatted versions.
+
+```js
+chai.expect(semver.gte('2.0.5', 'Resin OS v2.0.2+rev2')).to.equal(true);
+chai.expect(semver.gte('1.16.0', 'Resin OS v2.0.2+rev2')).to.equal(false);
+chai.expect(semver.gte('Resin OS 1.16.0', '2.0.2')).to.equal(false);
+chai.expect(semver.gte('Resin OS 1.16.0', '1.16.0')).to.equal(true);
+```
+
+should correctly compare Resin formatted versions.
+
+```js
+chai.expect(semver.gte('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(true);
+chai.expect(semver.gte('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(false);
+```
+
+should correctly compare invalid semver values.
+
+```js
+chai.expect(semver.gte('Linux 14.04', 'Resin OS v2.0.2+rev2')).to.equal(false);
+chai.expect(semver.gte('Linux 14.04', 'A development version')).to.equal(true);
+chai.expect(semver.gte('Version B', 'Version A')).to.equal(true);
+```
+
+should correctly compare null values.
+
+```js
+chai.expect(semver.gte('2.0.5', null)).to.equal(true);
+chai.expect(semver.gte(null, '1.16.0')).to.equal(false);
+chai.expect(semver.gte('Resin OS 1.16.0', null)).to.equal(true);
+chai.expect(semver.gte(null, 'Resin OS 1.16.0')).to.equal(false);
+chai.expect(semver.gte('Linux 14.04', null)).to.equal(true);
+chai.expect(semver.gte(null, 'Linux 14.04')).to.equal(false);
+chai.expect(semver.gte(null, null)).to.equal(true);
+```
+
+should correctly compare "rev" values.
+
+```js
+chai.expect(semver.gte('2.0.0+rev6', '2.0.0+rev3')).to.equal(true);
+chai.expect(semver.gte('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(true);
+chai.expect(semver.gte('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(true);
+chai.expect(semver.gte('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(false);
+chai.expect(semver.gte('2.0.0+rev3', '2.0.0+rev3')).to.equal(true);
+```
+
+should correctly compare ".dev" versions.
+
+```js
+chai.expect(semver.gte('2.0.0', '2.0.0+dev')).to.equal(true);
+chai.expect(semver.gte('2.0.0', '2.0.0-dev')).to.equal(true);
+chai.expect(semver.gte('2.0.0', '2.0.0.dev')).to.equal(true);
+chai.expect(semver.gte('2.0.0+rev6', '2.0.0+rev6.dev')).to.equal(true);
+chai.expect(semver.gte('2.0.0+rev6.dev', '2.0.0+rev6')).to.equal(false);
+chai.expect(semver.gte('2.0.0+rev6.dev', '2.0.0+rev6.dev')).to.equal(true);
+chai.expect(semver.gte('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.dev')).to.equal(true);
+chai.expect(semver.gte('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3')).to.equal(false);
+chai.expect(semver.gte('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.equal(true);
+chai.expect(semver.gte('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(true);
+chai.expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
+chai.expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(true);
+```
+
+<a name="resin-semver-gt"></a>
+
 <a name="gt"></a>
 
 ## gt(versionA, versionB) ⇒ <code>boolean</code>
@@ -198,15 +489,81 @@ Non-semver strings are compared alphabetically.
 | versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
 
 **Example**  
+should correctly compare valid semver values.
+
 ```js
-resinSemver.gt('2.0.5', '1.16.0'); //--> true
-
-resinSemver.gt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> true
-
-resinSemver.gt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> false
-
-resinSemver.gt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
+chai.expect(semver.gt('2.0.5', '1.16.0')).to.equal(true);
+chai.expect(semver.gt('1.16.0', '2.0.5')).to.equal(false);
+chai.expect(semver.gt('1.16.0', '1.16.0')).to.equal(false);
 ```
+
+should correctly compare valid semver values to Resin formatted versions.
+
+```js
+chai.expect(semver.gt('2.0.5', 'Resin OS v2.0.2+rev2')).to.equal(true);
+chai.expect(semver.gt('1.16.0', 'Resin OS v2.0.2+rev2')).to.equal(false);
+chai.expect(semver.gt('Resin OS 1.16.0', '2.0.2')).to.equal(false);
+chai.expect(semver.gt('Resin OS 1.16.0', '1.16.0')).to.equal(false);
+```
+
+should correctly compare Resin formatted versions.
+
+```js
+chai.expect(semver.gt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(true);
+chai.expect(semver.gt('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(false);
+chai.expect(semver.gt('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(false);
+```
+
+should correctly compare invalid semver values.
+
+```js
+chai.expect(semver.gt('Linux 14.04', 'Resin OS v2.0.2+rev2')).to.equal(false);
+chai.expect(semver.gt('Linux 14.04', 'A development version')).to.equal(true);
+chai.expect(semver.gt('Version B', 'Version A')).to.equal(true);
+chai.expect(semver.gt('Version A', 'Version A')).to.equal(false);
+```
+
+should correctly compare null values.
+
+```js
+chai.expect(semver.gt('2.0.5', null)).to.equal(true);
+chai.expect(semver.gt(null, '1.16.0')).to.equal(false);
+chai.expect(semver.gt('Resin OS 1.16.0', null)).to.equal(true);
+chai.expect(semver.gt(null, 'Resin OS 1.16.0')).to.equal(false);
+chai.expect(semver.gt('Linux 14.04', null)).to.equal(true);
+chai.expect(semver.gt(null, 'Linux 14.04')).to.equal(false);
+chai.expect(semver.gt(null, null)).to.equal(false);
+```
+
+should correctly compare "rev" values.
+
+```js
+chai.expect(semver.gt('2.0.0+rev6', '2.0.0+rev3')).to.equal(true);
+chai.expect(semver.gt('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(true);
+chai.expect(semver.gt('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(true);
+chai.expect(semver.gt('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(false);
+chai.expect(semver.gt('2.0.0+rev3', '2.0.0+rev3')).to.equal(false);
+```
+
+should correctly compare ".dev" versions.
+
+```js
+chai.expect(semver.gt('2.0.0', '2.0.0+dev')).to.equal(true);
+chai.expect(semver.gt('2.0.0', '2.0.0-dev')).to.equal(true);
+chai.expect(semver.gt('2.0.0', '2.0.0.dev')).to.equal(true);
+chai.expect(semver.gt('2.0.0+rev6', '2.0.0+rev6.dev')).to.equal(true);
+chai.expect(semver.gt('2.0.0+rev6.dev', '2.0.0+rev6')).to.equal(false);
+chai.expect(semver.gt('2.0.0+rev6.dev', '2.0.0+rev6.dev')).to.equal(false);
+chai.expect(semver.gt('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.dev')).to.equal(true);
+chai.expect(semver.gt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3')).to.equal(false);
+chai.expect(semver.gt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.equal(false);
+chai.expect(semver.gt('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(true);
+chai.expect(semver.gt('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
+chai.expect(semver.gt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
+```
+
+<a name="resin-semver-lt"></a>
+
 <a name="lt"></a>
 
 ## lt(versionA, versionB) ⇒ <code>boolean</code>
@@ -225,16 +582,79 @@ Non-semver strings are compared alphabetically.
 | versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
 
 **Example**  
+should correctly compare valid semver values.
+
 ```js
-resinSemver.lt('2.0.5', '1.16.0'); //--> false
-
-resinSemver.lt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2'); //--> false
-
-resinSemver.lt('1.16.0', 'Resin OS 2.0.2+rev2'); //--> true
-
-resinSemver.lt('Resin OS 2.0.2', 'Resin OS 2.0.2'); //--> false
-
-resinSemver.lt('Version A', 'Version B'); //--> true
+chai.expect(semver.lt('2.0.5', '1.16.0')).to.equal(false);
+chai.expect(semver.lt('1.16.0', '2.0.5')).to.equal(true);
+chai.expect(semver.lt('1.16.0', '1.16.0')).to.equal(false);
 ```
+
+should correctly compare valid semver values to Resin formatted versions.
+
+```js
+chai.expect(semver.lt('2.0.5', 'Resin OS v2.0.2+rev2')).to.equal(false);
+chai.expect(semver.lt('1.16.0', 'Resin OS v2.0.2+rev2')).to.equal(true);
+chai.expect(semver.lt('Resin OS 1.16.0', '2.0.2')).to.equal(true);
+chai.expect(semver.lt('Resin OS 1.16.0', '1.16.0')).to.equal(false);
+```
+
+should correctly compare Resin formatted versions.
+
+```js
+chai.expect(semver.lt('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(false);
+chai.expect(semver.lt('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(true);
+chai.expect(semver.lt('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(false);
+```
+
+should correctly compare invalid semver values.
+
+```js
+chai.expect(semver.lt('Linux 14.04', 'Resin OS v2.0.2+rev2')).to.equal(true);
+chai.expect(semver.lt('Linux 14.04', 'A development version')).to.equal(false);
+chai.expect(semver.lt('Version B', 'Version A')).to.equal(false);
+chai.expect(semver.lt('Version A', 'Version A')).to.equal(false);
+```
+
+should correctly compare null values.
+
+```js
+chai.expect(semver.lt('2.0.5', null)).to.equal(false);
+chai.expect(semver.lt(null, '1.16.0')).to.equal(true);
+chai.expect(semver.lt('Resin OS 1.16.0', null)).to.equal(false);
+chai.expect(semver.lt(null, 'Resin OS 1.16.0')).to.equal(true);
+chai.expect(semver.lt('Linux 14.04', null)).to.equal(false);
+chai.expect(semver.lt(null, 'Linux 14.04')).to.equal(true);
+chai.expect(semver.lt(null, null)).to.equal(false);
+```
+
+should correctly compare "rev" values.
+
+```js
+chai.expect(semver.lt('2.0.0+rev6', '2.0.0+rev3')).to.equal(false);
+chai.expect(semver.lt('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(false);
+chai.expect(semver.lt('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(false);
+chai.expect(semver.lt('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(true);
+chai.expect(semver.lt('2.0.0+rev3', '2.0.0+rev3')).to.equal(false);
+```
+
+should correctly compare ".dev" versions.
+
+```js
+chai.expect(semver.lt('2.0.0', '2.0.0+dev')).to.equal(false);
+chai.expect(semver.lt('2.0.0', '2.0.0-dev')).to.equal(false);
+chai.expect(semver.lt('2.0.0', '2.0.0.dev')).to.equal(false);
+chai.expect(semver.lt('2.0.0+rev6', '2.0.0+rev6.dev')).to.equal(false);
+chai.expect(semver.lt('2.0.0+rev6.dev', '2.0.0+rev6')).to.equal(true);
+chai.expect(semver.lt('2.0.0+rev6.dev', '2.0.0+rev6.dev')).to.equal(false);
+chai.expect(semver.lt('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.dev')).to.equal(false);
+chai.expect(semver.lt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3')).to.equal(true);
+chai.expect(semver.lt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.equal(false);
+chai.expect(semver.lt('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(false);
+chai.expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0')).to.equal(true);
+chai.expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
+```
+
+
 
 

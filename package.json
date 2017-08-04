@@ -1,6 +1,6 @@
 {
   "name": "resin-semver",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
@@ -18,7 +18,7 @@
     "test": "npm run build && npm run lint && mocha -r ts-node/register test/index.spec.ts",
     "build": "tsc src/index.ts",
     "lint": "tslint -t stylish -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
-    "docs": "npm run build && jsdoc2md --template doc/README.hbs src/index.js > README.md"
+    "docs": "npm run build && node generateDocs"
   },
   "author": "Lucian Buzzo <lucian@resin.io>",
   "license": "Apache-2.0",
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
+    "jsdoc-to-markdown": "^3.0.0",
     "mocha": "^3.4.2",
     "ts-node": "^3.2.1",
     "tslint": "^5.5.0",
