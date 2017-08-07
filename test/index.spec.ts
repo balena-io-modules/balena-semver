@@ -377,4 +377,45 @@ describe('resin-semver', () => {
 			expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
 		});
 	});
+
+	describe('.satisfies()', () => {
+		it('should correctly evaluate valid semver values', () => {
+			expect(semver.satisfies('2.0.5', '^2.0.0')).to.equal(true);
+			expect(semver.satisfies('1.16.0', '^2.0.0')).to.equal(false);
+		});
+
+		it('should correctly evaluate Resin formatted versions', () => {
+			expect(semver.satisfies('Resin OS 2.0.2+rev2', '^2.0.0')).to.equal(true);
+			expect(semver.satisfies('Resin OS 2.0.2 (prod)', '^2.0.0')).to.equal(true);
+			expect(semver.satisfies('Resin OS 1.16.0', '^2.0.0')).to.equal(false);
+		});
+
+		it('should always return false when provided with an invalid semver value', () => {
+			expect(semver.satisfies('Linux 14.04', '^2.0.0')).to.equal(false);
+			expect(semver.satisfies('A development version', '^2.0.0')).to.equal(false);
+			expect(semver.satisfies('Version A', '^2.0.0')).to.equal(false);
+			expect(semver.satisfies('Linux 14.04', '*')).to.equal(false);
+			expect(semver.satisfies('Linux 14.04', '< 1.0.0')).to.equal(false);
+		});
+
+		it('should correctly evaluate null values', () => {
+			expect(semver.satisfies(null, '^2.0.0')).to.equal(false);
+		});
+	});
+
+	describe('.maxSatisfying()', () => {
+		it('should return the correct version', () => {
+			expect(semver.maxSatisfying(versions, '1.1.*')).to.equal('Resin OS 1.1.4');
+			expect(semver.maxSatisfying(versions, '^2.0.0')).to.equal('Resin OS 2.0.9+rev1');
+			expect(semver.maxSatisfying(versions, '< 1.0.0')).to.equal(null);
+		});
+
+		it('should return the first version found if multiple versions have equally high values', () => {
+			expect(semver.maxSatisfying([
+				'1.0.0',
+				'Resin OS 1.1.4',
+				'1.1.4',
+			], '1.1.*')).to.equal('Resin OS 1.1.4');
+		});
+	});
 });

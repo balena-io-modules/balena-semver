@@ -62,6 +62,15 @@ Non-semver strings are compared alphabetically.</p>
 Valid semver versions are always weighted above non semver strings.
 Non-semver strings are compared alphabetically.</p>
 </dd>
+<dt><a href="#satisfies">satisfies(version, range)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Return true if the parsed version satisfies the range.
+This method will always return false if the provided version doesn&#39;t contain a valid semver string.</p>
+</dd>
+<dt><a href="#maxSatisfying">maxSatisfying(versions, range)</a> ⇒ <code>string</code> | <code>null</code></dt>
+<dd><p>Return the highest version in the list that satisfies the range, or null if none of them do.
+If multiple versions are found that have equally high values, the last one in the array is returned.
+Note that only version that contain a valid semver string can satisfy a range.</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -92,6 +101,12 @@ should not throw when provided with a version.
 versions_1.versions.forEach((version) => {
     chai.expect(() => semver.compare(version, version)).to.not.throw();
 });
+```
+
+should correctly sort lists of versions.
+
+```js
+chai.expect(versions_1.versions.slice().sort(semver.compare)).to.eql(versions_1.versions);
 ```
 
 should correctly compare valid semver values.
@@ -653,6 +668,94 @@ chai.expect(semver.lt('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to.
 chai.expect(semver.lt('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(false);
 chai.expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0')).to.equal(true);
 chai.expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
+```
+
+<a name="resin-semver-satisfies"></a>
+
+<a name="satisfies"></a>
+
+## satisfies(version, range) ⇒ <code>boolean</code>
+Return true if the parsed version satisfies the range.
+This method will always return false if the provided version doesn't contain a valid semver string.
+
+**Kind**: global function  
+**Summary**: Check if a version satisfies a range  
+**Returns**: <code>boolean</code> - - True if the parsed version satisfies the range, false otherwise  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| version | <code>string</code> \| <code>null</code> | The version to evaluate |
+| range | <code>string</code> | A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges) docs for details |
+
+**Example**  
+should correctly evaluate valid semver values.
+
+```js
+chai.expect(semver.satisfies('2.0.5', '^2.0.0')).to.equal(true);
+chai.expect(semver.satisfies('1.16.0', '^2.0.0')).to.equal(false);
+```
+
+should correctly evaluate Resin formatted versions.
+
+```js
+chai.expect(semver.satisfies('Resin OS 2.0.2+rev2', '^2.0.0')).to.equal(true);
+chai.expect(semver.satisfies('Resin OS 2.0.2 (prod)', '^2.0.0')).to.equal(true);
+chai.expect(semver.satisfies('Resin OS 1.16.0', '^2.0.0')).to.equal(false);
+```
+
+should always return false when provided with an invalid semver value.
+
+```js
+chai.expect(semver.satisfies('Linux 14.04', '^2.0.0')).to.equal(false);
+chai.expect(semver.satisfies('A development version', '^2.0.0')).to.equal(false);
+chai.expect(semver.satisfies('Version A', '^2.0.0')).to.equal(false);
+chai.expect(semver.satisfies('Linux 14.04', '*')).to.equal(false);
+chai.expect(semver.satisfies('Linux 14.04', '< 1.0.0')).to.equal(false);
+```
+
+should correctly evaluate null values.
+
+```js
+chai.expect(semver.satisfies(null, '^2.0.0')).to.equal(false);
+```
+
+<a name="resin-semver-maxsatisfying"></a>
+
+<a name="maxSatisfying"></a>
+
+## maxSatisfying(versions, range) ⇒ <code>string</code> \| <code>null</code>
+Return the highest version in the list that satisfies the range, or null if none of them do.
+If multiple versions are found that have equally high values, the last one in the array is returned.
+Note that only version that contain a valid semver string can satisfy a range.
+
+**Kind**: global function  
+**Summary**: Return the highest version in the list that satisfies the range  
+**Returns**: <code>string</code> \| <code>null</code> - - The highest matching version string, or null.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| versions | <code>Array.&lt;(string\|null)&gt;</code> | An array of versions to evaluate |
+| range | <code>string</code> | A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges) docs for details |
+
+**Example**  
+should return the correct version.
+
+```js
+chai.expect(semver.maxSatisfying(versions_1.versions, '1.1.*')).to.equal('Resin OS 1.1.4');
+chai.expect(semver.maxSatisfying(versions_1.versions, '^2.0.0')).to.equal('Resin OS 2.0.9+rev1');
+chai.expect(semver.maxSatisfying(versions_1.versions, '< 1.0.0')).to.equal(null);
+```
+
+should return the first version found if multiple versions have equally high values.
+
+```js
+chai.expect(semver.maxSatisfying([
+    '1.0.0',
+    'Resin OS 1.1.4',
+    '1.1.4',
+], '1.1.*')).to.equal('Resin OS 1.1.4');
 ```
 
 

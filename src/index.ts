@@ -234,3 +234,62 @@ export const gt = (versionA: string | null, versionB: string | null): boolean =>
 export const lt = (versionA: string | null, versionB: string | null): boolean => {
 	return compare(versionA, versionB) < 0;
 };
+
+/**
+ * @summary Check if a version satisfies a range
+ * @name satisfies
+ * @public
+ * @function
+ *
+ * @description Return true if the parsed version satisfies the range.
+ * This method will always return false if the provided version doesn't contain a valid semver string.
+ *
+ * @param {string|null} version - The version to evaluate
+ * @param {string} range - A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges)
+ * docs for details
+ *
+ * @returns {boolean} - True if the parsed version satisfies the range, false otherwise
+ *
+ */
+export const satisfies = (version: string | null, range: string) => {
+	if (version === null) {
+		return false;
+	}
+
+	version = normalize(version);
+
+	if (!semver.valid(version)) {
+		return false;
+	}
+
+	return semver.satisfies(version, range);
+};
+
+/**
+ * @summary Return the highest version in the list that satisfies the range
+ * @name maxSatisfying
+ * @public
+ * @function
+ *
+ * @description Return the highest version in the list that satisfies the range, or null if none of them do.
+ * If multiple versions are found that have equally high values, the last one in the array is returned.
+ * Note that only version that contain a valid semver string can satisfy a range.
+ *
+ * @param {Array.<string|null>} versions - An array of versions to evaluate
+ * @param {string} range - A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges)
+ * docs for details
+ *
+ * @returns {string|null} - The highest matching version string, or null.
+ *
+ */
+export const maxSatisfying = (versions: Array<string | null>, range: string) => {
+	let max: string | null = null;
+
+	versions.forEach((version) => {
+		if (satisfies(version, range) && gt(version, max)) {
+			max = version;
+		}
+	});
+
+	return max;
+};
