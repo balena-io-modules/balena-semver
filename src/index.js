@@ -9,11 +9,14 @@ var trimOsText = function (version) {
         .replace(/^v/, '');
 };
 var safeSemver = function (version) {
-    return version.replace(/(\.[0-9]+)\.rev/, '$1+rev');
+    // fix major.minor.patch.rev to use rev as build metadata
+    return version.replace(/(\.[0-9]+)\.rev/, '$1+rev')
+        .replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
+        .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
+        .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2');
 };
 var normalize = function (version) { return trimOsText(safeSemver(version)); };
-var getRev = function (osVersion) {
-    var parsedVersion = semver.parse(osVersion);
+var getRev = function (parsedVersion) {
     if (parsedVersion === null) {
         return 0;
     }
@@ -29,8 +32,20 @@ var getRev = function (osVersion) {
         return 0;
     }
 };
-var isDevelopmentVersion = function (version) {
-    return /(\.|\+|-)dev/.test(version);
+var isDevelopmentVersion = function (parsedVersion) {
+    if (parsedVersion === null) {
+        return false;
+    }
+    return parsedVersion.build.indexOf('dev') >= 0;
+};
+var compareValues = function (valueA, valueB) {
+    if (valueA > valueB) {
+        return 1;
+    }
+    if (valueA < valueB) {
+        return -1;
+    }
+    return 0;
 };
 /**
  * @summary Compare order of versions
@@ -61,36 +76,28 @@ exports.compare = memoize(function (versionA, versionB) {
     }
     versionA = normalize(versionA);
     versionB = normalize(versionB);
-    var isAValid = semver.valid(versionA);
-    var isBValid = semver.valid(versionB);
-    if (isAValid && !isBValid) {
-        return 1;
-    }
-    if (!isAValid && isBValid) {
-        return -1;
-    }
-    if (!isAValid && !isBValid) {
-        if (versionA > versionB) {
+    var semverA = semver.parse(versionA);
+    var semverB = semver.parse(versionB);
+    if (!semverA || !semverB) {
+        if (semverA) {
             return 1;
         }
-        if (versionA < versionB) {
+        if (semverB) {
             return -1;
         }
-        return 0;
+        return compareValues(versionA, versionB);
     }
-    var semverResult = semver.compare(versionA, versionB);
+    var semverResult = semver.compare(semverA, semverB);
     if (semverResult !== 0) {
         return semverResult;
     }
-    var revA = getRev(versionA);
-    var revB = getRev(versionB);
-    if (revA !== revB) {
-        return revA > revB ? 1 : -1;
+    var revResult = compareValues(getRev(semverA), getRev(semverB));
+    if (revResult !== 0) {
+        return revResult;
     }
-    var devA = Number(isDevelopmentVersion(versionA));
-    var devB = Number(isDevelopmentVersion(versionB));
-    if (devA !== devB) {
-        return devA > devB ? -1 : 1;
+    var devResult = compareValues(isDevelopmentVersion(semverA), isDevelopmentVersion(semverB));
+    if (devResult !== 0) {
+        return devResult * -1;
     }
     return versionA.localeCompare(versionB);
 }, function (a, b) { return a + " && " + b; });
@@ -134,7 +141,7 @@ exports.major = function (version) {
     if (!version) {
         return null;
     }
-    version = trimOsText(safeSemver(version));
+    version = normalize(version);
     if (semver.valid(version)) {
         return semver.major(version);
     }
@@ -156,7 +163,7 @@ exports.prerelease = function (version) {
     if (!version) {
         return null;
     }
-    version = trimOsText(safeSemver(version));
+    version = normalize(version);
     return semver.prerelease(version);
 };
 /**
