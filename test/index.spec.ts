@@ -418,4 +418,60 @@ describe('resin-semver', () => {
 			], '1.1.*')).to.equal('Resin OS 1.1.4');
 		});
 	});
+
+	describe('.parse()', () => {
+		it('should correctly parse valid semver values', () => {
+			expect(semver.parse('2.0.5')).to.deep.include({
+				raw: '2.0.5',
+				major: 2,
+				minor: 0,
+				patch: 5,
+				version: '2.0.5',
+				prerelease: [],
+				build: [],
+			});
+		});
+
+		it('should correctly parse Resin formatted versions', () => {
+			expect(semver.parse('Resin OS v2.0.2+rev2')).to.deep.include({
+				raw: 'Resin OS v2.0.2+rev2',
+				major: 2,
+				minor: 0,
+				patch: 2,
+				version: '2.0.2',
+				prerelease: [],
+				build: ['rev2'],
+			});
+
+			expect(semver.parse('Resin OS v2.0.2 (prod)')).to.deep.include({
+				raw: 'Resin OS v2.0.2 (prod)',
+				major: 2,
+				minor: 0,
+				patch: 2,
+				version: '2.0.2',
+				prerelease: [],
+				build: [],
+			});
+
+			expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
+				raw: 'Resin OS 2.0.0-rc5.rev1',
+				major: 2,
+				minor: 0,
+				patch: 0,
+				version: '2.0.0-rc5.rev1',
+				prerelease: ['rc5', 'rev1'],
+				build: [],
+			});
+		});
+
+		it('should correctly parse invalid semver values', () => {
+			expect(semver.parse('Linux 14.04')).to.equal(null);
+			expect(semver.parse('A development version')).to.equal(null);
+			expect(semver.parse('Version A')).to.equal(null);
+		});
+
+		it('should correctly parse null values', () => {
+			expect(semver.parse(null)).to.equal(null);
+		});
+	});
 });

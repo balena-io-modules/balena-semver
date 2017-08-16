@@ -1,23 +1,26 @@
 "use strict";
-exports.__esModule = true;
-var semver = require("semver");
-var memoize = require("lodash.memoize");
-var trimOsText = function (version) {
-    // Remove "Resin OS" text
+Object.defineProperty(exports, "__esModule", { value: true });
+const memoize = require("lodash.memoize");
+const semver = require("semver");
+const trimOsText = (version) => {
     return version.replace(/^resin\sos\s+/gi, '')
         .replace(/\s+\(\w+\)$/, '')
         .replace(/^v/, '');
 };
-var safeSemver = function (version) {
+const safeSemver = (version) => {
     return version.replace(/(\.[0-9]+)\.rev/, '$1+rev');
 };
-var normalize = function (version) { return trimOsText(safeSemver(version)); };
-var getRev = function (osVersion) {
-    var rev = semver.parse(osVersion).build.map(function (metadataPart) {
-        var matches = /rev(\d+)/.exec(metadataPart);
+const normalize = (version) => trimOsText(safeSemver(version));
+const getRev = (osVersion) => {
+    const parsedVersion = semver.parse(osVersion);
+    if (parsedVersion === null) {
+        return 0;
+    }
+    const rev = parsedVersion.build.map(function (metadataPart) {
+        const matches = /rev(\d+)/.exec(metadataPart);
         return matches && matches[1] || null;
     })
-        .filter(function (x) { return x != null; })[0];
+        .filter((x) => x != null)[0];
     if (rev != null) {
         return parseInt(rev, 10);
     }
@@ -25,30 +28,10 @@ var getRev = function (osVersion) {
         return 0;
     }
 };
-var isDevelopmentVersion = function (version) {
+const isDevelopmentVersion = (version) => {
     return /(\.|\+|-)dev/.test(version);
 };
-/**
- * @summary Compare order of versions
- * @name compare
- * @public
- * @function
- *
- * @description Accepts string or null values and compares them, returning a number
- * indicating sort order. Values are parsed for valid semver strings. Sorts an array
- * of versions in ascending order if passed to `Array.sort()`.
- *
- *
- * @param {string|null} versionA - The first version to compare
- * @param {string|null} versionB - The second version to compare
- *
- * @returns {number} Returns `0` if `versionA == versionB`,
- * or `1` if `versionA` is greater, or `-1` if `versionB` is greater.
- * Null values are sorted before invalid semver values, and invalid semver values
- * are sorted before valid semver values
- * If both values are invalid semver values, then the values are compared alphabetically.
- */
-exports.compare = memoize(function (versionA, versionB) {
+exports.compare = memoize((versionA, versionB) => {
     if (versionA === null) {
         return versionB === null ? 0 : -1;
     }
@@ -57,8 +40,8 @@ exports.compare = memoize(function (versionA, versionB) {
     }
     versionA = normalize(versionA);
     versionB = normalize(versionB);
-    var isAValid = semver.valid(versionA);
-    var isBValid = semver.valid(versionB);
+    const isAValid = semver.valid(versionA);
+    const isBValid = semver.valid(versionB);
     if (isAValid && !isBValid) {
         return 1;
     }
@@ -74,59 +57,26 @@ exports.compare = memoize(function (versionA, versionB) {
         }
         return 0;
     }
-    var semverResult = semver.compare(versionA, versionB);
+    const semverResult = semver.compare(versionA, versionB);
     if (semverResult !== 0) {
         return semverResult;
     }
-    var revA = getRev(versionA);
-    var revB = getRev(versionB);
+    const revA = getRev(versionA);
+    const revB = getRev(versionB);
     if (revA !== revB) {
         return revA > revB ? 1 : -1;
     }
-    var devA = Number(isDevelopmentVersion(versionA));
-    var devB = Number(isDevelopmentVersion(versionB));
+    const devA = Number(isDevelopmentVersion(versionA));
+    const devB = Number(isDevelopmentVersion(versionB));
     if (devA !== devB) {
         return devA > devB ? -1 : 1;
     }
     return versionA.localeCompare(versionB);
-}, function (a, b) { return a + " && " + b; });
-/**
- * @summary Compare order of versions in reverse
- * @name rcompare
- * @public
- * @function
- *
- * @description The reverse of `.compare()`. Accepts string or null values and compares
- * them, returning a number indicating sort order. Values are parsed for valid semver
- * strings. Sorts an array of versions in descending order when passed to `Array.sort()`.
- *
- * @param {string|null} versionA - The first version to compare
- * @param {string|null} versionB - The second version to compare
- *
- * @returns {number} Returns `0` if `versionA == versionB`,
- * or `-1` if `versionA` is greater, or `1` if `versionB` is greater.
- * Valid semver values are sorted before invalid semver values, and invalid semver values are
- * sorted before null values.
- * If both values are non-null invalid semver values, then the values are compared alphabetically.
- */
-exports.rcompare = function (versionA, versionB) {
+}, (a, b) => `${a} && ${b}`);
+exports.rcompare = (versionA, versionB) => {
     return 0 - exports.compare(versionA, versionB);
 };
-/**
- * @summary Return the major version number
- * @name major
- * @public
- * @function
- *
- * @description Returns the major version number in a semver string.
- * If the version is not a valid semver string, or a valid semver string cannot be
- * found, it returns null.
- *
- * @param {string|null} version - The version string to evaluate
- *
- * @returns {number|null} - The major version number
- */
-exports.major = function (version) {
+exports.major = (version) => {
     if (!version) {
         return null;
     }
@@ -136,97 +86,23 @@ exports.major = function (version) {
     }
     return null;
 };
-/**
- * @summary Return prerelease components
- * @name prerelease
- * @public
- * @function
- *
- * @description Returns an array of prerelease components, or null if none exist
- *
- * @param {string|null} version - The version string to evaluate
- *
- * @returns {Array.<string|number>|null} - An array of prerelease component, or null if none exist
- */
-exports.prerelease = function (version) {
+exports.prerelease = (version) => {
     if (!version) {
         return null;
     }
     version = trimOsText(safeSemver(version));
     return semver.prerelease(version);
 };
-/**
- * @summary Check if a version is greater than or equal to another
- * @name gte
- * @public
- * @function
- *
- * @description Returns true if versionA is greater than or equal to versionB.
- * Valid semver versions are always weighted above non semver strings.
- * Non-semver strings are compared alphabetically.
- *
- * @param {string|null} versionA - The version string to compare against
- * @param {string|null} versionB - The version string to compare to versionA
- *
- * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
- */
-exports.gte = function (versionA, versionB) {
+exports.gte = (versionA, versionB) => {
     return exports.compare(versionA, versionB) >= 0;
 };
-/**
- * @summary Check if a version is greater than another
- * @name gt
- * @public
- * @function
- *
- * @description Returns true if versionA is greater than versionB.
- * Valid semver versions are always weighted above non semver strings.
- * Non-semver strings are compared alphabetically.
- *
- * @param {string|null} versionA - The version string to compare against
- * @param {string|null} versionB - The version string to compare to versionA
- *
- *
- * @returns {boolean} - true if versionA is greater than versionB, otherwise false.
- */
-exports.gt = function (versionA, versionB) {
+exports.gt = (versionA, versionB) => {
     return exports.compare(versionA, versionB) > 0;
 };
-/**
- * @summary Check if a version is less than another
- * @name lt
- * @public
- * @function
- *
- * @description Returns true if versionA is less than versionB.
- * Valid semver versions are always weighted above non semver strings.
- * Non-semver strings are compared alphabetically.
- *
- * @param {string|null} versionA - The version string to compare against
- * @param {string|null} versionB - The version string to compare to versionA
- *
- * @returns {boolean} - true if versionA is less than versionB, otherwise false.
- */
-exports.lt = function (versionA, versionB) {
+exports.lt = (versionA, versionB) => {
     return exports.compare(versionA, versionB) < 0;
 };
-/**
- * @summary Check if a version satisfies a range
- * @name satisfies
- * @public
- * @function
- *
- * @description Return true if the parsed version satisfies the range.
- * This method will always return false if the provided version doesn't contain a valid semver string.
- *
- * @param {string|null} version - The version to evaluate
- * @param {string} range - A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges)
- * docs for details
- *
- * @returns {boolean} - True if the parsed version satisfies the range, false otherwise
- *
- */
-exports.satisfies = function (version, range) {
+exports.satisfies = (version, range) => {
     if (version === null) {
         return false;
     }
@@ -236,29 +112,23 @@ exports.satisfies = function (version, range) {
     }
     return semver.satisfies(version, range);
 };
-/**
- * @summary Return the highest version in the list that satisfies the range
- * @name maxSatisfying
- * @public
- * @function
- *
- * @description Return the highest version in the list that satisfies the range, or null if none of them do.
- * If multiple versions are found that have equally high values, the last one in the array is returned.
- * Note that only version that contain a valid semver string can satisfy a range.
- *
- * @param {Array.<string|null>} versions - An array of versions to evaluate
- * @param {string} range - A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges)
- * docs for details
- *
- * @returns {string|null} - The highest matching version string, or null.
- *
- */
-exports.maxSatisfying = function (versions, range) {
-    var max = null;
-    versions.forEach(function (version) {
+exports.maxSatisfying = (versions, range) => {
+    let max = null;
+    versions.forEach((version) => {
         if (exports.satisfies(version, range) && exports.gt(version, max)) {
             max = version;
         }
     });
     return max;
 };
+exports.parse = (version) => {
+    if (version === null) {
+        return null;
+    }
+    const parsed = semver.parse(normalize(version));
+    if (parsed) {
+        parsed.raw = version;
+    }
+    return parsed;
+};
+//# sourceMappingURL=index.js.map
