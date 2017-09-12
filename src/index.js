@@ -53,10 +53,10 @@ var isDevelopmentVersion = function (version) {
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
 exports.compare = memoize(function (versionA, versionB) {
-    if (versionA === null) {
-        return versionB === null ? 0 : -1;
+    if (versionA == null) {
+        return versionB == null ? 0 : -1;
     }
-    if (versionB === null) {
+    if (versionB == null) {
         return 1;
     }
     versionA = normalize(versionA);
@@ -231,7 +231,7 @@ exports.lt = function (versionA, versionB) {
  *
  */
 exports.satisfies = function (version, range) {
-    if (version === null) {
+    if (version == null) {
         return false;
     }
     version = normalize(version);
@@ -292,7 +292,7 @@ exports.maxSatisfying = function (versions, range) {
  * null if a valid semver string could not be found
  */
 exports.parse = function (version) {
-    if (version === null) {
+    if (version == null) {
         return null;
     }
     var parsed = semver.parse(normalize(version));

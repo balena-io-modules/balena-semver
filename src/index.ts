@@ -1,6 +1,8 @@
 import memoize = require('lodash.memoize');
 import * as semver from 'semver';
 
+type VersionInput = string | null | undefined;
+
 const trimOsText = (version: string) => {
 	// Remove "Resin OS" text
 	return version.replace(/^resin\sos\s+/gi, '')
@@ -60,11 +62,11 @@ const isDevelopmentVersion = (version: string) => {
  * are sorted before valid semver values
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
-export const compare = memoize((versionA: string | null, versionB: string | null): number => {
-	if (versionA === null) {
-		return versionB === null ? 0 : -1;
+export const compare = memoize((versionA: VersionInput, versionB: VersionInput): number => {
+	if (versionA == null) {
+		return versionB == null ? 0 : -1;
 	}
-	if (versionB === null) {
+	if (versionB == null) {
 		return 1;
 	}
 
@@ -124,7 +126,7 @@ export const compare = memoize((versionA: string | null, versionB: string | null
  * sorted before null values.
  * If both values are non-null invalid semver values, then the values are compared alphabetically.
  */
-export const rcompare = (versionA: string | null, versionB: string | null): number => {
+export const rcompare = (versionA: VersionInput, versionB: VersionInput): number => {
 	return 0 - compare(versionA, versionB);
 };
 
@@ -142,7 +144,7 @@ export const rcompare = (versionA: string | null, versionB: string | null): numb
  *
  * @returns {number|null} - The major version number
  */
-export const major = (version: string | null): number | null => {
+export const major = (version: VersionInput): number | null => {
 	if (!version) {
 		return null;
 	}
@@ -168,7 +170,7 @@ export const major = (version: string | null): number | null => {
  *
  * @returns {Array.<string|number>|null} - An array of prerelease component, or null if none exist
  */
-export const prerelease = (version: string | null) => {
+export const prerelease = (version: VersionInput) => {
 	if (!version) {
 		return null;
 	}
@@ -193,7 +195,7 @@ export const prerelease = (version: string | null) => {
  *
  * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
  */
-export const gte = (versionA: string | null, versionB: string | null): boolean => {
+export const gte = (versionA: VersionInput, versionB: VersionInput): boolean => {
 	return compare(versionA, versionB) >= 0;
 };
 
@@ -213,7 +215,7 @@ export const gte = (versionA: string | null, versionB: string | null): boolean =
  *
  * @returns {boolean} - true if versionA is greater than versionB, otherwise false.
  */
-export const gt = (versionA: string | null, versionB: string | null): boolean => {
+export const gt = (versionA: VersionInput, versionB: VersionInput): boolean => {
 	return compare(versionA, versionB) > 0;
 };
 
@@ -232,7 +234,7 @@ export const gt = (versionA: string | null, versionB: string | null): boolean =>
  *
  * @returns {boolean} - true if versionA is less than versionB, otherwise false.
  */
-export const lt = (versionA: string | null, versionB: string | null): boolean => {
+export const lt = (versionA: VersionInput, versionB: VersionInput): boolean => {
 	return compare(versionA, versionB) < 0;
 };
 
@@ -252,8 +254,8 @@ export const lt = (versionA: string | null, versionB: string | null): boolean =>
  * @returns {boolean} - True if the parsed version satisfies the range, false otherwise
  *
  */
-export const satisfies = (version: string | null, range: string) => {
-	if (version === null) {
+export const satisfies = (version: VersionInput, range: string) => {
+	if (version == null) {
 		return false;
 	}
 
@@ -283,8 +285,8 @@ export const satisfies = (version: string | null, range: string) => {
  * @returns {string|null} - The highest matching version string, or null.
  *
  */
-export const maxSatisfying = (versions: Array<string | null>, range: string) => {
-	let max: string | null = null;
+export const maxSatisfying = (versions: VersionInput[], range: string) => {
+	let max: VersionInput = null;
 
 	versions.forEach((version) => {
 		if (satisfies(version, range) && gt(version, max)) {
@@ -321,8 +323,8 @@ export const maxSatisfying = (versions: Array<string | null>, range: string) => 
  * @returns {SemverObject|null} - An object representing the version string, or
  * null if a valid semver string could not be found
  */
-export const parse = (version: string | null) => {
-	if (version === null) {
+export const parse = (version: VersionInput) => {
+	if (version == null) {
 		return null;
 	}
 	const parsed = semver.parse(normalize(version));
