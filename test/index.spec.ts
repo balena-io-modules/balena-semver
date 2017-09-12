@@ -54,6 +54,16 @@ describe('resin-semver', () => {
 			expect(semver.compare(null, null)).to.equal(0);
 		});
 
+		it('should correctly compare undefined values', () => {
+			expect(semver.compare('2.0.5', undefined)).to.equal(1);
+			expect(semver.compare(undefined, '1.16.0')).to.equal(-1);
+			expect(semver.compare('Resin OS 1.16.0', undefined)).to.equal(1);
+			expect(semver.compare(undefined, 'Resin OS 1.16.0')).to.equal(-1);
+			expect(semver.compare('Linux 14.04', undefined)).to.equal(1);
+			expect(semver.compare(undefined, 'Linux 14.04')).to.equal(-1);
+			expect(semver.compare(undefined, undefined)).to.equal(0);
+		});
+
 		it('should correctly compare "rev" values', () => {
 			expect(semver.compare('2.0.0+rev6', '2.0.0+rev3')).to.equal(1);
 			expect(semver.compare('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(1);
@@ -123,6 +133,16 @@ describe('resin-semver', () => {
 			expect(semver.rcompare(null, null)).to.equal(0);
 		});
 
+		it('should correctly compare undefined values', () => {
+			expect(semver.rcompare('2.0.5', undefined)).to.equal(-1);
+			expect(semver.rcompare(undefined, '1.16.0')).to.equal(1);
+			expect(semver.rcompare('Resin OS 1.16.0', undefined)).to.equal(-1);
+			expect(semver.rcompare(undefined, 'Resin OS 1.16.0')).to.equal(1);
+			expect(semver.rcompare('Linux 14.04', undefined)).to.equal(-1);
+			expect(semver.rcompare(undefined, 'Linux 14.04')).to.equal(1);
+			expect(semver.rcompare(undefined, undefined)).to.equal(0);
+		});
+
 		it('should correctly compare "rev" values', () => {
 			expect(semver.rcompare('2.0.0+rev6', '2.0.0+rev3')).to.equal(-1);
 			expect(semver.rcompare('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(-1);
@@ -163,6 +183,10 @@ describe('resin-semver', () => {
 			expect(semver.major(null)).to.equal(null);
 		});
 
+		it('should return null when version is `undefined`', () => {
+			expect(semver.major(undefined)).to.equal(null);
+		});
+
 		it('should return null when the version contains no valid semver value', () => {
 			expect(semver.major('My dev version')).to.equal(null);
 			expect(semver.major('Linux 14.04')).to.equal(null);
@@ -195,6 +219,10 @@ describe('resin-semver', () => {
 
 		it('should return null when provided with a null value', () => {
 			expect(semver.prerelease(null)).to.equal(null);
+		});
+
+		it('should return null when provided with an undefined value', () => {
+			expect(semver.prerelease(undefined)).to.equal(null);
 		});
 	});
 
@@ -230,6 +258,16 @@ describe('resin-semver', () => {
 			expect(semver.gte('Linux 14.04', null)).to.equal(true);
 			expect(semver.gte(null, 'Linux 14.04')).to.equal(false);
 			expect(semver.gte(null, null)).to.equal(true);
+		});
+
+		it('should correctly compare undefined values', () => {
+			expect(semver.gte('2.0.5', undefined)).to.equal(true);
+			expect(semver.gte(undefined, '1.16.0')).to.equal(false);
+			expect(semver.gte('Resin OS 1.16.0', undefined)).to.equal(true);
+			expect(semver.gte(undefined, 'Resin OS 1.16.0')).to.equal(false);
+			expect(semver.gte('Linux 14.04', undefined)).to.equal(true);
+			expect(semver.gte(undefined, 'Linux 14.04')).to.equal(false);
+			expect(semver.gte(undefined, undefined)).to.equal(true);
 		});
 
 		it('should correctly compare "rev" values', () => {
@@ -293,6 +331,16 @@ describe('resin-semver', () => {
 			expect(semver.gt(null, null)).to.equal(false);
 		});
 
+		it('should correctly compare undefined values', () => {
+			expect(semver.gt('2.0.5', undefined)).to.equal(true);
+			expect(semver.gt(undefined, '1.16.0')).to.equal(false);
+			expect(semver.gt('Resin OS 1.16.0', undefined)).to.equal(true);
+			expect(semver.gt(undefined, 'Resin OS 1.16.0')).to.equal(false);
+			expect(semver.gt('Linux 14.04', undefined)).to.equal(true);
+			expect(semver.gt(undefined, 'Linux 14.04')).to.equal(false);
+			expect(semver.gt(undefined, undefined)).to.equal(false);
+		});
+
 		it('should correctly compare "rev" values', () => {
 			expect(semver.gt('2.0.0+rev6', '2.0.0+rev3')).to.equal(true);
 			expect(semver.gt('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(true);
@@ -354,6 +402,16 @@ describe('resin-semver', () => {
 			expect(semver.lt(null, null)).to.equal(false);
 		});
 
+		it('should correctly compare undefined values', () => {
+			expect(semver.lt('2.0.5', undefined)).to.equal(false);
+			expect(semver.lt(undefined, '1.16.0')).to.equal(true);
+			expect(semver.lt('Resin OS 1.16.0', undefined)).to.equal(false);
+			expect(semver.lt(undefined, 'Resin OS 1.16.0')).to.equal(true);
+			expect(semver.lt('Linux 14.04', undefined)).to.equal(false);
+			expect(semver.lt(undefined, 'Linux 14.04')).to.equal(true);
+			expect(semver.lt(undefined, undefined)).to.equal(false);
+		});
+
 		it('should correctly compare "rev" values', () => {
 			expect(semver.lt('2.0.0+rev6', '2.0.0+rev3')).to.equal(false);
 			expect(semver.lt('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equal(false);
@@ -400,6 +458,10 @@ describe('resin-semver', () => {
 
 		it('should correctly evaluate null values', () => {
 			expect(semver.satisfies(null, '^2.0.0')).to.equal(false);
+		});
+
+		it('should correctly evaluate undefined values', () => {
+			expect(semver.satisfies(undefined, '^2.0.0')).to.equal(false);
 		});
 	});
 
@@ -472,6 +534,10 @@ describe('resin-semver', () => {
 
 		it('should correctly parse null values', () => {
 			expect(semver.parse(null)).to.equal(null);
+		});
+
+		it('should correctly parse undefined values', () => {
+			expect(semver.parse(undefined)).to.equal(null);
 		});
 	});
 });

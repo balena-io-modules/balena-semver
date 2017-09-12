@@ -161,6 +161,18 @@ chai.expect(semver.compare(null, 'Linux 14.04')).to.equal(-1);
 chai.expect(semver.compare(null, null)).to.equal(0);
 ```
 
+should correctly compare undefined values.
+
+```js
+chai.expect(semver.compare('2.0.5', undefined)).to.equal(1);
+chai.expect(semver.compare(undefined, '1.16.0')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 1.16.0', undefined)).to.equal(1);
+chai.expect(semver.compare(undefined, 'Resin OS 1.16.0')).to.equal(-1);
+chai.expect(semver.compare('Linux 14.04', undefined)).to.equal(1);
+chai.expect(semver.compare(undefined, 'Linux 14.04')).to.equal(-1);
+chai.expect(semver.compare(undefined, undefined)).to.equal(0);
+```
+
 should correctly compare "rev" values.
 
 ```js
@@ -268,6 +280,18 @@ chai.expect(semver.rcompare(null, 'Linux 14.04')).to.equal(1);
 chai.expect(semver.rcompare(null, null)).to.equal(0);
 ```
 
+should correctly compare undefined values.
+
+```js
+chai.expect(semver.rcompare('2.0.5', undefined)).to.equal(-1);
+chai.expect(semver.rcompare(undefined, '1.16.0')).to.equal(1);
+chai.expect(semver.rcompare('Resin OS 1.16.0', undefined)).to.equal(-1);
+chai.expect(semver.rcompare(undefined, 'Resin OS 1.16.0')).to.equal(1);
+chai.expect(semver.rcompare('Linux 14.04', undefined)).to.equal(-1);
+chai.expect(semver.rcompare(undefined, 'Linux 14.04')).to.equal(1);
+chai.expect(semver.rcompare(undefined, undefined)).to.equal(0);
+```
+
 should correctly compare "rev" values.
 
 ```js
@@ -335,6 +359,12 @@ should return null when version is `null`.
 chai.expect(semver.major(null)).to.equal(null);
 ```
 
+should return null when version is `undefined`.
+
+```js
+chai.expect(semver.major(undefined)).to.equal(null);
+```
+
 should return null when the version contains no valid semver value.
 
 ```js
@@ -398,6 +428,12 @@ should return null when provided with a null value.
 chai.expect(semver.prerelease(null)).to.equal(null);
 ```
 
+should return null when provided with an undefined value.
+
+```js
+chai.expect(semver.prerelease(undefined)).to.equal(null);
+```
+
 <a name="resin-semver-gte"></a>
 
 <a name="gte"></a>
@@ -459,6 +495,18 @@ chai.expect(semver.gte(null, 'Resin OS 1.16.0')).to.equal(false);
 chai.expect(semver.gte('Linux 14.04', null)).to.equal(true);
 chai.expect(semver.gte(null, 'Linux 14.04')).to.equal(false);
 chai.expect(semver.gte(null, null)).to.equal(true);
+```
+
+should correctly compare undefined values.
+
+```js
+chai.expect(semver.gte('2.0.5', undefined)).to.equal(true);
+chai.expect(semver.gte(undefined, '1.16.0')).to.equal(false);
+chai.expect(semver.gte('Resin OS 1.16.0', undefined)).to.equal(true);
+chai.expect(semver.gte(undefined, 'Resin OS 1.16.0')).to.equal(false);
+chai.expect(semver.gte('Linux 14.04', undefined)).to.equal(true);
+chai.expect(semver.gte(undefined, 'Linux 14.04')).to.equal(false);
+chai.expect(semver.gte(undefined, undefined)).to.equal(true);
 ```
 
 should correctly compare "rev" values.
@@ -554,6 +602,18 @@ chai.expect(semver.gt(null, 'Linux 14.04')).to.equal(false);
 chai.expect(semver.gt(null, null)).to.equal(false);
 ```
 
+should correctly compare undefined values.
+
+```js
+chai.expect(semver.gt('2.0.5', undefined)).to.equal(true);
+chai.expect(semver.gt(undefined, '1.16.0')).to.equal(false);
+chai.expect(semver.gt('Resin OS 1.16.0', undefined)).to.equal(true);
+chai.expect(semver.gt(undefined, 'Resin OS 1.16.0')).to.equal(false);
+chai.expect(semver.gt('Linux 14.04', undefined)).to.equal(true);
+chai.expect(semver.gt(undefined, 'Linux 14.04')).to.equal(false);
+chai.expect(semver.gt(undefined, undefined)).to.equal(false);
+```
+
 should correctly compare "rev" values.
 
 ```js
@@ -647,6 +707,18 @@ chai.expect(semver.lt(null, 'Linux 14.04')).to.equal(true);
 chai.expect(semver.lt(null, null)).to.equal(false);
 ```
 
+should correctly compare undefined values.
+
+```js
+chai.expect(semver.lt('2.0.5', undefined)).to.equal(false);
+chai.expect(semver.lt(undefined, '1.16.0')).to.equal(true);
+chai.expect(semver.lt('Resin OS 1.16.0', undefined)).to.equal(false);
+chai.expect(semver.lt(undefined, 'Resin OS 1.16.0')).to.equal(true);
+chai.expect(semver.lt('Linux 14.04', undefined)).to.equal(false);
+chai.expect(semver.lt(undefined, 'Linux 14.04')).to.equal(true);
+chai.expect(semver.lt(undefined, undefined)).to.equal(false);
+```
+
 should correctly compare "rev" values.
 
 ```js
@@ -722,6 +794,12 @@ should correctly evaluate null values.
 
 ```js
 chai.expect(semver.satisfies(null, '^2.0.0')).to.equal(false);
+```
+
+should correctly evaluate undefined values.
+
+```js
+chai.expect(semver.satisfies(undefined, '^2.0.0')).to.equal(false);
 ```
 
 <a name="resin-semver-maxsatisfying"></a>
@@ -839,6 +917,12 @@ should correctly parse null values.
 
 ```js
 chai.expect(semver.parse(null)).to.equal(null);
+```
+
+should correctly parse undefined values.
+
+```js
+chai.expect(semver.parse(undefined)).to.equal(null);
 ```
 
 
