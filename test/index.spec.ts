@@ -540,4 +540,26 @@ describe('resin-semver', () => {
 			expect(semver.parse(undefined)).to.equal(null);
 		});
 	});
+
+	describe('.valid()', () => {
+		it('should return null for invalid semver values', () => {
+			expect(semver.valid(null)).to.equal(null);
+			expect(semver.valid(undefined)).to.equal(null);
+			expect(semver.valid('')).to.equal(null);
+			expect(semver.valid('foobar')).to.equal(null);
+			expect(semver.valid('12345')).to.equal(null);
+			expect(semver.valid('1.2.3.4.5')).to.equal(null);
+		});
+
+		it('should correctly parse valid values', () => {
+			expect(semver.valid('Resin OS 1.0.0-pre')).to.equal('1.0.0-pre');
+			expect(semver.valid('Resin OS 1.0.5 (fido)')).to.equal('1.0.5');
+			expect(semver.valid('Resin OS 2.0.0-beta.8')).to.equal('2.0.0-beta.8');
+			expect(semver.valid('Resin OS 2.0.0-beta10.rev1')).to.equal('2.0.0-beta10.rev1');
+			expect(semver.valid('Resin OS 2.0.0+rev3')).to.equal('2.0.0');
+			expect(semver.valid('Resin OS 2.0.0.rev1 (prod)')).to.equal('2.0.0');
+			expect(semver.valid('Resin OS 2.0.0+rev4 (dev)')).to.equal('2.0.0');
+			expect(semver.valid('2.0.6+rev3.dev')).to.equal('2.0.6');
+		});
+	});
 });
