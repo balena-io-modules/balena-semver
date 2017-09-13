@@ -75,6 +75,9 @@ Note that only version that contain a valid semver string can satisfy a range.</
 <dd><p>Returns an object representing the semver version. Returns null
 if a valid semver string can&#39;t be found.</p>
 </dd>
+<dt><a href="#valid">valid(version)</a> ⇒ <code>string</code> | <code>null</code></dt>
+<dd><p>Return the parsed version, or null if it&#39;s not valid.</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -95,8 +98,8 @@ If both values are invalid semver values, then the values are compared alphabeti
 
 | Param | Type | Description |
 | --- | --- | --- |
-| versionA | <code>string</code> \| <code>null</code> | The first version to compare |
-| versionB | <code>string</code> \| <code>null</code> | The second version to compare |
+| versionA | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The first version to compare |
+| versionB | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The second version to compare |
 
 **Example**  
 should not throw when provided with a version.
@@ -220,8 +223,8 @@ If both values are non-null invalid semver values, then the values are compared 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| versionA | <code>string</code> \| <code>null</code> | The first version to compare |
-| versionB | <code>string</code> \| <code>null</code> | The second version to compare |
+| versionA | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The first version to compare |
+| versionB | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The second version to compare |
 
 **Example**  
 should not throw when provided with a version.
@@ -335,7 +338,7 @@ found, it returns null.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| version | <code>string</code> \| <code>null</code> | The version string to evaluate |
+| version | <code>string</code> \| <code>null</code> \| <code>undefine</code> | The version string to evaluate |
 
 **Example**  
 should correctly match valid semver versions.
@@ -387,7 +390,7 @@ Returns an array of prerelease components, or null if none exist
 
 | Param | Type | Description |
 | --- | --- | --- |
-| version | <code>string</code> \| <code>null</code> | The version string to evaluate |
+| version | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to evaluate |
 
 **Example**  
 should return an array of prerelease components when provided a semver string.
@@ -450,8 +453,8 @@ Non-semver strings are compared alphabetically.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| versionA | <code>string</code> \| <code>null</code> | The version string to compare against |
-| versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
+| versionA | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to compare against |
+| versionB | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to compare to versionA |
 
 **Example**  
 should correctly compare valid semver values.
@@ -552,8 +555,8 @@ Non-semver strings are compared alphabetically.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| versionA | <code>string</code> \| <code>null</code> | The version string to compare against |
-| versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
+| versionA | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to compare against |
+| versionB | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to compare to versionA |
 
 **Example**  
 should correctly compare valid semver values.
@@ -657,8 +660,8 @@ Non-semver strings are compared alphabetically.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| versionA | <code>string</code> \| <code>null</code> | The version string to compare against |
-| versionB | <code>string</code> \| <code>null</code> | The version string to compare to versionA |
+| versionA | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to compare against |
+| versionB | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version string to compare to versionA |
 
 **Example**  
 should correctly compare valid semver values.
@@ -761,7 +764,7 @@ This method will always return false if the provided version doesn't contain a v
 
 | Param | Type | Description |
 | --- | --- | --- |
-| version | <code>string</code> \| <code>null</code> | The version to evaluate |
+| version | <code>string</code> \| <code>null</code> \| <code>undefined</code> | The version to evaluate |
 | range | <code>string</code> | A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges) docs for details |
 
 **Example**  
@@ -818,7 +821,7 @@ Note that only version that contain a valid semver string can satisfy a range.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| versions | <code>Array.&lt;(string\|null)&gt;</code> | An array of versions to evaluate |
+| versions | <code>Array.&lt;(string\|null\|undefined)&gt;</code> | An array of versions to evaluate |
 | range | <code>string</code> | A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges) docs for details |
 
 **Example**  
@@ -856,7 +859,7 @@ null if a valid semver string could not be found
 
 | Param | Type |
 | --- | --- |
-| version | <code>string</code> \| <code>null</code> | 
+| version | <code>string</code> \| <code>null</code> \| <code>undefined</code> | 
 
 **Example**  
 should correctly parse valid semver values.
@@ -923,6 +926,48 @@ should correctly parse undefined values.
 
 ```js
 chai.expect(semver.parse(undefined)).to.equal(null);
+```
+
+<a name="resin-semver-valid"></a>
+
+<a name="valid"></a>
+
+## valid(version) ⇒ <code>string</code> \| <code>null</code>
+Return the parsed version, or null if it's not valid.
+
+**Kind**: global function  
+**Summary**: Check if a version string is valid  
+**Returns**: <code>string</code> \| <code>null</code> - - The parsed version string, or
+null if a valid semver string could not be found  
+**Access**: public  
+
+| Param | Type |
+| --- | --- |
+| version | <code>string</code> \| <code>null</code> \| <code>undefined</code> | 
+
+**Example**  
+should return null for invalid semver values.
+
+```js
+chai.expect(semver.valid(null)).to.equal(null);
+chai.expect(semver.valid(undefined)).to.equal(null);
+chai.expect(semver.valid('')).to.equal(null);
+chai.expect(semver.valid('foobar')).to.equal(null);
+chai.expect(semver.valid('12345')).to.equal(null);
+chai.expect(semver.valid('1.2.3.4.5')).to.equal(null);
+```
+
+should correctly parse valid values.
+
+```js
+chai.expect(semver.valid('Resin OS 1.0.0-pre')).to.equal('1.0.0-pre');
+chai.expect(semver.valid('Resin OS 1.0.5 (fido)')).to.equal('1.0.5');
+chai.expect(semver.valid('Resin OS 2.0.0-beta.8')).to.equal('2.0.0-beta.8');
+chai.expect(semver.valid('Resin OS 2.0.0-beta10.rev1')).to.equal('2.0.0-beta10.rev1');
+chai.expect(semver.valid('Resin OS 2.0.0+rev3')).to.equal('2.0.0');
+chai.expect(semver.valid('Resin OS 2.0.0.rev1 (prod)')).to.equal('2.0.0');
+chai.expect(semver.valid('Resin OS 2.0.0+rev4 (dev)')).to.equal('2.0.0');
+chai.expect(semver.valid('2.0.6+rev3.dev')).to.equal('2.0.6');
 ```
 
 

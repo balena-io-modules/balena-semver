@@ -43,8 +43,8 @@ var isDevelopmentVersion = function (version) {
  * of versions in ascending order if passed to `Array.sort()`.
  *
  *
- * @param {string|null} versionA - The first version to compare
- * @param {string|null} versionB - The second version to compare
+ * @param {string|null|undefined} versionA - The first version to compare
+ * @param {string|null|undefined} versionB - The second version to compare
  *
  * @returns {number} Returns `0` if `versionA == versionB`,
  * or `1` if `versionA` is greater, or `-1` if `versionB` is greater.
@@ -104,8 +104,8 @@ exports.compare = memoize(function (versionA, versionB) {
  * them, returning a number indicating sort order. Values are parsed for valid semver
  * strings. Sorts an array of versions in descending order when passed to `Array.sort()`.
  *
- * @param {string|null} versionA - The first version to compare
- * @param {string|null} versionB - The second version to compare
+ * @param {string|null|undefined} versionA - The first version to compare
+ * @param {string|null|undefined} versionB - The second version to compare
  *
  * @returns {number} Returns `0` if `versionA == versionB`,
  * or `-1` if `versionA` is greater, or `1` if `versionB` is greater.
@@ -126,7 +126,7 @@ exports.rcompare = function (versionA, versionB) {
  * If the version is not a valid semver string, or a valid semver string cannot be
  * found, it returns null.
  *
- * @param {string|null} version - The version string to evaluate
+ * @param {string|null|undefine} version - The version string to evaluate
  *
  * @returns {number|null} - The major version number
  */
@@ -148,7 +148,7 @@ exports.major = function (version) {
  *
  * @description Returns an array of prerelease components, or null if none exist
  *
- * @param {string|null} version - The version string to evaluate
+ * @param {string|null|undefined} version - The version string to evaluate
  *
  * @returns {Array.<string|number>|null} - An array of prerelease component, or null if none exist
  */
@@ -169,8 +169,8 @@ exports.prerelease = function (version) {
  * Valid semver versions are always weighted above non semver strings.
  * Non-semver strings are compared alphabetically.
  *
- * @param {string|null} versionA - The version string to compare against
- * @param {string|null} versionB - The version string to compare to versionA
+ * @param {string|null|undefined} versionA - The version string to compare against
+ * @param {string|null|undefined} versionB - The version string to compare to versionA
  *
  * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
  */
@@ -187,8 +187,8 @@ exports.gte = function (versionA, versionB) {
  * Valid semver versions are always weighted above non semver strings.
  * Non-semver strings are compared alphabetically.
  *
- * @param {string|null} versionA - The version string to compare against
- * @param {string|null} versionB - The version string to compare to versionA
+ * @param {string|null|undefined} versionA - The version string to compare against
+ * @param {string|null|undefined} versionB - The version string to compare to versionA
  *
  *
  * @returns {boolean} - true if versionA is greater than versionB, otherwise false.
@@ -206,8 +206,8 @@ exports.gt = function (versionA, versionB) {
  * Valid semver versions are always weighted above non semver strings.
  * Non-semver strings are compared alphabetically.
  *
- * @param {string|null} versionA - The version string to compare against
- * @param {string|null} versionB - The version string to compare to versionA
+ * @param {string|null|undefined} versionA - The version string to compare against
+ * @param {string|null|undefined} versionB - The version string to compare to versionA
  *
  * @returns {boolean} - true if versionA is less than versionB, otherwise false.
  */
@@ -223,7 +223,7 @@ exports.lt = function (versionA, versionB) {
  * @description Return true if the parsed version satisfies the range.
  * This method will always return false if the provided version doesn't contain a valid semver string.
  *
- * @param {string|null} version - The version to evaluate
+ * @param {string|null|undefined} version - The version to evaluate
  * @param {string} range - A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges)
  * docs for details
  *
@@ -250,7 +250,7 @@ exports.satisfies = function (version, range) {
  * If multiple versions are found that have equally high values, the last one in the array is returned.
  * Note that only version that contain a valid semver string can satisfy a range.
  *
- * @param {Array.<string|null>} versions - An array of versions to evaluate
+ * @param {Array.<string|null|undefined>} versions - An array of versions to evaluate
  * @param {string} range - A semver range string, see the [node-semver](https://github.com/npm/node-semver#ranges)
  * docs for details
  *
@@ -286,7 +286,7 @@ exports.maxSatisfying = function (versions, range) {
  * @description Returns an object representing the semver version. Returns null
  * if a valid semver string can't be found.
  *
- * @param {string|null} version
+ * @param {string|null|undefined} version
  *
  * @returns {SemverObject|null} - An object representing the version string, or
  * null if a valid semver string could not be found
@@ -300,5 +300,24 @@ exports.parse = function (version) {
         parsed.raw = version;
     }
     return parsed;
+};
+/**
+ * @summary Check if a version string is valid
+ * @name valid
+ * @public
+ * @function
+ *
+ * @description Return the parsed version, or null if it's not valid.
+ *
+ * @param {string|null|undefined} version
+ *
+ * @returns {string|null} - The parsed version string, or
+ * null if a valid semver string could not be found
+ */
+exports.valid = function (version) {
+    if (version == null) {
+        return null;
+    }
+    return semver.valid(normalize(version));
 };
 //# sourceMappingURL=index.js.map
