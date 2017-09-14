@@ -2,26 +2,45 @@ import memoize = require('lodash.memoize');
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;
-type Release = 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'major' | 'minor' | 'patch';
+type Release =
+	| 'premajor'
+	| 'preminor'
+	| 'prepatch'
+	| 'prerelease'
+	| 'major'
+	| 'minor'
+	| 'patch';
 
 const trimOsText = (version: string) => {
 	// Remove "Resin OS" text
-	return version.replace(/^resin\sos\s+/gi, '')
-	// Remove optional versioning, eg "(prod)", "(dev)"
-	.replace(/\s+\(\w+\)$/, '')
-	// Remove "v" prefix
-	.replace(/^v/, '');
+	return (
+		version
+			.replace(/^resin\sos\s+/gi, '')
+			// Remove optional versioning, eg "(prod)", "(dev)"
+			.replace(/\s+\(\w+\)$/, '')
+			// Remove "v" prefix
+			.replace(/^v/, '')
+	);
 };
 
 const safeSemver = (version: string) => {
 	// fix major.minor.patch.rev to use rev as build metadata
-	return version.replace(/(\.[0-9]+)\.rev/, '$1+rev')
-		// fix major.minor.patch.prod to be treat .dev & .prod as build metadata
-		.replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
-		// if there are no build metadata, then treat the parenthesized value as one
-		.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
-		// if there are build metadata, then treat the parenthesized value as point value
-		.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2');
+	return (
+		version
+			.replace(/(\.[0-9]+)\.rev/, '$1+rev')
+			// fix major.minor.patch.prod to be treat .dev & .prod as build metadata
+			.replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
+			// if there are no build metadata, then treat the parenthesized value as one
+			.replace(
+				/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
+				'$1+$2',
+			)
+			// if there are build metadata, then treat the parenthesized value as point value
+			.replace(
+				/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
+				'$1.$2',
+			)
+	);
 };
 
 const normalize = (version: string): string => trimOsText(safeSemver(version));
@@ -31,11 +50,12 @@ const getRev = (parsedVersion: semver.SemVer | null) => {
 		return 0;
 	}
 
-	const rev = parsedVersion.build.map(function(metadataPart) {
-		const matches = /rev(\d+)/.exec(metadataPart);
-		return matches && matches[1] || null;
-	})
-	.filter((x) => x != null)[0];
+	const rev = parsedVersion.build
+		.map(function(metadataPart) {
+			const matches = /rev(\d+)/.exec(metadataPart);
+			return (matches && matches[1]) || null;
+		})
+		.filter(x => x != null)[0];
 
 	if (rev != null) {
 		return parseInt(rev, 10);
@@ -82,46 +102,54 @@ const compareValues = <T>(valueA: T, valueB: T) => {
  * are sorted before valid semver values
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
-export const compare = memoize((versionA: VersionInput, versionB: VersionInput): number => {
-	if (versionA == null) {
-		return versionB == null ? 0 : -1;
-	}
-	if (versionB == null) {
-		return 1;
-	}
-
-	versionA = normalize(versionA);
-	versionB = normalize(versionB);
-
-	const semverA = semver.parse(versionA);
-	const semverB = semver.parse(versionB);
-	if (!semverA || !semverB) {
-		if (semverA) { // !semverB
+export const compare = memoize(
+	(versionA: VersionInput, versionB: VersionInput): number => {
+		if (versionA == null) {
+			return versionB == null ? 0 : -1;
+		}
+		if (versionB == null) {
 			return 1;
 		}
-		if (semverB) { // !semverA
-			return -1;
+
+		versionA = normalize(versionA);
+		versionB = normalize(versionB);
+
+		const semverA = semver.parse(versionA);
+		const semverB = semver.parse(versionB);
+		if (!semverA || !semverB) {
+			if (semverA) {
+				// !semverB
+				return 1;
+			}
+			if (semverB) {
+				// !semverA
+				return -1;
+			}
+			return compareValues(versionA, versionB);
 		}
-		return compareValues(versionA, versionB);
-	}
 
-	const semverResult = semver.compare(semverA, semverB);
-	if (semverResult !== 0) {
-		return semverResult;
-	}
+		const semverResult = semver.compare(semverA, semverB);
+		if (semverResult !== 0) {
+			return semverResult;
+		}
 
-	const revResult = compareValues(getRev(semverA), getRev(semverB));
-	if (revResult !== 0) {
-		return revResult;
-	}
+		const revResult = compareValues(getRev(semverA), getRev(semverB));
+		if (revResult !== 0) {
+			return revResult;
+		}
 
-	const devResult = compareValues(isDevelopmentVersion(semverA), isDevelopmentVersion(semverB));
-	if (devResult !== 0) {
-		return devResult * -1;
-	}
+		const devResult = compareValues(
+			isDevelopmentVersion(semverA),
+			isDevelopmentVersion(semverB),
+		);
+		if (devResult !== 0) {
+			return devResult * -1;
+		}
 
-	return versionA.localeCompare(versionB);
-}, (a: string, b: string) => `${a} && ${b}`);
+		return versionA.localeCompare(versionB);
+	},
+	(a: string, b: string) => `${a} && ${b}`,
+);
 
 /**
  * @summary Compare order of versions in reverse
@@ -142,7 +170,10 @@ export const compare = memoize((versionA: VersionInput, versionB: VersionInput):
  * sorted before null values.
  * If both values are non-null invalid semver values, then the values are compared alphabetically.
  */
-export const rcompare = (versionA: VersionInput, versionB: VersionInput): number => {
+export const rcompare = (
+	versionA: VersionInput,
+	versionB: VersionInput,
+): number => {
 	return 0 - compare(versionA, versionB);
 };
 
@@ -211,7 +242,10 @@ export const prerelease = (version: VersionInput) => {
  *
  * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
  */
-export const gte = (versionA: VersionInput, versionB: VersionInput): boolean => {
+export const gte = (
+	versionA: VersionInput,
+	versionB: VersionInput,
+): boolean => {
 	return compare(versionA, versionB) >= 0;
 };
 
@@ -304,7 +338,7 @@ export const satisfies = (version: VersionInput, range: string) => {
 export const maxSatisfying = (versions: VersionInput[], range: string) => {
 	let max: VersionInput = null;
 
-	versions.forEach((version) => {
+	versions.forEach(version => {
 		if (satisfies(version, range) && gt(version, max)) {
 			max = version;
 		}
@@ -369,6 +403,7 @@ export const valid = (version: VersionInput) => {
 	if (version == null) {
 		return null;
 	}
+
 	return semver.valid(normalize(version));
 };
 

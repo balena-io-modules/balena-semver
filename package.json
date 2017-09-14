@@ -1,6 +1,6 @@
 {
   "name": "resin-semver",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.d.ts",
@@ -19,7 +19,9 @@
     "build": "tsc && npm run docs",
     "lint": "tslint -t stylish -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
     "docs": "./automation/docs.js",
-    "ci": "npm run build && catch-uncommitted && npm test"
+    "ci": "npm run build && catch-uncommitted && npm test",
+    "precommit": "lint-staged",
+    "prettify": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
   },
   "author": "Lucian Buzzo <lucian@resin.io>",
   "license": "Apache-2.0",
@@ -34,10 +36,21 @@
   "devDependencies": {
     "catch-uncommitted": "^1.0.0",
     "chai": "^4.1.0",
+    "husky": "^0.14.3",
     "jsdoc-to-markdown": "^3.0.0",
+    "lint-staged": "^4.0.4",
     "mocha": "^3.4.2",
+    "prettier": "^1.6.1",
     "ts-node": "^3.2.1",
     "tslint": "^5.5.0",
     "typescript": "^2.4.2"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "npm run lint",
+      "npm run docs",
+      "git add"
+    ]
   }
 }
