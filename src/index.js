@@ -4,25 +4,28 @@ var memoize = require("lodash.memoize");
 var semver = require("semver");
 var trimOsText = function (version) {
     // Remove "Resin OS" text
-    return version.replace(/^resin\sos\s+/gi, '')
+    return (version
+        .replace(/^resin\sos\s+/gi, '')
         .replace(/\s+\(\w+\)$/, '')
-        .replace(/^v/, '');
+        .replace(/^v/, ''));
 };
 var safeSemver = function (version) {
     // fix major.minor.patch.rev to use rev as build metadata
-    return version.replace(/(\.[0-9]+)\.rev/, '$1+rev')
+    return (version
+        .replace(/(\.[0-9]+)\.rev/, '$1+rev')
         .replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
         .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
-        .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2');
+        .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2'));
 };
 var normalize = function (version) { return trimOsText(safeSemver(version)); };
 var getRev = function (parsedVersion) {
     if (parsedVersion === null) {
         return 0;
     }
-    var rev = parsedVersion.build.map(function (metadataPart) {
+    var rev = parsedVersion.build
+        .map(function (metadataPart) {
         var matches = /rev(\d+)/.exec(metadataPart);
-        return matches && matches[1] || null;
+        return (matches && matches[1]) || null;
     })
         .filter(function (x) { return x != null; })[0];
     if (rev != null) {
@@ -80,9 +83,11 @@ exports.compare = memoize(function (versionA, versionB) {
     var semverB = semver.parse(versionB);
     if (!semverA || !semverB) {
         if (semverA) {
+            // !semverB
             return 1;
         }
         if (semverB) {
+            // !semverA
             return -1;
         }
         return compareValues(versionA, versionB);
