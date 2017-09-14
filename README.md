@@ -184,6 +184,8 @@ chai.expect(semver.compare('Resin OS 2.0.0+rev4', 'Resin OS 2.0.0+rev3')).to.equ
 chai.expect(semver.compare('2.0.0+rev6', 'Resin OS 2.0.0+rev3')).to.equal(1);
 chai.expect(semver.compare('2.0.0+rev2', 'Resin OS 2.0.0+rev5')).to.equal(-1);
 chai.expect(semver.compare('2.0.0+rev3', '2.0.0+rev3')).to.equal(0);
+chai.expect(semver.compare('2.0.0+rev1', '2.0.0+rev11')).to.equal(-1);
+chai.expect(semver.compare('2.0.0+rev2', '2.0.0+rev11')).to.equal(-1);
 ```
 
 should correctly compare ".dev" versions.
@@ -201,6 +203,34 @@ chai.expect(semver.compare('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')
 chai.expect(semver.compare('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(1);
 chai.expect(semver.compare('Resin OS 2.0.0.dev', '2.0.0')).to.equal(-1);
 chai.expect(semver.compare('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(0);
+```
+
+should correctly compare "(dev)" and "(prod)" versions without revisions.
+
+```js
+chai.expect(semver.compare('Resin OS 2.0.0', 'Resin OS 2.0.0 (dev)')).to.equal(1);
+chai.expect(semver.compare('Resin OS 2.0.0', 'Resin OS 2.0.0 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0 (dev)', 'Resin OS 2.0.0 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0', 'Resin OS 2.0.0-prod')).to.equal(1);
+chai.expect(semver.compare('Resin OS 2.0.0', 'Resin OS 2.0.0.prod')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0', 'Resin OS 2.0.0+prod')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0 (dev)', 'Resin OS 2.0.0+prod')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0.dev', 'Resin OS 2.0.0+dev')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.0.dev', 'Resin OS 2.0.0 (dev)')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.0+dev', 'Resin OS 2.0.0 (dev)')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.0.prod', 'Resin OS 2.0.0+prod')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.0.prod', 'Resin OS 2.0.0 (prod)')).to.equal(0);
+chai.expect(semver.compare('Resin OS 2.0.0+prod', 'Resin OS 2.0.0 (prod)')).to.equal(0);
+```
+
+should correctly compare "(dev)" and "(prod)" versions of the same revision.
+
+```js
+chai.expect(semver.compare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3 (dev)')).to.equal(1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3 (dev)', 'Resin OS 2.0.0+rev3 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.prod')).to.equal(-1);
+chai.expect(semver.compare('Resin OS 2.0.0+rev3 (dev)', 'Resin OS 2.0.0+rev3+prod')).to.equal(1); // B is invalid
 ```
 
 <a name="resin-semver-rcompare"></a>
@@ -829,7 +859,7 @@ should return the correct version.
 
 ```js
 chai.expect(semver.maxSatisfying(versions_1.versions, '1.1.*')).to.equal('Resin OS 1.1.4');
-chai.expect(semver.maxSatisfying(versions_1.versions, '^2.0.0')).to.equal('Resin OS 2.0.9+rev1');
+chai.expect(semver.maxSatisfying(versions_1.versions, '^2.0.0')).to.equal('Resin OS 2.7.9+rev1');
 chai.expect(semver.maxSatisfying(versions_1.versions, '< 1.0.0')).to.equal(null);
 ```
 
@@ -895,7 +925,16 @@ chai.expect(semver.parse('Resin OS v2.0.2 (prod)')).to.deep.include({
     patch: 2,
     version: '2.0.2',
     prerelease: [],
-    build: [],
+    build: ['prod'],
+});
+chai.expect(semver.parse('Resin OS v2.0.2.prod')).to.deep.include({
+    raw: 'Resin OS v2.0.2.prod',
+    major: 2,
+    minor: 0,
+    patch: 2,
+    version: '2.0.2',
+    prerelease: [],
+    build: ['prod'],
 });
 chai.expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
     raw: 'Resin OS 2.0.0-rc5.rev1',
@@ -905,6 +944,63 @@ chai.expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
     version: '2.0.0-rc5.rev1',
     prerelease: ['rc5', 'rev1'],
     build: [],
+});
+chai.expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
+    raw: 'Resin OS 2.3.0+rev1.prod',
+    major: 2,
+    minor: 3,
+    patch: 0,
+    version: '2.3.0',
+    prerelease: [],
+    build: [
+        'rev1',
+        'prod',
+    ],
+});
+chai.expect(semver.parse('Resin OS v2.3.0-a.b.c (prod)')).to.deep.include({
+    raw: 'Resin OS v2.3.0-a.b.c (prod)',
+    major: 2,
+    minor: 3,
+    patch: 0,
+    version: '2.3.0-a.b.c',
+    prerelease: [
+        'a',
+        'b',
+        'c',
+    ],
+    build: ['prod'],
+});
+chai.expect(semver.parse('Resin OS 2.3.0-a.b.c+d.e.f (prod)')).to.deep.include({
+    raw: 'Resin OS 2.3.0-a.b.c+d.e.f (prod)',
+    major: 2,
+    minor: 3,
+    patch: 0,
+    version: '2.3.0-a.b.c',
+    prerelease: [
+        'a',
+        'b',
+        'c',
+    ],
+    build: [
+        'd',
+        'e',
+        'f',
+        'prod',
+    ],
+});
+chai.expect(semver.parse('Resin OS 2.3.0+a.b.c (prod)')).to.deep.include({
+    raw: 'Resin OS 2.3.0+a.b.c (prod)',
+    major: 2,
+    minor: 3,
+    patch: 0,
+    version: '2.3.0',
+    prerelease: [],
+    build: [
+        'a',
+        'b',
+        'c',
+        'prod',
+    ],
 });
 ```
 

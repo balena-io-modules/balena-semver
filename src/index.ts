@@ -13,14 +13,19 @@ const trimOsText = (version: string) => {
 };
 
 const safeSemver = (version: string) => {
-	return version.replace(/(\.[0-9]+)\.rev/, '$1+rev');
+	// fix major.minor.patch.rev to use rev as build metadata
+	return version.replace(/(\.[0-9]+)\.rev/, '$1+rev')
+		// fix major.minor.patch.prod to be treat .dev & .prod as build metadata
+		.replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
+		// if there are no build metadata, then treat the parenthesized value as one
+		.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
+		// if there are build metadata, then treat the parenthesized value as point value
+		.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2');
 };
 
 const normalize = (version: string): string => trimOsText(safeSemver(version));
 
-const getRev = (osVersion: string) => {
-	const parsedVersion = semver.parse(osVersion);
-
+const getRev = (parsedVersion: semver.SemVer | null) => {
 	if (parsedVersion === null) {
 		return 0;
 	}
@@ -38,8 +43,22 @@ const getRev = (osVersion: string) => {
 	}
 };
 
-const isDevelopmentVersion = (version: string) => {
-	return /(\.|\+|-)dev/.test(version);
+const isDevelopmentVersion = (parsedVersion: semver.SemVer | null) => {
+	if (parsedVersion === null) {
+		return false;
+	}
+
+	return parsedVersion.build.indexOf('dev') >= 0;
+};
+
+const compareValues = <T>(valueA: T, valueB: T) => {
+	if (valueA > valueB) {
+		return 1;
+	}
+	if (valueA < valueB) {
+		return -1;
+	}
+	return 0;
 };
 
 /**
@@ -73,37 +92,33 @@ export const compare = memoize((versionA: VersionInput, versionB: VersionInput):
 	versionA = normalize(versionA);
 	versionB = normalize(versionB);
 
-	const isAValid = semver.valid(versionA);
-	const isBValid = semver.valid(versionB);
-	if (isAValid && !isBValid) {
-		return 1;
-	}
-	if (!isAValid && isBValid) {
-		return -1;
-	}
-	if (!isAValid && !isBValid) {
-		if (versionA > versionB) {
+	const semverA = semver.parse(versionA);
+	const semverB = semver.parse(versionB);
+	if (!semverA || !semverB) {
+		if (semverA) { // !semverB
 			return 1;
 		}
-		if (versionA < versionB) {
+		if (semverB) { // !semverA
 			return -1;
 		}
-		return 0;
+		return compareValues(versionA, versionB);
 	}
-	const semverResult = semver.compare(versionA, versionB);
+
+	const semverResult = semver.compare(semverA, semverB);
 	if (semverResult !== 0) {
 		return semverResult;
 	}
-	const revA = getRev(versionA);
-	const revB = getRev(versionB);
-	if (revA !== revB) {
-		return revA > revB ? 1 : -1;
+
+	const revResult = compareValues(getRev(semverA), getRev(semverB));
+	if (revResult !== 0) {
+		return revResult;
 	}
-	const devA = Number(isDevelopmentVersion(versionA));
-	const devB = Number(isDevelopmentVersion(versionB));
-	if (devA !== devB) {
-		return devA > devB ? -1 : 1;
+
+	const devResult = compareValues(isDevelopmentVersion(semverA), isDevelopmentVersion(semverB));
+	if (devResult !== 0) {
+		return devResult * -1;
 	}
+
 	return versionA.localeCompare(versionB);
 }, (a: string, b: string) => `${a} && ${b}`);
 
@@ -149,7 +164,7 @@ export const major = (version: VersionInput): number | null => {
 		return null;
 	}
 
-	version = trimOsText(safeSemver(version));
+	version = normalize(version);
 
 	if (semver.valid(version)) {
 		return semver.major(version);
@@ -175,7 +190,7 @@ export const prerelease = (version: VersionInput) => {
 		return null;
 	}
 
-	version = trimOsText(safeSemver(version));
+	version = normalize(version);
 
 	return semver.prerelease(version);
 };
