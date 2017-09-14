@@ -78,6 +78,11 @@ if a valid semver string can&#39;t be found.</p>
 <dt><a href="#valid">valid(version)</a> ⇒ <code>string</code> | <code>null</code></dt>
 <dd><p>Return the parsed version, or null if it&#39;s not valid.</p>
 </dd>
+<dt><a href="#inc">inc(version, release)</a> ⇒ <code>string</code> | <code>null</code></dt>
+<dd><p>Return the version incremented by the release type
+(major, premajor, minor, preminor, patch, prepatch, or prerelease), or null
+if it&#39;s not valid.</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -1064,6 +1069,129 @@ chai.expect(semver.valid('Resin OS 2.0.0+rev3')).to.equal('2.0.0');
 chai.expect(semver.valid('Resin OS 2.0.0.rev1 (prod)')).to.equal('2.0.0');
 chai.expect(semver.valid('Resin OS 2.0.0+rev4 (dev)')).to.equal('2.0.0');
 chai.expect(semver.valid('2.0.6+rev3.dev')).to.equal('2.0.6');
+```
+
+<a name="resin-semver-inc"></a>
+
+<a name="inc"></a>
+
+## inc(version, release) ⇒ <code>string</code> \| <code>null</code>
+Return the version incremented by the release type
+(major, premajor, minor, preminor, patch, prepatch, or prerelease), or null
+if it's not valid.
+
+**Kind**: global function  
+**Summary**: Return an incremented version  
+**Returns**: <code>string</code> \| <code>null</code> - - The incremented version string, or
+null if a valid semver string could not be found  
+**Access**: public  
+
+| Param | Type |
+| --- | --- |
+| version | <code>string</code> \| <code>null</code> \| <code>undefined</code> | 
+| release | <code>string</code> | 
+
+**Example**  
+should return null for invalid semver values.
+
+```js
+chai.expect(semver.inc(null, 'major')).to.equal(null);
+chai.expect(semver.inc(undefined, 'major')).to.equal(null);
+chai.expect(semver.inc('', 'major')).to.equal(null);
+chai.expect(semver.inc('foobar', 'major')).to.equal(null);
+chai.expect(semver.inc('12345', 'major')).to.equal(null);
+chai.expect(semver.inc('1.2.3.4.5', 'major')).to.equal(null);
+```
+
+should correctly increment valid values by a 'premajor' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'premajor')).to.equal('2.0.0-0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'premajor')).to.equal('2.0.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'premajor')).to.equal('3.0.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'premajor')).to.equal('3.0.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'premajor')).to.equal('3.0.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'premajor')).to.equal('3.0.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'premajor')).to.equal('3.0.0-0');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'premajor')).to.equal('3.0.0-0');
+```
+
+should correctly increment valid values by a 'preminor' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'preminor')).to.equal('1.1.0-0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'preminor')).to.equal('1.1.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'preminor')).to.equal('2.1.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'preminor')).to.equal('2.1.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'preminor')).to.equal('2.1.0-0');
+chai.expect(semver.inc('Resin OS 2.1.0.rev1 (prod)', 'preminor')).to.equal('2.2.0-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'preminor')).to.equal('2.1.0-0');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'preminor')).to.equal('2.1.0-0');
+```
+
+should correctly increment valid values by a 'prepatch' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'prepatch')).to.equal('1.0.1-0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'prepatch')).to.equal('1.0.6-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'prepatch')).to.equal('2.0.1-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'prepatch')).to.equal('2.0.1-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'prepatch')).to.equal('2.0.1-0');
+chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'prepatch')).to.equal('2.0.1-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'prepatch')).to.equal('2.0.1-0');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'prepatch')).to.equal('2.0.7-0');
+```
+
+should correctly increment valid values by a 'prerelease' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'prerelease')).to.equal('1.0.0-pre.0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'prerelease')).to.equal('1.0.6-0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'prerelease')).to.equal('2.0.0-beta.9');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'prerelease')).to.equal('2.0.0-beta10.rev1.0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'prerelease')).to.equal('2.0.1-0');
+chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'prerelease')).to.equal('2.0.1-0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'prerelease')).to.equal('2.0.1-0');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'prerelease')).to.equal('2.0.7-0');
+```
+
+should correctly increment valid values by a 'major' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'major')).to.equal('1.0.0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'major')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'major')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'major')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'major')).to.equal('3.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'major')).to.equal('3.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'major')).to.equal('3.0.0');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'major')).to.equal('3.0.0');
+```
+
+should correctly increment valid values by a 'minor' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'minor')).to.equal('1.0.0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'minor')).to.equal('1.1.0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'minor')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'minor')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'minor')).to.equal('2.1.0');
+chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'minor')).to.equal('2.1.0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'minor')).to.equal('2.1.0');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'minor')).to.equal('2.1.0');
+```
+
+should correctly increment valid values by a 'patch' release.
+
+```js
+chai.expect(semver.inc('Resin OS 1.0.0-pre', 'patch')).to.equal('1.0.0');
+chai.expect(semver.inc('Resin OS 1.0.5 (fido)', 'patch')).to.equal('1.0.6');
+chai.expect(semver.inc('Resin OS 2.0.0-beta.8', 'patch')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0-beta10.rev1', 'patch')).to.equal('2.0.0');
+chai.expect(semver.inc('Resin OS 2.0.0+rev3', 'patch')).to.equal('2.0.1');
+chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'patch')).to.equal('2.0.1');
+chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'patch')).to.equal('2.0.1');
+chai.expect(semver.inc('2.0.6+rev3.dev', 'patch')).to.equal('2.0.7');
 ```
 
 

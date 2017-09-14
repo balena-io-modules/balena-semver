@@ -327,4 +327,26 @@ exports.valid = function (version) {
     }
     return semver.valid(normalize(version));
 };
+/**
+ * @summary Return an incremented version
+ * @name inc
+ * @public
+ * @function
+ *
+ * @description Return the version incremented by the release type
+ * (major, premajor, minor, preminor, patch, prepatch, or prerelease), or null
+ * if it's not valid.
+ *
+ * @param {string|null|undefined} version
+ * @param {string} release
+ *
+ * @returns {string|null} - The incremented version string, or
+ * null if a valid semver string could not be found
+ */
+exports.inc = function (version, release) {
+    if (version == null) {
+        return null;
+    }
+    return semver.inc(normalize(version), release);
+};
 //# sourceMappingURL=index.js.map
