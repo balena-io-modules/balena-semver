@@ -2,6 +2,7 @@ import memoize = require('lodash.memoize');
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;
+type Release = 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'major' | 'minor' | 'patch';
 
 const trimOsText = (version: string) => {
 	// Remove "Resin OS" text
@@ -369,4 +370,27 @@ export const valid = (version: VersionInput) => {
 		return null;
 	}
 	return semver.valid(normalize(version));
+};
+
+/**
+ * @summary Return an incremented version
+ * @name inc
+ * @public
+ * @function
+ *
+ * @description Return the version incremented by the release type
+ * (major, premajor, minor, preminor, patch, prepatch, or prerelease), or null
+ * if it's not valid.
+ *
+ * @param {string|null|undefined} version
+ * @param {string} release
+ *
+ * @returns {string|null} - The incremented version string, or
+ * null if a valid semver string could not be found
+ */
+export const inc = (version: VersionInput, release: Release) => {
+	if (version == null) {
+		return null;
+	}
+	return semver.inc(normalize(version), release);
 };
