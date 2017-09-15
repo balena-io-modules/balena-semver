@@ -5,7 +5,7 @@ var semver = require("semver");
 var trimOsText = function (version) {
     // Remove "Resin OS" text
     return (version
-        .replace(/^resin\sos\s+/gi, '')
+        .replace(/resin\sos\s+/gi, '')
         .replace(/\s+\(\w+\)$/, '')
         .replace(/^v/, ''));
 };
@@ -271,8 +271,9 @@ exports.satisfies = function (version, range) {
  */
 exports.maxSatisfying = function (versions, range) {
     var max = null;
+    var normalizedRange = normalize(range);
     versions.forEach(function (version) {
-        if (exports.satisfies(version, range) && exports.gt(version, max)) {
+        if (exports.satisfies(version, normalizedRange) && exports.gt(version, max)) {
             max = version;
         }
     });
