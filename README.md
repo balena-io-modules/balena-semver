@@ -871,11 +871,16 @@ chai.expect(semver.maxSatisfying(versions_1.versions, '< 1.0.0')).to.equal(null)
 should return the first version found if multiple versions have equally high values.
 
 ```js
-chai.expect(semver.maxSatisfying([
-    '1.0.0',
-    'Resin OS 1.1.4',
-    '1.1.4',
-], '1.1.*')).to.equal('Resin OS 1.1.4');
+chai.expect(semver.maxSatisfying(['1.0.0', 'Resin OS 1.1.4', '1.1.4'], '1.1.*')).to.equal('Resin OS 1.1.4');
+```
+
+should normalize versions used in range parameter.
+
+```js
+chai.expect(semver.maxSatisfying(versions_1.versions, '2.0.0.rev1')).to.equal('Resin OS 2.0.0+rev11');
+chai.expect(semver.maxSatisfying(versions_1.versions, '^ Resin OS 2.0.0 (prod)')).to.equal('Resin OS 2.7.9+rev1');
+chai.expect(semver.maxSatisfying(versions_1.versions, '< Resin OS v1.0.0')).to.equal(null);
+chai.expect(semver.maxSatisfying(versions_1.versions, 'Resin OS v1.1.*')).to.equal('Resin OS 1.1.4');
 ```
 
 <a name="resin-semver-parse"></a>
@@ -957,10 +962,7 @@ chai.expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
     patch: 0,
     version: '2.3.0',
     prerelease: [],
-    build: [
-        'rev1',
-        'prod',
-    ],
+    build: ['rev1', 'prod'],
 });
 chai.expect(semver.parse('Resin OS v2.3.0-a.b.c (prod)')).to.deep.include({
     raw: 'Resin OS v2.3.0-a.b.c (prod)',
@@ -968,11 +970,7 @@ chai.expect(semver.parse('Resin OS v2.3.0-a.b.c (prod)')).to.deep.include({
     minor: 3,
     patch: 0,
     version: '2.3.0-a.b.c',
-    prerelease: [
-        'a',
-        'b',
-        'c',
-    ],
+    prerelease: ['a', 'b', 'c'],
     build: ['prod'],
 });
 chai.expect(semver.parse('Resin OS 2.3.0-a.b.c+d.e.f (prod)')).to.deep.include({
@@ -981,17 +979,8 @@ chai.expect(semver.parse('Resin OS 2.3.0-a.b.c+d.e.f (prod)')).to.deep.include({
     minor: 3,
     patch: 0,
     version: '2.3.0-a.b.c',
-    prerelease: [
-        'a',
-        'b',
-        'c',
-    ],
-    build: [
-        'd',
-        'e',
-        'f',
-        'prod',
-    ],
+    prerelease: ['a', 'b', 'c'],
+    build: ['d', 'e', 'f', 'prod'],
 });
 chai.expect(semver.parse('Resin OS 2.3.0+a.b.c (prod)')).to.deep.include({
     raw: 'Resin OS 2.3.0+a.b.c (prod)',
@@ -1000,12 +989,7 @@ chai.expect(semver.parse('Resin OS 2.3.0+a.b.c (prod)')).to.deep.include({
     patch: 0,
     version: '2.3.0',
     prerelease: [],
-    build: [
-        'a',
-        'b',
-        'c',
-        'prod',
-    ],
+    build: ['a', 'b', 'c', 'prod'],
 });
 ```
 
