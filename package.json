@@ -3,17 +3,13 @@
   "version": "1.2.0",
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
-  "typings": "src/index.d.ts",
+  "typings": "src/index.ts",
   "homepage": "https://github.com/resin-io-modules/resin-semver",
   "repository": {
     "type": "git",
     "url": "https://github.com/resin-io-modules/resin-semver"
   },
-  "keywords": [
-    "resin",
-    "resin.io",
-    "semver"
-  ],
+  "keywords": ["resin", "resin.io", "semver"],
   "scripts": {
     "test": "npm run lint && ./automation/test.js",
     "build": "tsc && npm run docs",
@@ -31,7 +27,7 @@
     "@types/chai": "^4.0.1",
     "@types/lodash.memoize": "^4.1.2",
     "@types/mocha": "^2.2.41",
-    "@types/semver": "^5.3.34"
+    "@types/semver": "^5.4.0"
   },
   "devDependencies": {
     "catch-uncommitted": "^1.0.0",
@@ -46,11 +42,6 @@
     "typescript": "^2.4.2"
   },
   "lint-staged": {
-    "*.ts": [
-      "prettier --write",
-      "npm run lint",
-      "npm run docs",
-      "git add"
-    ]
+    "*.ts": ["prettier --write", "npm run lint", "npm run docs", "git add"]
   }
 }
