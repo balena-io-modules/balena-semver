@@ -1,6 +1,6 @@
 {
   "name": "resin-semver",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
   "typings": "src/index.ts",
@@ -9,7 +9,11 @@
     "type": "git",
     "url": "https://github.com/resin-io-modules/resin-semver"
   },
-  "keywords": ["resin", "resin.io", "semver"],
+  "keywords": [
+    "resin",
+    "resin.io",
+    "semver"
+  ],
   "scripts": {
     "test": "npm run lint && ./automation/test.js",
     "build": "tsc && npm run docs",
@@ -42,6 +46,11 @@
     "typescript": "^2.4.2"
   },
   "lint-staged": {
-    "*.ts": ["prettier --write", "npm run lint", "npm run docs", "git add"]
+    "*.ts": [
+      "prettier --write",
+      "npm run lint",
+      "npm run docs",
+      "git add"
+    ]
   }
 }
