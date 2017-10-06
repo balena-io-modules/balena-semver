@@ -1,9 +1,9 @@
 {
   "name": "resin-semver",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Resin.io specific semver utility methods",
   "main": "src/index.js",
-  "typings": "src/index.d.ts",
+  "typings": "src/index.ts",
   "homepage": "https://github.com/resin-io-modules/resin-semver",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
     "@types/chai": "^4.0.1",
     "@types/lodash.memoize": "^4.1.2",
     "@types/mocha": "^2.2.41",
-    "@types/semver": "^5.3.34"
+    "@types/semver": "^5.4.0"
   },
   "devDependencies": {
     "catch-uncommitted": "^1.0.0",
