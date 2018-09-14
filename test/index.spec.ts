@@ -1,8 +1,7 @@
-import * as semver from '../src';
-
-import { versions } from './versions';
-
 import { expect } from 'chai';
+import sortBy = require('lodash.sortby');
+import * as semver from '../src';
+import { versions } from './versions';
 
 describe('resin-semver', () => {
 	describe('.compare()', () => {
@@ -13,7 +12,7 @@ describe('resin-semver', () => {
 		});
 
 		it('should correctly sort lists of versions', () => {
-			expect(versions.slice().sort(semver.compare)).to.eql(versions);
+			expect(sortBy(versions.slice(), semver.compare)).to.eql(versions);
 		});
 
 		it('should correctly compare valid semver values', () => {
@@ -35,6 +34,18 @@ describe('resin-semver', () => {
 			expect(semver.compare('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
 			expect(semver.compare('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
 			expect(semver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
+		});
+
+		it('should correctly compare Balena formatted versions', () => {
+			expect(semver.compare('Balena OS 2.0.5', 'Balena OS 2.0.2+rev2')).to.equal(1);
+			expect(semver.compare('Balena OS 1.16.0', 'Balena OS 2.0.2 (prod)')).to.equal(-1);
+			expect(semver.compare('Balena OS 1.16.0', 'Balena OS 1.16.0')).to.equal(0);
+		});
+
+		it('should correctly compare Balena formatted versions to Resin formatted versions', () => {
+			expect(semver.compare('Balena OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
+			expect(semver.compare('Balena OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
+			expect(semver.compare('Balena OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
 		});
 
 		it('should correctly compare invalid semver values', () => {
@@ -498,7 +509,7 @@ describe('resin-semver', () => {
 	describe('.maxSatisfying()', () => {
 		it('should return the correct version', () => {
 			expect(semver.maxSatisfying(versions, '1.1.*')).to.equal('Resin OS 1.1.4');
-			expect(semver.maxSatisfying(versions, '^2.0.0')).to.equal('Resin OS 2.7.9+rev1');
+			expect(semver.maxSatisfying(versions, '^2.0.0')).to.equal('Resin OS 2.14.0');
 			expect(semver.maxSatisfying(versions, '< 1.0.0')).to.equal(null);
 		});
 
@@ -508,7 +519,7 @@ describe('resin-semver', () => {
 
 		it('should normalize versions used in range parameter', () => {
 			expect(semver.maxSatisfying(versions, '2.0.0.rev1')).to.equal('Resin OS 2.0.0+rev11');
-			expect(semver.maxSatisfying(versions, '^ Resin OS 2.0.0 (prod)')).to.equal('Resin OS 2.7.9+rev1');
+			expect(semver.maxSatisfying(versions, '^ Resin OS 2.0.0 (prod)')).to.equal('Resin OS 2.14.0');
 			expect(semver.maxSatisfying(versions, '< Resin OS v1.0.0')).to.equal(null);
 			expect(semver.maxSatisfying(versions, 'Resin OS v1.1.*')).to.equal('Resin OS 1.1.4');
 		});

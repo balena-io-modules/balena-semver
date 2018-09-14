@@ -95,3 +95,4 @@ nbproject
 
 # Node environment
 .cache.json
+package-lock.json

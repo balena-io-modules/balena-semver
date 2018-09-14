@@ -76,4 +76,6 @@ export const versions = [
 	'2.7.2-foo+bar',
 	'2.7.2+asdf',
 	'Resin OS 2.7.9+rev1',
+	'Balena OS 2.13.0',
+	'Resin OS 2.14.0',
 ];

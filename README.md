@@ -118,7 +118,7 @@ versions_1.versions.forEach(function (version) {
 should correctly sort lists of versions.
 
 ```js
-chai.expect(versions_1.versions.slice().sort(semver.compare)).to.eql(versions_1.versions);
+chai.expect(sortBy(versions_1.versions.slice(), semver.compare)).to.eql(versions_1.versions);
 ```
 
 should correctly compare valid semver values.
@@ -146,6 +146,22 @@ should correctly compare Resin formatted versions.
 chai.expect(semver.compare('Resin OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
 chai.expect(semver.compare('Resin OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
 chai.expect(semver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
+```
+
+should correctly compare Balena formatted versions.
+
+```js
+chai.expect(semver.compare('Balena OS 2.0.5', 'Balena OS 2.0.2+rev2')).to.equal(1);
+chai.expect(semver.compare('Balena OS 1.16.0', 'Balena OS 2.0.2 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Balena OS 1.16.0', 'Balena OS 1.16.0')).to.equal(0);
+```
+
+should correctly compare Balena formatted versions to Resin formatted versions.
+
+```js
+chai.expect(semver.compare('Balena OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
+chai.expect(semver.compare('Balena OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
+chai.expect(semver.compare('Balena OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
 ```
 
 should correctly compare invalid semver values.
@@ -864,7 +880,7 @@ should return the correct version.
 
 ```js
 chai.expect(semver.maxSatisfying(versions_1.versions, '1.1.*')).to.equal('Resin OS 1.1.4');
-chai.expect(semver.maxSatisfying(versions_1.versions, '^2.0.0')).to.equal('Resin OS 2.7.9+rev1');
+chai.expect(semver.maxSatisfying(versions_1.versions, '^2.0.0')).to.equal('Resin OS 2.14.0');
 chai.expect(semver.maxSatisfying(versions_1.versions, '< 1.0.0')).to.equal(null);
 ```
 
@@ -878,7 +894,7 @@ should normalize versions used in range parameter.
 
 ```js
 chai.expect(semver.maxSatisfying(versions_1.versions, '2.0.0.rev1')).to.equal('Resin OS 2.0.0+rev11');
-chai.expect(semver.maxSatisfying(versions_1.versions, '^ Resin OS 2.0.0 (prod)')).to.equal('Resin OS 2.7.9+rev1');
+chai.expect(semver.maxSatisfying(versions_1.versions, '^ Resin OS 2.0.0 (prod)')).to.equal('Resin OS 2.14.0');
 chai.expect(semver.maxSatisfying(versions_1.versions, '< Resin OS v1.0.0')).to.equal(null);
 chai.expect(semver.maxSatisfying(versions_1.versions, 'Resin OS v1.1.*')).to.equal('Resin OS 1.1.4');
 ```
