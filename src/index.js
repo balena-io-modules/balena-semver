@@ -3,18 +3,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var memoize = require("lodash.memoize");
 var semver = require("semver");
 var trimOsText = function (version) {
-    // Remove "Resin OS" text
+    // Remove "Resin OS" and "Balena OS" text
     return (version
-        .replace(/resin\sos\s+/gi, '')
+        .replace(/(resin|balena)\sos\s+/gi, '')
+        // Remove optional versioning, eg "(prod)", "(dev)"
         .replace(/\s+\(\w+\)$/, '')
+        // Remove "v" prefix
         .replace(/^v/, ''));
 };
 var safeSemver = function (version) {
     // fix major.minor.patch.rev to use rev as build metadata
     return (version
         .replace(/(\.[0-9]+)\.rev/, '$1+rev')
+        // fix major.minor.patch.prod to be treat .dev & .prod as build metadata
         .replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
+        // if there are no build metadata, then treat the parenthesized value as one
         .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
+        // if there are build metadata, then treat the parenthesized value as point value
         .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2'));
 };
 var normalize = function (version) { return trimOsText(safeSemver(version)); };
@@ -355,4 +360,3 @@ exports.inc = function (version, release) {
     }
     return semver.inc(normalize(version), release);
 };
-//# sourceMappingURL=index.js.map
