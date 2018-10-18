@@ -151,17 +151,17 @@ chai.expect(semver.compare('Resin OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
 should correctly compare Balena formatted versions.
 
 ```js
-chai.expect(semver.compare('Balena OS 2.0.5', 'Balena OS 2.0.2+rev2')).to.equal(1);
-chai.expect(semver.compare('Balena OS 1.16.0', 'Balena OS 2.0.2 (prod)')).to.equal(-1);
-chai.expect(semver.compare('Balena OS 1.16.0', 'Balena OS 1.16.0')).to.equal(0);
+chai.expect(semver.compare('balenaOS 2.0.5', 'balenaOS 2.0.2+rev2')).to.equal(1);
+chai.expect(semver.compare('balenaOS 1.16.0', 'balenaOS 2.0.2 (prod)')).to.equal(-1);
+chai.expect(semver.compare('balenaOS 1.16.0', 'balenaOS 1.16.0')).to.equal(0);
 ```
 
 should correctly compare Balena formatted versions to Resin formatted versions.
 
 ```js
-chai.expect(semver.compare('Balena OS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
-chai.expect(semver.compare('Balena OS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
-chai.expect(semver.compare('Balena OS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
+chai.expect(semver.compare('balenaOS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
+chai.expect(semver.compare('balenaOS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
+chai.expect(semver.compare('balenaOS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
 ```
 
 should correctly compare invalid semver values.

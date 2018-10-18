@@ -5,7 +5,7 @@ var semver = require("semver");
 var trimOsText = function (version) {
     // Remove "Resin OS" and "Balena OS" text
     return (version
-        .replace(/(resin|balena)\sos\s+/gi, '')
+        .replace(/(resin|balena)\s*os\s*/gi, '')
         // Remove optional versioning, eg "(prod)", "(dev)"
         .replace(/\s+\(\w+\)$/, '')
         // Remove "v" prefix
