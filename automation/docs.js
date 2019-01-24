@@ -56,7 +56,7 @@ const buildDocs = report => {
       });
     })
     .then(result => {
-      fs.writeFile(OUTFILE, result);
+      fs.writeFileSync(OUTFILE, result);
     });
 };
 
