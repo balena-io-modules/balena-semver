@@ -214,6 +214,24 @@ exports.gt = function (versionA, versionB) {
     return exports.compare(versionA, versionB) > 0;
 };
 /**
+ * @summary Check if a version is less than or equal to another
+ * @name lte
+ * @public
+ * @function
+ *
+ * @description Returns true if versionA is less than or equal to versionB.
+ * Valid semver versions are always weighted above non semver strings.
+ * Non-semver strings are compared alphabetically.
+ *
+ * @param {string|null|undefined} versionA - The version string to compare against
+ * @param {string|null|undefined} versionB - The version string to compare to versionA
+ *
+ * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
+ */
+exports.lte = function (versionA, versionB) {
+    return exports.compare(versionA, versionB) <= 0;
+};
+/**
  * @summary Check if a version is less than another
  * @name lt
  * @public
