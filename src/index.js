@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var memoize = require("lodash.memoize");
+var memoize = require("lodash/memoize");
 var semver = require("semver");
 var trimOsText = function (version) {
     // Remove "Resin OS" and "Balena OS" text

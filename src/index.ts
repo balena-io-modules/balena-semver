@@ -1,4 +1,4 @@
-import memoize = require('lodash.memoize');
+import memoize = require('lodash/memoize');
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;

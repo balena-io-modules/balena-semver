@@ -26,21 +26,19 @@
   "author": "Lucian Buzzo <lucian@resin.io>",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/lodash.memoize": "^4.1.2",
+    "@types/lodash": "^4.1.2",
     "@types/semver": "^5.4.0",
-    "lodash.memoize": "^4.1.2",
+    "lodash": "^4.1.2",
     "semver": "^5.3.0"
   },
   "devDependencies": {
     "@types/chai": "^4.0.1",
-    "@types/lodash.sortby": "^4.7.4",
     "@types/mocha": "^2.2.41",
     "catch-uncommitted": "^1.0.0",
     "chai": "^4.1.0",
     "husky": "^0.14.3",
     "jsdoc-to-markdown": "^3.0.0",
     "lint-staged": "^4.0.4",
-    "lodash.sortby": "^4.7.0",
     "mocha": "^3.4.2",
     "prettier": "^1.6.1",
     "ts-node": "^3.2.1",

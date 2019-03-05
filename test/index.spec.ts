@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import sortBy = require('lodash.sortby');
+import sortBy = require('lodash/sortBy');
 import * as semver from '../src';
 import { versions } from './versions';
 
