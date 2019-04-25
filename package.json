@@ -2,13 +2,17 @@
   "name": "resin-semver",
   "version": "1.6.0",
   "description": "Resin.io specific semver utility methods",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "typings": "src/index.ts",
   "homepage": "https://github.com/resin-io-modules/resin-semver",
   "repository": {
     "type": "git",
     "url": "https://github.com/resin-io-modules/resin-semver"
   },
+  "files": [
+    "build/",
+    "src/"
+  ],
   "keywords": [
     "resin",
     "resin.io",
