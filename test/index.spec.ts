@@ -3,7 +3,7 @@ import sortBy = require('lodash/sortBy');
 import * as semver from '../src';
 import { versions } from './versions';
 
-describe('resin-semver', () => {
+describe('balena-semver', () => {
 	describe('.compare()', () => {
 		it('should not throw when provided with a version', () => {
 			versions.forEach(version => {
