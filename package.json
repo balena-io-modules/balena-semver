@@ -25,7 +25,8 @@
     "docs": "./automation/docs.js",
     "ci": "npm run build && catch-uncommitted && npm test",
     "precommit": "lint-staged",
-    "prettify": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+    "prettify": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "prepare": "npm run build"
   },
   "author": "Lucian Buzzo <lucian@resin.io>",
   "license": "Apache-2.0",
