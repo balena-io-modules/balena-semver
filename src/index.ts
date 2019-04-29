@@ -27,10 +27,12 @@ const safeSemver = (version: string) => {
 			.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
 			// if there are build metadata, then treat the parenthesized value as point value
 			.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2')
+			// remove leading zeros
+			.replace(/([^1-9])0+([1-9]+)/i, '$1$2')
 	);
 };
 
-const normalize = (version: string): string => trimOsText(safeSemver(version));
+const normalize = (version: string): string => trimOsText(safeSemver(version.trim()));
 
 const getRev = (parsedVersion: semver.SemVer | null) => {
 	if (parsedVersion === null) {
