@@ -20,9 +20,11 @@ var safeSemver = function (version) {
         // if there are no build metadata, then treat the parenthesized value as one
         .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
         // if there are build metadata, then treat the parenthesized value as point value
-        .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2'));
+        .replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2')
+        // remove leading zeros
+        .replace(/([^1-9])0+([1-9]+)/i, '$1$2'));
 };
-var normalize = function (version) { return trimOsText(safeSemver(version)); };
+var normalize = function (version) { return trimOsText(safeSemver(version.trim())); };
 var getRev = function (parsedVersion) {
     if (parsedVersion === null) {
         return 0;

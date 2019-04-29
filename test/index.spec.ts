@@ -15,6 +15,12 @@ describe('resin-semver', () => {
 			expect(sortBy(versions.slice(), semver.compare)).to.eql(versions);
 		});
 
+		it('should correctly compare versions with leading 0s', () => {
+			expect(semver.compare('18.04.1', '18.4.1')).to.equal(0);
+			expect(semver.compare('18.04.2', '18.4.1')).to.equal(1);
+			expect(semver.compare('18.04.1', '18.4.2')).to.equal(-1);
+		});
+
 		it('should correctly compare valid semver values', () => {
 			expect(semver.compare('2.0.5', '1.16.0')).to.equal(1);
 			expect(semver.compare('2.0.5', '2.0.5')).to.equal(0);
@@ -46,6 +52,12 @@ describe('resin-semver', () => {
 			expect(semver.compare('balenaOS 2.0.5', 'Resin OS 2.0.2+rev2')).to.equal(1);
 			expect(semver.compare('balenaOS 1.16.0', 'Resin OS 2.0.2 (prod)')).to.equal(-1);
 			expect(semver.compare('balenaOS 1.16.0', 'Resin OS 1.16.0')).to.equal(0);
+		});
+
+		it('should correctly compare Balena formatted versions with leading 0s', () => {
+			expect(semver.compare('balenaOS v2.0.2+rev2', 'balenaOS v2.0.2+rev02')).to.equal(0);
+			expect(semver.compare('balenaOS v2.0.2+rev01', 'balenaOS v2.0.2+rev02')).to.equal(-1);
+			expect(semver.compare('balenaOS v2.0.02+rev2', 'balenaOS v2.0.2+rev1')).to.equal(1);
 		});
 
 		it('should correctly compare invalid semver values', () => {
