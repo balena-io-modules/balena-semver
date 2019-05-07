@@ -1,29 +1,36 @@
 {
-  "name": "resin-semver",
+  "name": "balena-semver",
   "version": "1.6.0",
-  "description": "Resin.io specific semver utility methods",
-  "main": "src/index.js",
+  "description": "Balena specific semver utility methods",
+  "main": "build/index.js",
   "typings": "src/index.ts",
-  "homepage": "https://github.com/resin-io-modules/resin-semver",
+  "homepage": "https://github.com/balena-io-modules/balena-semver",
   "repository": {
     "type": "git",
-    "url": "https://github.com/resin-io-modules/resin-semver"
+    "url": "https://github.com/balena-io-modules/balena-semver"
   },
+  "files": [
+    "build/",
+    "src/"
+  ],
   "keywords": [
+    "balena",
+    "balena.io",
     "resin",
     "resin.io",
     "semver"
   ],
   "scripts": {
-    "test": "npm run lint && ./automation/test.js",
+    "test": "npm run build && npm run lint && ./automation/test.js",
     "build": "tsc && npm run docs",
     "lint": "tslint -t stylish -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
     "docs": "./automation/docs.js",
     "ci": "npm run build && catch-uncommitted && npm test",
     "precommit": "lint-staged",
-    "prettify": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+    "prettify": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "prepare": "npm run build"
   },
-  "author": "Lucian Buzzo <lucian@resin.io>",
+  "author": "Lucian Buzzo <lucian@balena.io>",
   "license": "Apache-2.0",
   "dependencies": {
     "@types/lodash": "^4.1.2 <=4.14.121",

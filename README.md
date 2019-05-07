@@ -1,26 +1,26 @@
-resin-semver
+balena-semver
 ============
 
-> Resin.io specific semver utility methods
+> Balena specific semver utility methods
 
-[![Build Status](https://travis-ci.org/resin-io-modules/resin-semver.svg?branch=master)](https://travis-ci.org/resin-io-modules/resin-semver)
+[![Build Status](https://travis-ci.org/balena-io-modules/balena-semver.svg?branch=master)](https://travis-ci.org/balena-io-modules/balena-semver)
 
 Role
 ----
 
-The intention of this module is to provide a collection of resin specific semver utility methods.
+The intention of this module is to provide a collection of balena specific semver utility methods.
 
 **THIS MODULE IS LOW LEVEL AND IS NOT MEANT TO BE USED BY END USERS DIRECTLY**.
 
-Unless you know what you're doing, use the [Resin SDK](https://github.com/resin-io/resin-sdk) instead.
+Unless you know what you're doing, use the [Balena SDK](https://github.com/balena-io/balena-sdk) instead.
 
 Installation
 ------------
 
-Install `resin-semver` by running:
+Install `balena-semver` by running:
 
 ```sh
-$ npm install --save resin-semver
+$ npm install --save balena-semver
 ```
 
 Documentation
@@ -275,7 +275,7 @@ chai.expect(semver.compare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.prod')).t
 chai.expect(semver.compare('Resin OS 2.0.0+rev3 (dev)', 'Resin OS 2.0.0+rev3+prod')).to.equal(1); // B is invalid
 ```
 
-<a name="resin-semver-rcompare"></a>
+<a name="balena-semver-rcompare"></a>
 
 <a name="rcompare"></a>
 
@@ -394,7 +394,7 @@ chai.expect(semver.rcompare('Resin OS 2.0.0.dev', '2.0.0')).to.equal(1);
 chai.expect(semver.rcompare('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(0);
 ```
 
-<a name="resin-semver-major"></a>
+<a name="balena-semver-major"></a>
 
 <a name="major"></a>
 
@@ -448,7 +448,7 @@ chai.expect(semver.major('Linux 14.04')).to.equal(null);
 chai.expect(semver.major('Software version 42.3.20170726.72bbcf8')).to.equal(null);
 ```
 
-<a name="resin-semver-prerelease"></a>
+<a name="balena-semver-prerelease"></a>
 
 <a name="prerelease"></a>
 
@@ -509,7 +509,7 @@ should return null when provided with an undefined value.
 chai.expect(semver.prerelease(undefined)).to.equal(null);
 ```
 
-<a name="resin-semver-gte"></a>
+<a name="balena-semver-gte"></a>
 
 <a name="gte"></a>
 
@@ -611,7 +611,7 @@ chai.expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
 chai.expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(true);
 ```
 
-<a name="resin-semver-gt"></a>
+<a name="balena-semver-gt"></a>
 
 <a name="gt"></a>
 
@@ -716,7 +716,7 @@ chai.expect(semver.gt('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
 chai.expect(semver.gt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
 ```
 
-<a name="resin-semver-lte"></a>
+<a name="balena-semver-lte"></a>
 
 <a name="lte"></a>
 
@@ -821,7 +821,7 @@ chai.expect(semver.lte('Resin OS 2.0.0.dev', '2.0.0')).to.equal(true);
 chai.expect(semver.lte('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(true);
 ```
 
-<a name="resin-semver-lt"></a>
+<a name="balena-semver-lt"></a>
 
 <a name="lt"></a>
 
@@ -926,7 +926,7 @@ chai.expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0')).to.equal(true);
 chai.expect(semver.lt('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(false);
 ```
 
-<a name="resin-semver-satisfies"></a>
+<a name="balena-semver-satisfies"></a>
 
 <a name="satisfies"></a>
 
@@ -982,7 +982,7 @@ should correctly evaluate undefined values.
 chai.expect(semver.satisfies(undefined, '^2.0.0')).to.equal(false);
 ```
 
-<a name="resin-semver-maxsatisfying"></a>
+<a name="balena-semver-maxsatisfying"></a>
 
 <a name="maxSatisfying"></a>
 
@@ -1025,7 +1025,7 @@ chai.expect(semver.maxSatisfying(versions_1.versions, '< Resin OS v1.0.0')).to.e
 chai.expect(semver.maxSatisfying(versions_1.versions, 'Resin OS v1.1.*')).to.equal('Resin OS 1.1.4');
 ```
 
-<a name="resin-semver-parse"></a>
+<a name="balena-semver-parse"></a>
 
 <a name="parse"></a>
 
@@ -1155,7 +1155,7 @@ should correctly parse undefined values.
 chai.expect(semver.parse(undefined)).to.equal(null);
 ```
 
-<a name="resin-semver-valid"></a>
+<a name="balena-semver-valid"></a>
 
 <a name="valid"></a>
 
@@ -1197,7 +1197,7 @@ chai.expect(semver.valid('Resin OS 2.0.0+rev4 (dev)')).to.equal('2.0.0');
 chai.expect(semver.valid('2.0.6+rev3.dev')).to.equal('2.0.6');
 ```
 
-<a name="resin-semver-inc"></a>
+<a name="balena-semver-inc"></a>
 
 <a name="inc"></a>
 

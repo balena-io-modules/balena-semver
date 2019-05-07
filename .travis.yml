@@ -2,6 +2,8 @@ language: node_js
 matrix:
   include:
   - node_js:
+    - '10'
+    - '8'
     - '6'
     env:
     - CAN_DEPLOY=true
@@ -11,13 +13,3 @@ notifications:
 before_install:
   - npm -g install npm@4
 script: npm run ci
-deploy:
-  provider: npm
-  email: accounts@resin.io
-  skip_cleanup: true
-  api_key:
-    secure: VEk7/b553aXVWYGXRvavU/pkeR0R7/xxeD24zhf050hClVu6iSxEDrG13dUAcqOppfQukPH3StJ6pu5zaCWEfhii012KJA9BUAjsFCiZ08Ug9PFkAG5PC6PtJ2ve3R7c3uk5FBVFIIpaBJPtolg/RL7mXa2IbeJCUhhtffoZoLkYj7GiGaolfuD2Xs/XEymqoGz3q1KHqrgeMz43LZ8diwCIwedB7DzEz8Q3M7qV+hJ2rfjq1g4aa2pIcO2yOGNEFuALD4WvWwUeg8wrwYsrmI1KWlRciJtj/nWvyxj+vJ/iHoR43nHuvg3tniXpZLV6HEJfVA0/dqr5srbopyEiE89V0003APHHILymmyQdS1nJsWJJhgUSeARmZbyU+LRr+90pSMmwZJe/dsHH5US3KyhGr9TyENoPYKC7w0vsMfbnqLXepsTQrQcT2ii5+fI7S3m71qw0ivjNiTFn2maVPXBqfHJNfdIHZ3WWv4CpfjfFWwfeycLqLKgzCDuGDOu384604LP03eT6LMDCsuqpQeFso58aSg6KuP3qejqO7aLvE9GoZtPyAHjhodMZQwJdYH8Zbj4HPNJWRj0S+JUrITULo3GZ85M3JEuKC1VG7XoyqeoghwyJmgX0WeDhZdOCW+Xky1w/jdNovpBoH7OlUhE5g0hcDizTeuvMeUT66Iw=
-  on:
-    tags: true
-    condition: "$CAN_DEPLOY = 'true' && $TRAVIS_TAG =~ ^v?[[:digit:]]+\\.[[:digit:]]+\\.[[:digit:]]+"
-    repo: resin-io-modules/resin-semver
