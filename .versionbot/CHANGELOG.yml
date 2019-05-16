@@ -1,0 +1,394 @@
+- commits:
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      change-type: minor
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 58493c862a12abb638c516b05998c27988969d16
+    subject: Move the build output of the repo
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      change-type: major
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 068392593aed300ef4877438b5db09bb143eb2e6
+    subject: Exclude the build output from the repo
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 4712578f02bd626bfb24fd5dc5df7ed87c96444c
+    subject: Use a prepare step that doesn't run tests, to be balenaCI compliant
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 59389f0789fa5a9c1a97c403e02475ec7ef1b130
+    subject: Run build before the tests
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 7a52febbc5f693d87c2b769b17aa6c378791775e
+    subject: '.travis.yml: Also test against node 8 & 10'
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 544593074bdf8e754212963452df1b2d0798a313
+    subject: '.travis.yml: Stop publishing using Travis'
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      change-type: major
+      resolves: '#74'
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: de870a566275c378e436719c528dd43ed6825f40
+    subject: Rename everything 'resin' to 'balena'
+  date: "2019-05-07T14:35:12Z"
+  version: 2.0.0
+- commits:
+  - author: Giovanni Garufi
+    body: ""
+    footers:
+      change-type: minor
+      signed-off-by: Giovanni Garufi <giovanni@balena.io>
+    hash: 540e5b757b5d8e47e70aea0d2f7025297e37bbab
+    subject: Accept versions with leading zeros
+  date: "2019-04-29T13:41:05Z"
+  version: 1.6.0
+- commits:
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      change-type: patch
+      resolves: '#72'
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: b7ebb5e41dbdd2b3f27fe92fe43eb60d97ecbf45
+    subject: Drop lodash.memoize in favor of deep imports
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      change-type: patch
+      resolves: '#71'
+      signed-off-by: Thodoris Greasidis <thodoris@balena.io>
+    hash: 4dc97c051bb3dcb848a49e7bc276a675f142a4c1
+    subject: Limit @types/lodash version to not break TS<2.8 consumers
+  date: "2019-03-05T13:12:33Z"
+  version: 1.5.1
+- commits:
+  - author: Gergely Imreh
+    body: ""
+    footers:
+      change-type: minor
+      signed-off-by: Gergely Imreh <gergely@balena.io>
+    hash: a6de0135c5deebc3119a65a9eebdf28b90fc5ad0
+    subject: add .lte to the supported functions
+  date: "2019-01-25T16:15:42Z"
+  version: 1.5.0
+- commits:
+  - author: Gergely Imreh
+    body: |-
+      Otherwise on node 11, at least, run into this error with the original
+      async version:
+      ```
+      (node:4198) UnhandledPromiseRejectionWarning: TypeError [ERR_INVALID_CALLBACK]: Callback must be a function
+      at maybeCallback (fs.js:134:9)
+      at Object.writeFile (fs.js:1180:14)
+      at jsdoc2md.getTemplateData.then.then.result (/home/greg/resin/resin-semver/automation/docs.js:59:10)
+      ```
+    footers:
+      change-type: patch
+      signed-off-by: Gergely Imreh <gergely@balena.io>
+    hash: 0cd30ce11fc43bfc476b00cc82fe69fb7ac4103f
+    subject: 'docs: make file writer synchronous'
+  date: "2019-01-24T18:07:09Z"
+  version: 1.4.1
+- commits:
+  - author: Lucian Buzzo
+    body: ""
+    footers:
+      change-type: minor
+      signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+    hash: fc88a50891d2cd949592e2fbd4ee0b112a26de38
+    subject: Add support for balenaOS prefixed OS versions
+  date: "2018-10-18T06:37:52Z"
+  version: 1.4.0
+- commits:
+  - author: Lucian Buzzo
+    body: |-
+      - Balena OS versions are completely equivalent to Resin OS versions.
+      - Remove unnecessary sourcemap.
+    footers:
+      change-type: minor
+      signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+    hash: ceeaf7100b2dffa3ad42867599a10dc5f1ea5706
+    subject: 'feat: Add support for Balena OS versions'
+  date: "2018-09-18T12:09:25Z"
+  version: 1.3.0
+- commits:
+  - author: Lucian Buzzo
+    body: ""
+    footers:
+      change-type: patch
+    hash: 3a02c5b4b1c89913427a2e8a7fe4184e9e7a6568
+    subject: Declare mocha and chai as dev dependencies instead of direct dependencies
+  date: "2018-02-16T10:04:02Z"
+  version: 1.2.2
+- commits:
+  - author: Lucian Buzzo
+    body: 'Fixes #58'
+    footers:
+      change-type: patch
+    hash: 55460301b3ab6db2a4684d9ca12c4c7a3dcaa946
+    subject: Bump semver typings version and remove index.d.ts
+  date: "2017-10-06T09:35:19Z"
+  version: 1.2.1
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #53'
+    footers:
+      change-type: minor
+    hash: 6e014d0d7f3ee37541765eaf75850b0b7eb681a2
+    subject: Normalize range/version used in maxSatisfying method
+  date: "2017-09-15T15:27:49Z"
+  version: 1.2.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #47'
+    footers:
+      change-type: patch
+    hash: c471b248f4f0b1ba95652ed37bea816c96dc67db
+    subject: Use Husky to prettify and lint files, then build output
+  date: "2017-09-14T16:00:58Z"
+  version: 1.1.1
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #3'
+    footers:
+      change-type: minor
+    hash: 1eece76b753eb083acac6e4081dd264e589e64e4
+    subject: Add `.inc()` method
+  date: "2017-09-14T15:46:17Z"
+  version: 1.1.0
+- commits:
+  - author: Lucian Buzzo
+    body: |-
+      Connects to #46
+      The doc generation script has been refactored to be more platform agnostic,
+      allowing it to be run on the Travis servers
+    footers:
+      change-type: patch
+    hash: 987057ee59ae51b4a5e3b4eb58340c8e417b8bb0
+    subject: Check to see if build output has been committed
+  date: "2017-09-14T15:37:07Z"
+  version: 1.0.1
+- commits:
+  - author: Thodoris Greasidis
+    body: ""
+    footers:
+      change-type: major
+      connects-to: '#34'
+    hash: 4165938af14bb951033fdc9b3243eaf8ccbcb288
+    subject: Normalize dev and prod builds
+  date: "2017-09-14T15:30:44Z"
+  version: 1.0.0
+- commits:
+  - author: Lucian Buzzo
+    body: |-
+      The TypeScript compiler was stripping comments from the compiled source.
+      Connects to #38
+    footers:
+      change-type: patch
+    hash: 94bea800048ea34f81b220294428f91dcd0244b7
+    subject: Fix broken doc generation
+  date: "2017-08-18T10:45:13Z"
+  version: 0.9.2
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #36'
+    footers:
+      change-type: patch
+    hash: 651640b529bb5c46d407af4ef3340130bcec2eef
+    subject: Drop typings augmentation now that DT types are updated
+  date: "2017-08-18T09:40:50Z"
+  version: 0.9.1
+- commits:
+  - author: Lucian Buzzo
+    body: |-
+      Fixed build command so that it correctly uses tsconfig.json instead of
+      typsecript defaults.
+      Connects to #25
+    footers:
+      change-type: minor
+    hash: c1a555b6218c1999578d31afbf14158f24a33e43
+    subject: Implement `.parse()` method
+  date: "2017-08-16T09:01:28Z"
+  version: 0.9.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #23'
+    footers:
+      change-type: minor
+    hash: 609c5d9fb0cb5d1f0c4a3fe28aa2a5cb31840624
+    subject: Implement `.satisfies()` and `.maxSatisfying()` methods
+  date: "2017-08-07T09:45:26Z"
+  version: 0.8.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #10'
+    footers:
+      change-type: patch
+    hash: 4a9465d9e8825d0a7d3e712339411d070a080125
+    subject: Arrange example versions in the /test directory expected sort order
+  date: "2017-08-07T08:06:30Z"
+  version: 0.7.2
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #9'
+    footers:
+      change-type: patch
+    hash: 60454a1c6d104cf8a2bd7ef7f0357e4afa2e2057
+    subject: Remove string casting from `.compare()` method
+  date: "2017-08-04T10:08:34Z"
+  version: 0.7.1
+- commits:
+  - author: Lucian Buzzo
+    body: |-
+      Connects to #24
+      JSDoc examples are now automatically generated using the mocha markdown reporter
+    footers:
+      change-type: minor
+    hash: 1f1cf8533925c3cb62bad321f0c65a0748dc6178
+    subject: Implement `.rcompare()` method
+  date: "2017-08-04T09:08:08Z"
+  version: 0.7.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #26'
+    footers:
+      change-type: patch
+    hash: 4f774ecfb3a2a1b332ef7b2cea8816fcdf060b9d
+    subject: Add additional metadata to package.json
+  date: "2017-08-01T15:43:25Z"
+  version: 0.6.1
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #20'
+    footers:
+      change-type: minor
+    hash: 5dd87dada76b37ae9ebc7abf078629eba5881ef0
+    subject: Add `.lt()` method
+  date: "2017-08-01T13:48:13Z"
+  version: 0.6.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #19'
+    footers:
+      change-type: minor
+    hash: 35299b62c3d53d7e6602b128888dc153c84685a9
+    subject: Add a `.gt()` method
+  date: "2017-08-01T13:27:39Z"
+  version: 0.5.0
+- commits:
+  - author: Lucian Buzzo
+    body: |-
+      Added comprehensive testing to `.compare()` method and fix a number of bugs in
+      `.compare()` method and `getRev()` helper function.
+      Previously, `.compare()` incorrectly performed a right compare, causing the results to be
+      the reverse of what is expected.
+      Connects to #15
+    footers:
+      change-type: minor
+    hash: 1859eb66e8a4a40c9f63e0a9922745f59f424120
+    subject: Add a `.gte()` method.
+  date: "2017-08-01T12:55:29Z"
+  version: 0.4.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #17'
+    footers:
+      change-type: minor
+    hash: 71eed8f9a15e2e8e9b7e872d45a8143f0105ae9e
+    subject: Add a `.prerelease()` method
+  date: "2017-08-01T08:10:04Z"
+  version: 0.3.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #13'
+    footers:
+      change-type: minor
+    hash: c43487dcff1f82b5c7e4f25aeb47344001b2b875
+    subject: Add a method `.major()` for returning the major version number
+  - author: Lucian Buzzo
+    body: ""
+    hash: 59ba77b83eee912c1eb6ac28908915b2a5081ee9
+    subject: .major() will return null if a valid semver string cannot be found
+  - author: Lucian Buzzo
+    body: ""
+    hash: d9166c3a82e6dbc4b0bc171fe6323614ce760773
+    subject: added comparison/parsing approach to README
+  - author: Lucian Buzzo
+    body: ""
+    hash: 7b24d9b3a5771d41c45eacecdda63d5cb0fb5091
+    subject: bump docs
+  - author: Lucian Buzzo
+    body: ""
+    hash: e9a81e010b6950aa928b08669f1bf63798388ac7
+    subject: added test spec for prefixed 3 part versions that are not ResinOS style
+  date: "2017-07-31T13:44:52Z"
+  version: 0.2.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #5'
+    footers:
+      change-type: patch
+    hash: d81a08d3364b3792086d7e3cd9c6a9bc109f859c
+    subject: Add Functionality for generating documentation.
+  date: "2017-07-21T15:21:25Z"
+  version: 0.1.4
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #6'
+    footers:
+      change-type: patch
+    hash: 79689ee8614877b1690f4f63cc625373f3cd778a
+    subject: Add linting script and integrate it into test script
+  date: "2017-07-21T15:00:39Z"
+  version: 0.1.3
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #2'
+    footers:
+      change-type: patch
+    hash: 2284315a57a4eb943c877f732306a5110dae68f2
+    subject: Add travis CI integration
+  date: "2017-07-21T14:27:19Z"
+  version: 0.1.2
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #45'
+    footers:
+      change-type: patch
+    hash: f6eddbf1e05932e0b7e1bd04f3f065d38cad1c2f
+    subject: Auto deploy to npm on tagged commit merge
+  date: "2017-09-14T12:53:15Z"
+  version: 0.12.1
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #42'
+    footers:
+      change-type: minor
+    hash: c50aa0188d74e10ad58f668a629982d026f8b9a2
+    subject: Add the `.valid()` method
+  date: "2017-09-13T08:51:21Z"
+  version: 0.12.0
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #33'
+    footers:
+      change-type: minor
+    hash: ca3c4ae1eb2bea10ac08fca4e86c407e38673626
+    subject: Safely handle undefined version values
+  date: "2017-09-12T19:57:58Z"
+  version: 0.11.0
