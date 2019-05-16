@@ -1,4 +1,14 @@
 - commits:
+    - subject: Switch to a declaration file for exported types
+      hash: 89afada5a770d1b7deed3c01bc3056ce7545fdfb
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 2.0.3
+  date: 2019-05-16T15:25:16.020Z
+- commits:
     - subject: Update dev dependencies
       hash: bdb422713834bb3f156417db434308fd06d95434
       body: ''
