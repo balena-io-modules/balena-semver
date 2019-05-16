@@ -3,7 +3,7 @@
   "version": "2.0.2",
   "description": "Balena specific semver utility methods",
   "main": "build/index.js",
-  "typings": "src/index.ts",
+  "typings": "build/index.d.ts",
   "homepage": "https://github.com/balena-io-modules/balena-semver",
   "repository": {
     "type": "git",
