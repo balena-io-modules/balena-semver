@@ -480,7 +480,10 @@ chai.expect(semver.prerelease('1.16.0')).to.eql(null);
 should return an array of prerelease components when provided a resinOS prefixed version.
 
 ```js
-chai.expect(semver.prerelease('Resin OS 2.0.0-rc5.rev1')).to.eql(['rc5', 'rev1']);
+chai.expect(semver.prerelease('Resin OS 2.0.0-rc5.rev1')).to.eql([
+    'rc5',
+    'rev1',
+]);
 ```
 
 should return null when provided a resinOS prefixed version that has no prerelease segment.
@@ -1319,7 +1322,3 @@ chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'patch')).to.equal('2.0.1')
 chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'patch')).to.equal('2.0.1');
 chai.expect(semver.inc('2.0.6+rev3.dev', 'patch')).to.equal('2.0.7');
 ```
-
-
-
-

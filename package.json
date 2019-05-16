@@ -23,10 +23,10 @@
   "scripts": {
     "test": "npm run build && npm run lint && node ./automation/test.js",
     "build": "tsc && npm run docs",
-    "lint": "tslint -t stylish -c tslint.json 'src/**/*.ts' 'test/**/*.ts'",
+    "lint": "resin-lint --typescript src/ test/",
     "docs": "node ./automation/docs.js",
     "ci": "npm run build && catch-uncommitted && npm test",
-    "prettify": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "prettify": "prettier --config ./node_modules/resin-lint/config/.prettierrc --write \"{src,test}/**/*.ts\"",
     "prepare": "npm run build"
   },
   "author": "Lucian Buzzo <lucian@balena.io>",
@@ -47,14 +47,15 @@
     "lint-staged": "^8.1.7",
     "mocha": "^6.1.4",
     "prettier": "^1.17.1",
+    "resin-lint": "^3.0.4",
     "ts-node": "^7.0.1",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   },
   "lint-staged": {
     "*.ts": [
-      "prettier --write",
-      "npm run lint",
+      "prettier --config ./node_modules/resin-lint/config/.prettierrc --write",
+      "resin-lint --typescript --no-prettier",
       "npm run docs",
       "git add"
     ]
