@@ -1,4 +1,14 @@
 - commits:
+    - subject: Update dev dependencies
+      hash: bdb422713834bb3f156417db434308fd06d95434
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 2.0.2
+  date: 2019-05-16T14:24:46.901Z
+- commits:
     - subject: Add .versionbot/CHANGELOG.yml to allow nested changelogs
       hash: 3c47688e707fecc03897d2baa0f24be07208402c
       body: ''
