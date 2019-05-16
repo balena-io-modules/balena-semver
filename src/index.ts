@@ -2,7 +2,14 @@ import memoize = require('lodash/memoize');
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;
-type Release = 'premajor' | 'preminor' | 'prepatch' | 'prerelease' | 'major' | 'minor' | 'patch';
+type Release =
+	| 'premajor'
+	| 'preminor'
+	| 'prepatch'
+	| 'prerelease'
+	| 'major'
+	| 'minor'
+	| 'patch';
 
 const trimOsText = (version: string) => {
 	// Remove "Resin OS" and "Balena OS" text
@@ -24,15 +31,22 @@ const safeSemver = (version: string) => {
 			// fix major.minor.patch.prod to be treat .dev & .prod as build metadata
 			.replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
 			// if there are no build metadata, then treat the parenthesized value as one
-			.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1+$2')
+			.replace(
+				/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
+				'$1+$2',
+			)
 			// if there are build metadata, then treat the parenthesized value as point value
-			.replace(/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i, '$1.$2')
+			.replace(
+				/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
+				'$1.$2',
+			)
 			// remove leading zeros
 			.replace(/([^1-9])0+([1-9]+)/i, '$1$2')
 	);
 };
 
-const normalize = (version: string): string => trimOsText(safeSemver(version.trim()));
+const normalize = (version: string): string =>
+	trimOsText(safeSemver(version.trim()));
 
 const getRev = (parsedVersion: semver.SemVer | null) => {
 	if (parsedVersion === null) {
@@ -127,7 +141,10 @@ export const compare = memoize(
 			return revResult;
 		}
 
-		const devResult = compareValues(isDevelopmentVersion(semverA), isDevelopmentVersion(semverB));
+		const devResult = compareValues(
+			isDevelopmentVersion(semverA),
+			isDevelopmentVersion(semverB),
+		);
 		if (devResult !== 0) {
 			return devResult * -1;
 		}
@@ -156,7 +173,10 @@ export const compare = memoize(
  * sorted before null values.
  * If both values are non-null invalid semver values, then the values are compared alphabetically.
  */
-export const rcompare = (versionA: VersionInput, versionB: VersionInput): number => {
+export const rcompare = (
+	versionA: VersionInput,
+	versionB: VersionInput,
+): number => {
 	return 0 - compare(versionA, versionB);
 };
 
@@ -225,7 +245,10 @@ export const prerelease = (version: VersionInput) => {
  *
  * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
  */
-export const gte = (versionA: VersionInput, versionB: VersionInput): boolean => {
+export const gte = (
+	versionA: VersionInput,
+	versionB: VersionInput,
+): boolean => {
 	return compare(versionA, versionB) >= 0;
 };
 
@@ -264,7 +287,10 @@ export const gt = (versionA: VersionInput, versionB: VersionInput): boolean => {
  *
  * @returns {boolean} - true if versionA is greater than or equal to versionB, otherwise false.
  */
-export const lte = (versionA: VersionInput, versionB: VersionInput): boolean => {
+export const lte = (
+	versionA: VersionInput,
+	versionB: VersionInput,
+): boolean => {
 	return compare(versionA, versionB) <= 0;
 };
 
