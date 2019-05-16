@@ -1,13 +1,14 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "ES5",
+		"target": "es5",
 		"outDir": "build",
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"preserveConstEnums": true,
-		"sourceMap": false,
+		"sourceMap": true,
+		"declaration": true,
 		"strictNullChecks": true,
 		"moduleResolution": "node",
 		"baseUrl": ".",
@@ -16,7 +17,6 @@
 		}
 	},
 	"include": [
-		"./src/**/*.d.ts",
-		"./src/**/*.ts"
+		"src/**/*.ts"
 	]
 }
