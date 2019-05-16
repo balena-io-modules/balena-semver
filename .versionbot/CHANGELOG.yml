@@ -1,4 +1,14 @@
 - commits:
+    - subject: Switch to resin-lint
+      hash: e704585d240e75e812ff28dd77e970fb7f975d1e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 2.0.4
+  date: 2019-05-16T15:42:16.585Z
+- commits:
     - subject: Switch to a declaration file for exported types
       hash: 89afada5a770d1b7deed3c01bc3056ce7545fdfb
       body: ''
