@@ -33,7 +33,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@types/lodash": "^4.1.2 <=4.14.121",
-    "@types/semver": "^5.4.0",
+    "@types/semver": "^6.0.0",
     "lodash": "^4.1.2",
     "semver": "^5.3.0"
   },

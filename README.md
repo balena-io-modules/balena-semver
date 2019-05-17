@@ -963,6 +963,15 @@ chai.expect(semver.satisfies('Resin OS 2.0.2 (prod)', '^2.0.0')).to.equal(true);
 chai.expect(semver.satisfies('Resin OS 1.16.0', '^2.0.0')).to.equal(false);
 ```
 
+should correctly evaluate versions with leading zeros.
+
+```js
+chai.expect(semver.satisfies('2019.04.0', '~2019.04.0')).to.equal(true);
+chai.expect(semver.satisfies('2019.04.1', '~2019.04.0')).to.equal(true);
+chai.expect(semver.satisfies('2019.05.0', '~2019.04.0')).to.equal(false);
+chai.expect(semver.satisfies('2020.05.0', '^2019.04.0')).to.equal(false);
+```
+
 should always return false when provided with an invalid semver value.
 
 ```js
@@ -1322,3 +1331,7 @@ chai.expect(semver.inc('Resin OS 2.0.0.rev1 (prod)', 'patch')).to.equal('2.0.1')
 chai.expect(semver.inc('Resin OS 2.0.0+rev4 (dev)', 'patch')).to.equal('2.0.1');
 chai.expect(semver.inc('2.0.6+rev3.dev', 'patch')).to.equal('2.0.7');
 ```
+
+
+
+
