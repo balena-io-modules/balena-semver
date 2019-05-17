@@ -340,7 +340,9 @@ export const satisfies = (version: VersionInput, range: string) => {
 		return false;
 	}
 
-	return semver.satisfies(version, range);
+	return semver.satisfies(version, range, {
+		loose: true,
+	});
 };
 
 /**

@@ -714,6 +714,13 @@ describe('balena-semver', () => {
 			expect(semver.satisfies('Resin OS 1.16.0', '^2.0.0')).to.equal(false);
 		});
 
+		it('should correctly evaluate versions with leading zeros', () => {
+			expect(semver.satisfies('2019.04.0', '~2019.04.0')).to.equal(true);
+			expect(semver.satisfies('2019.04.1', '~2019.04.0')).to.equal(true);
+			expect(semver.satisfies('2019.05.0', '~2019.04.0')).to.equal(false);
+			expect(semver.satisfies('2020.05.0', '^2019.04.0')).to.equal(false);
+		});
+
 		it('should always return false when provided with an invalid semver value', () => {
 			expect(semver.satisfies('Linux 14.04', '^2.0.0')).to.equal(false);
 			expect(semver.satisfies('A development version', '^2.0.0')).to.equal(
