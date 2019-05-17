@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add loose option for semver.satisfies
+      hash: 2b08811488c614f034a05f130e6e3cf5c827e09b
+      body: |
+        This gives the range parser more freedom when interpreting the range, in
+        particular it allows to pass ranges that contain leading 0s
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Giovanni Garufi <giovanni@balena.io>
+        signed-off-by: Giovanni Garufi <giovanni@balena.io>
+      author: Giovanni Garufi
+  version: 2.1.0
+  date: 2019-05-17T13:04:38.928Z
+- commits:
     - subject: Switch to resin-lint
       hash: e704585d240e75e812ff28dd77e970fb7f975d1e
       body: ''
