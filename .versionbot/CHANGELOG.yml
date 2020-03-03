@@ -1,4 +1,14 @@
 - commits:
+    - subject: Update dependencies
+      hash: 195244a8fb43b12a2783fbac88e43b8562a2b5bc
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Pagan Gazzard
+  version: 2.2.0
+  date: 2020-03-03T14:28:32.090Z
+- commits:
     - subject: Add loose option for semver.satisfies
       hash: 2b08811488c614f034a05f130e6e3cf5c827e09b
       body: |
