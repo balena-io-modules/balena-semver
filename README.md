@@ -275,6 +275,15 @@ chai.expect(semver.compare('Resin OS 2.0.0+rev3', 'Resin OS 2.0.0+rev3.prod')).t
 chai.expect(semver.compare('Resin OS 2.0.0+rev3 (dev)', 'Resin OS 2.0.0+rev3+prod')).to.equal(1); // B is invalid
 ```
 
+should correctly compare versions with underscores.
+
+```js
+chai.expect(semver.compare('6.0.1_logstream', '5.0.1')).to.equal(1);
+chai.expect(semver.compare('6.0.1_logstream', '5.0.1_logstream')).to.equal(1);
+chai.expect(semver.compare('6.0.1_logstream', '7.0.1')).to.equal(-1);
+chai.expect(semver.compare('6.0.1_logstream', '6.0.1')).to.equal(1);
+```
+
 <a name="balena-semver-rcompare"></a>
 
 <a name="rcompare"></a>
@@ -448,6 +457,12 @@ chai.expect(semver.major('Linux 14.04')).to.equal(null);
 chai.expect(semver.major('Software version 42.3.20170726.72bbcf8')).to.equal(null);
 ```
 
+should correctly match underscored versions.
+
+```js
+chai.expect(semver.major('7.1.2_logstream')).to.equal(7);
+```
+
 <a name="balena-semver-prerelease"></a>
 
 <a name="prerelease"></a>
@@ -612,6 +627,13 @@ chai.expect(semver.gte('Resin OS 2.0.0+rev3.dev', 'Resin OS 2.0.0+rev3.dev')).to
 chai.expect(semver.gte('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(true);
 chai.expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
 chai.expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(true);
+```
+
+should correctly compare underscored versions.
+
+```js
+chai.expect(semver.gte('7.0.1_logstream', '7.0.1')).to.equal(true);
+chai.expect(semver.gte('7.0.1_logstream', '7.0.1_logstream')).to.equal(true);
 ```
 
 <a name="balena-semver-gt"></a>
@@ -1165,6 +1187,25 @@ should correctly parse undefined values.
 
 ```js
 chai.expect(semver.parse(undefined)).to.equal(null);
+```
+
+should correctly parse versions with underscores.
+
+```js
+chai.expect(semver.parse('6.0.1_logstream')).to.deep.include({
+    raw: '6.0.1_logstream',
+    major: 6,
+    minor: 0,
+    patch: 1,
+    version: '6.0.1',
+    build: ['logstream'],
+});
+```
+
+should not parse versions with multiple underscores.
+
+```js
+chai.expect(semver.parse('7.0.1_logstream_test')).to.be.null;
 ```
 
 <a name="balena-semver-valid"></a>

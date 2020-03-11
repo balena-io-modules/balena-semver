@@ -208,6 +208,13 @@ describe('balena-semver', () => {
 				semver.compare('Resin OS 2.0.0+rev3 (dev)', 'Resin OS 2.0.0+rev3+prod'),
 			).to.equal(1); // B is invalid
 		});
+
+		it('should correctly compare versions with underscores', () => {
+			expect(semver.compare('6.0.1_logstream', '5.0.1')).to.equal(1);
+			expect(semver.compare('6.0.1_logstream', '5.0.1_logstream')).to.equal(1);
+			expect(semver.compare('6.0.1_logstream', '7.0.1')).to.equal(-1);
+			expect(semver.compare('6.0.1_logstream', '6.0.1')).to.equal(1);
+		});
 	});
 
 	describe('.rcompare()', () => {
@@ -332,6 +339,10 @@ describe('balena-semver', () => {
 				null,
 			);
 		});
+
+		it('should correctly match underscored versions', () => {
+			expect(semver.major('7.1.2_logstream')).to.equal(7);
+		});
 	});
 
 	describe('.prerelease()', () => {
@@ -448,6 +459,11 @@ describe('balena-semver', () => {
 			expect(semver.gte('2.0.0', 'Resin OS 2.0.0.dev')).to.equal(true);
 			expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0')).to.equal(false);
 			expect(semver.gte('Resin OS 2.0.0.dev', '2.0.0.dev')).to.equal(true);
+		});
+
+		it('should correctly compare underscored versions', () => {
+			expect(semver.gte('7.0.1_logstream', '7.0.1')).to.equal(true);
+			expect(semver.gte('7.0.1_logstream', '7.0.1_logstream')).to.equal(true);
 		});
 	});
 
@@ -882,6 +898,21 @@ describe('balena-semver', () => {
 
 		it('should correctly parse undefined values', () => {
 			expect(semver.parse(undefined)).to.equal(null);
+		});
+
+		it('should correctly parse versions with underscores', () => {
+			expect(semver.parse('6.0.1_logstream')).to.deep.include({
+				raw: '6.0.1_logstream',
+				major: 6,
+				minor: 0,
+				patch: 1,
+				version: '6.0.1',
+				build: ['logstream'],
+			});
+		});
+
+		it('should not parse versions with multiple underscores', () => {
+			expect(semver.parse('7.0.1_logstream_test')).to.be.null;
 		});
 	});
 

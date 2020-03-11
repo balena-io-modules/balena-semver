@@ -27,6 +27,9 @@ const safeSemver = (version: string) => {
 	// fix major.minor.patch.rev to use rev as build metadata
 	return (
 		version
+			// Replace any underscores with plusses, as they should
+			// have the same semantics
+			.replace(/([0-9]+\.[0-9]+\.[0-9]+)_(\w+)/, '$1+$2')
 			.replace(/(\.[0-9]+)\.rev/, '$1+rev')
 			// fix major.minor.patch.prod to be treat .dev & .prod as build metadata
 			.replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
