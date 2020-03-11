@@ -1,4 +1,19 @@
 - commits:
+    - subject: Support underscore version variants
+      hash: abebeaa230588dbe101336ccb2f9531ae57c10a2
+      body: |
+        A bunch of supervisor versions container the string `_logstream` at the
+        end. We convert this to a +logstream and handle it like any other build
+        metadata.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Cameron Diver <cameron@balena.io>
+        signed-off-by: Cameron Diver <cameron@balena.io>
+      author: Cameron Diver
+  version: 2.3.0
+  date: 2020-03-11T16:57:22.101Z
+- commits:
     - subject: Update dependencies
       hash: 195244a8fb43b12a2783fbac88e43b8562a2b5bc
       body: ''
