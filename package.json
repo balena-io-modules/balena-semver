@@ -13,6 +13,9 @@
     "build/",
     "src/"
   ],
+  "engines": {
+    "node": ">=10"
+  },
   "keywords": [
     "balena",
     "balena.io",
