@@ -1,4 +1,16 @@
 - commits:
+    - subject: Delete redundant .resinci.yml
+      hash: cd03cee06cb838ee22ce4c8181c492d9b20873c9
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+  version: 2.3.2
+  title: ""
+  date: 2022-09-26T12:41:08.956Z
+- commits:
     - subject: Drop the .travis.yml
       hash: 14b4554172e6740c8d1093662523fcf1588def65
       body: ""
