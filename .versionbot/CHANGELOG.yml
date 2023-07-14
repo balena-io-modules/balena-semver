@@ -1,4 +1,22 @@
 - commits:
+    - subject: Update TypeScript to 4.9.5
+      hash: 2c39d47bc602282c5f20b62b917e53bfbc11c650
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+    - subject: "patch: Update flowzone.yml"
+      hash: ce02a95d8e2568a0bb7de892779117a89a86d7e8
+      body: ""
+      footer: {}
+      author: Kyle Harding
+      nested: []
+  version: 2.3.3
+  title: ""
+  date: 2023-07-14T07:16:10.666Z
+- commits:
     - subject: Delete redundant .resinci.yml
       hash: cd03cee06cb838ee22ce4c8181c492d9b20873c9
       body: ""
