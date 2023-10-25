@@ -1,4 +1,16 @@
 - commits:
+    - subject: Fix the `.compare()` method test when used with sorting
+      hash: 4cdf8016bc4c17f64fc566366fad833f9df5c77c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+  version: 2.3.4
+  title: ""
+  date: 2023-10-25T09:56:14.151Z
+- commits:
     - subject: Update TypeScript to 4.9.5
       hash: 2c39d47bc602282c5f20b62b917e53bfbc11c650
       body: ""
