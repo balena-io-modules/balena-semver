@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import sortBy = require('lodash/sortBy');
 import * as semver from '../src';
 import { versions } from './versions';
 
@@ -12,7 +11,7 @@ describe('balena-semver', () => {
 		});
 
 		it('should correctly sort lists of versions', () => {
-			expect(sortBy(versions.slice(), semver.compare)).to.eql(versions);
+			expect(versions.slice().sort(semver.compare)).to.eql(versions);
 		});
 
 		it('should correctly compare versions with leading 0s', () => {
