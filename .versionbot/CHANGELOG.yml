@@ -1,4 +1,24 @@
 - commits:
+    - subject: Test sorting pre-releases across revisions of the same semver
+      hash: dabe1a2e0ad65345132c8b282e0fff3391a508d6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+    - subject: Block the creation of package-lock.json
+      hash: 7a70f3b9c0846670f027c416237a96804d7658e5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+  version: 2.3.5
+  title: ""
+  date: 2023-10-25T10:01:51.841Z
+- commits:
     - subject: Fix the `.compare()` method test when used with sorting
       hash: 4cdf8016bc4c17f64fc566366fad833f9df5c77c
       body: ""
