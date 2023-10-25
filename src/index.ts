@@ -35,12 +35,12 @@ const safeSemver = (version: string) => {
 			.replace(/([0-9]+\.[0-9]+\.[0-9]+)\.(dev|prod)\b/i, '$1+$2')
 			// if there are no build metadata, then treat the parenthesized value as one
 			.replace(
-				/([0-9]+\.[0-9]+\.[0-9]+(?:[-\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
+				/([0-9]+\.[0-9]+\.[0-9]+(?:[-.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
 				'$1+$2',
 			)
 			// if there are build metadata, then treat the parenthesized value as point value
 			.replace(
-				/([0-9]+\.[0-9]+\.[0-9]+(?:[-\+\.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
+				/([0-9]+\.[0-9]+\.[0-9]+(?:[-+.][0-9a-z]+)*) \(([0-9a-z]+)\)/i,
 				'$1.$2',
 			)
 			// remove leading zeros
@@ -57,11 +57,11 @@ const getRev = (parsedVersion: semver.SemVer | null) => {
 	}
 
 	const rev = parsedVersion.build
-		.map(function(metadataPart) {
+		.map(function (metadataPart) {
 			const matches = /rev(\d+)/.exec(metadataPart);
 			return (matches && matches[1]) || null;
 		})
-		.filter(x => x != null)[0];
+		.filter((x) => x != null)[0];
 
 	if (rev != null) {
 		return parseInt(rev, 10);
@@ -370,7 +370,7 @@ export const maxSatisfying = (versions: VersionInput[], range: string) => {
 
 	const normalizedRange = normalize(range);
 
-	versions.forEach(version => {
+	versions.forEach((version) => {
 		if (satisfies(version, normalizedRange) && gt(version, max)) {
 			max = version;
 		}
