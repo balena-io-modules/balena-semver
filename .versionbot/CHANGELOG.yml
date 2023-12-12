@@ -1,4 +1,24 @@
 - commits:
+    - subject: Update dependencies
+      hash: 2e4484b43d1da62de72a1e6a536422ab84eb5072
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+    - subject: Drop support for nodejs < 16.0.0
+      hash: d59a62e97e93e80ac299694d169e2ccad944ccc8
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Thodoris Greasidis
+      nested: []
+  version: 3.0.0
+  title: ""
+  date: 2023-12-12T14:57:30.421Z
+- commits:
     - subject: Test sorting pre-releases across revisions of the same semver
       hash: dabe1a2e0ad65345132c8b282e0fff3391a508d6
       body: ""
