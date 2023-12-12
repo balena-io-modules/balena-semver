@@ -5,7 +5,7 @@ import { versions } from './versions';
 describe('balena-semver', () => {
 	describe('.compare()', () => {
 		it('should not throw when provided with a version', () => {
-			versions.forEach(version => {
+			versions.forEach((version) => {
 				expect(() => semver.compare(version, version)).to.not.throw();
 			});
 		});
@@ -218,7 +218,7 @@ describe('balena-semver', () => {
 
 	describe('.rcompare()', () => {
 		it('should not throw when provided with a version', () => {
-			versions.forEach(version => {
+			versions.forEach((version) => {
 				expect(() => semver.rcompare(version, version)).to.not.throw();
 			});
 		});
