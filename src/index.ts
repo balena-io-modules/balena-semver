@@ -44,7 +44,7 @@ const safeSemver = (version: string) => {
 				'$1.$2',
 			)
 			// remove leading zeros
-			.replace(/([^1-9])0+([1-9]+)/i, '$1$2')
+			.replace(/([^0-9])0+([1-9]+)/i, '$1$2')
 	);
 };
 

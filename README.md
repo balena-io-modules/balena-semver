@@ -1373,6 +1373,17 @@ should correctly increment valid values by a 'patch' release.
 (0, chai.expect)(semver.inc('2.0.6+rev3.dev', 'patch')).to.equal('2.0.7');
 ```
 
+should correctly increment 4 digit semver parts.
+
+```js
+(0, chai.expect)(semver.inc('14.1.1000', 'patch')).to.equal('14.1.1001');
+(0, chai.expect)(semver.inc('14.1.1001', 'patch')).to.equal('14.1.1002');
+(0, chai.expect)(semver.inc('14.1000.1000', 'minor')).to.equal('14.1001.0');
+(0, chai.expect)(semver.inc('14.1001.1001', 'minor')).to.equal('14.1002.0');
+(0, chai.expect)(semver.inc('1000.1000.1000', 'major')).to.equal('1001.0.0');
+(0, chai.expect)(semver.inc('1001.1001.1001', 'major')).to.equal('1002.0.0');
+```
+
 
 
 
