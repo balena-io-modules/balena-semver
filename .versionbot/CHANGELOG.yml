@@ -1,4 +1,16 @@
 - commits:
+    - subject: Fix parsing & incrementing semver parts > 1000
+      hash: 75905801615827ffe8f2d2303116f5eb2ecfc043
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Thodoris Greasidis
+      nested: []
+  version: 3.0.1
+  title: ""
+  date: 2025-02-14T18:42:07.174Z
+- commits:
     - subject: Update dependencies
       hash: 2e4484b43d1da62de72a1e6a536422ab84eb5072
       body: ""
@@ -292,13 +304,15 @@
 
         ```
 
-        (node:4198) UnhandledPromiseRejectionWarning: TypeError [ERR_INVALID_CALLBACK]: Callback must be a function
+        (node:4198) UnhandledPromiseRejectionWarning: TypeError
+        [ERR_INVALID_CALLBACK]: Callback must be a function
 
         at maybeCallback (fs.js:134:9)
 
         at Object.writeFile (fs.js:1180:14)
 
-        at jsdoc2md.getTemplateData.then.then.result (/home/greg/resin/resin-semver/automation/docs.js:59:10)
+        at jsdoc2md.getTemplateData.then.then.result
+        (/home/greg/resin/resin-semver/automation/docs.js:59:10)
 
         ```
       footers:
@@ -380,7 +394,8 @@
       body: >-
         Connects to #46
 
-        The doc generation script has been refactored to be more platform agnostic,
+        The doc generation script has been refactored to be more platform
+        agnostic,
 
         allowing it to be run on the Travis servers
       footers:
@@ -463,7 +478,8 @@
       body: >-
         Connects to #24
 
-        JSDoc examples are now automatically generated using the mocha markdown reporter
+        JSDoc examples are now automatically generated using the mocha markdown
+        reporter
       footers:
         change-type: minor
       hash: 1f1cf8533925c3cb62bad321f0c65a0748dc6178
@@ -505,7 +521,8 @@
 
         `.compare()` method and `getRev()` helper function.
 
-        Previously, `.compare()` incorrectly performed a right compare, causing the results to be
+        Previously, `.compare()` incorrectly performed a right compare, causing
+        the results to be
 
         the reverse of what is expected.
 
