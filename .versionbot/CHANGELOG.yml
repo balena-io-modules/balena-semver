@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency @balena/lint to v8
+      hash: 36903a103f6fdb5f80e14abc887530b01c04fccb
+      body: |
+        Update @balena/lint from 7.3.0 to 8.2.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 3.0.2
+  title: ""
+  date: 2025-03-25T17:14:22.133Z
+- commits:
     - subject: Fix parsing & incrementing semver parts > 1000
       hash: 75905801615827ffe8f2d2303116f5eb2ecfc043
       body: ""
