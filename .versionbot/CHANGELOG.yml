@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency jsdoc-to-markdown to v9
+      hash: 3019d85fa9ddf26c50b6ea242e6893b1ebb575ba
+      body: |
+        Update jsdoc-to-markdown from 8.0.3 to 9.1.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 3.0.4
+  title: ""
+  date: 2025-04-08T02:24:44.634Z
+- commits:
     - subject: Update dependency mocha to v11
       hash: 92800a2e5ed45435db6fd4c12faa3302485e848b
       body: |
