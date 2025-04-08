@@ -1,4 +1,4 @@
-import memoize = require('lodash/memoize');
+import { memoize } from 'lodash';
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;
@@ -59,7 +59,7 @@ const getRev = (parsedVersion: semver.SemVer | null) => {
 	const rev = parsedVersion.build
 		.map(function (metadataPart) {
 			const matches = /rev(\d+)/.exec(metadataPart);
-			return (matches && matches[1]) || null;
+			return matches?.[1] ?? null;
 		})
 		.filter((x) => x != null)[0];
 
@@ -75,7 +75,7 @@ const isDevelopmentVersion = (parsedVersion: semver.SemVer | null) => {
 		return false;
 	}
 
-	return parsedVersion.build.indexOf('dev') >= 0;
+	return parsedVersion.build.includes('dev');
 };
 
 const compareValues = <T>(valueA: T, valueB: T) => {

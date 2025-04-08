@@ -26,14 +26,14 @@
   "scripts": {
     "test": "npm run build && npm run lint && node ./automation/test.js",
     "build": "tsc && npm run docs",
-    "lint": "balena-lint src/ test/",
+    "lint": "balena-lint -t tsconfig.dev.json src/ test/",
     "docs": "node ./automation/docs.js",
     "ci": "npm run build && catch-uncommitted && npm test",
-    "prettify": "balena-lint --fix src/ test/",
+    "prettify": "balena-lint -t tsconfig.dev.json --fix src/ test/",
     "prepack": "npm run build",
     "prepare": "husky install"
   },
-  "author": "Lucian Buzzo <lucian@balena.io>",
+  "author": "Balena Ltd. <hello@balena.io>",
   "license": "Apache-2.0",
   "dependencies": {
     "@types/lodash": "^4.14.200",
@@ -42,7 +42,7 @@
     "semver": "^7.5.4"
   },
   "devDependencies": {
-    "@balena/lint": "^8.0.0",
+    "@balena/lint": "^9.0.0",
     "@types/chai": "^4.3.9",
     "@types/mocha": "^10.0.3",
     "catch-uncommitted": "^2.0.0",
