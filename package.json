@@ -31,7 +31,7 @@
     "ci": "npm run build && catch-uncommitted && npm test",
     "prettify": "balena-lint -t tsconfig.dev.json --fix src/ test/",
     "prepack": "npm run build",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "author": "Balena Ltd. <hello@balena.io>",
   "license": "Apache-2.0",
@@ -47,7 +47,7 @@
     "@types/mocha": "^10.0.3",
     "catch-uncommitted": "^2.0.0",
     "chai": "^4.3.10",
-    "husky": "^8.0.3",
+    "husky": "^9.0.0",
     "jsdoc-to-markdown": "^9.0.0",
     "lint-staged": "^15.0.2",
     "mocha": "^11.0.0",
