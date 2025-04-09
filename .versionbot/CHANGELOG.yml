@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency husky to v9
+      hash: f3567b48550673689a25e201ae390089b00d60b1
+      body: |
+        Update husky from 8.0.3 to 9.1.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 3.0.6
+  title: ""
+  date: 2025-04-09T10:59:59.990Z
+- commits:
     - subject: Update balena-lint to v9
       hash: bfc2e7390ab87a65a1522e48db65a8c5f5732554
       body: ""
