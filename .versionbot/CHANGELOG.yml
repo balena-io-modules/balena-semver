@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency lint-staged to v16
+      hash: 1b8245e4836905dbdac02e1de91d6838484a4f0e
+      body: |
+        Update lint-staged from 15.5.2 to 16.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 3.0.7
+  title: ""
+  date: 2025-06-07T23:25:27.416Z
+- commits:
     - subject: Update dependency husky to v9
       hash: f3567b48550673689a25e201ae390089b00d60b1
       body: |
