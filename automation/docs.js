@@ -11,19 +11,15 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-require('ts-node/register');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Mocha = require('mocha');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const jsdoc2md = require('jsdoc-to-markdown');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const fs = require('fs');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const config = require('../package.json');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const { target } = require('./test-config.js');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { execSync } = require('child_process');
 
 const baseDir = process.cwd();
 
@@ -69,30 +65,8 @@ const buildDocs = (report) => {
 		});
 };
 
-let capturedOutput = '';
-
-const mocha = new Mocha({
-	reporter: 'markdown',
+const capturedOutput = execSync('npx mocha --reporter markdown', {
+	encoding: 'utf8',
 });
 
-mocha.addFile(target);
-
-const originalWrite = process.stdout.write;
-
-// Capture stdout into a file so we can generate a markdown report
-process.stdout.write = function (str) {
-	capturedOutput += str;
-};
-
-// Run the tests.
-mocha.run(function (failures) {
-	// Restore stdout
-	process.stdout.write = originalWrite;
-
-	if (failures) {
-		// exit with non-zero status if there were failures
-		throw new Error(failures);
-	}
-
-	buildDocs(capturedOutput);
-});
+buildDocs(capturedOutput);
