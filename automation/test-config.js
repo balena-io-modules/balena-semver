@@ -1,3 +1,3 @@
 module.exports = {
-	target: 'test/index.spec.ts'
-}
+	target: 'test/index.spec.ts',
+};

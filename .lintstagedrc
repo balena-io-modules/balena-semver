@@ -1,9 +1,9 @@
 {
 	"*.js": [
-		"balena-lint --fix"
+		"balena-lint --fix -t tsconfig.dev.json"
 	],
 	"*.ts": [
-		"balena-lint --fix",
+		"balena-lint --fix -t tsconfig.dev.json",
 		"npm run docs"
 	]
 }
