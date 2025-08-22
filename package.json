@@ -14,6 +14,10 @@
     "build/",
     "src/"
   ],
+  "exports": {
+    ".": "./build/index.js",
+    "./memoized": "./build/memoized.js"
+  },
   "engines": {
     "node": ">=20"
   },

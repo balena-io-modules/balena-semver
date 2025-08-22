@@ -34,6 +34,8 @@ Documentation
 indicating sort order. Values are parsed for valid semver strings. Sorts an array
 of versions in ascending order if passed to <code>Array.sort()</code>.</p>
 </dd>
+<dt><a href="#enableMemoization">enableMemoization()</a></dt>
+<dd></dd>
 <dt><a href="#rcompare">rcompare(versionA, versionB)</a> ⇒ <code>number</code></dt>
 <dd><p>The reverse of <code>.compare()</code>. Accepts string or null values and compares
 them, returning a number indicating sort order. Values are parsed for valid semver
@@ -355,6 +357,12 @@ expect(semver.compare('6.0.1_logstream', '6.0.1')).to.equal(1);
 
 <a name="balena-semver-rcompare"></a>
 
+<a name="enableMemoization"></a>
+
+## enableMemoization()
+**Kind**: global function  
+**Summary**: Enable memoization for the compare function  
+**Access**: public  
 <a name="rcompare"></a>
 
 ## rcompare(versionA, versionB) ⇒ <code>number</code>
