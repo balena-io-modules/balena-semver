@@ -1,4 +1,32 @@
 - commits:
+    - subject: Simplify automation of tests/docs by using the mocha cli
+      hash: 93a6bfa75490adbf2f19de6e1e59517169cced2d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+    - subject: Improve readability of README examples
+      hash: cb3372278ddd43ee0dd10f4227e453bcdb2bb215
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+    - subject: Enable linting for automation scripts
+      hash: 3cb65647fdbce5b01e872760d33574f62bc18073
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+  version: 3.0.10
+  title: ""
+  date: 2025-08-22T16:56:25.668Z
+- commits:
     - subject: Switch tsconfig module to `Node16`, remaining as commonjs
       hash: 193ad5c913832a41b0b0ea366670c0c103e7a27d
       body: ""
