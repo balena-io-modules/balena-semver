@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import * as semver from '../src';
-import { versions } from './versions';
+import * as semver from '../src/index.js';
+import { versions } from './versions.js';
 
 describe('balena-semver', () => {
 	describe('.compare()', () => {

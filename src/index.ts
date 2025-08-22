@@ -1,4 +1,3 @@
-import { memoize } from 'lodash';
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;
@@ -108,54 +107,68 @@ const compareValues = <T>(valueA: T, valueB: T) => {
  * are sorted before valid semver values
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
-export const compare = memoize(
-	(versionA: VersionInput, versionB: VersionInput): number => {
-		if (versionA == null) {
-			return versionB == null ? 0 : -1;
-		}
-		if (versionB == null) {
+export let compare = (
+	versionA: VersionInput,
+	versionB: VersionInput,
+): number => {
+	if (versionA == null) {
+		return versionB == null ? 0 : -1;
+	}
+	if (versionB == null) {
+		return 1;
+	}
+
+	versionA = normalize(versionA);
+	versionB = normalize(versionB);
+
+	const semverA = semver.parse(versionA);
+	const semverB = semver.parse(versionB);
+	if (!semverA || !semverB) {
+		if (semverA) {
+			// !semverB
 			return 1;
 		}
-
-		versionA = normalize(versionA);
-		versionB = normalize(versionB);
-
-		const semverA = semver.parse(versionA);
-		const semverB = semver.parse(versionB);
-		if (!semverA || !semverB) {
-			if (semverA) {
-				// !semverB
-				return 1;
-			}
-			if (semverB) {
-				// !semverA
-				return -1;
-			}
-			return compareValues(versionA, versionB);
+		if (semverB) {
+			// !semverA
+			return -1;
 		}
+		return compareValues(versionA, versionB);
+	}
 
-		const semverResult = semver.compare(semverA, semverB);
-		if (semverResult !== 0) {
-			return semverResult;
-		}
+	const semverResult = semver.compare(semverA, semverB);
+	if (semverResult !== 0) {
+		return semverResult;
+	}
 
-		const revResult = compareValues(getRev(semverA), getRev(semverB));
-		if (revResult !== 0) {
-			return revResult;
-		}
+	const revResult = compareValues(getRev(semverA), getRev(semverB));
+	if (revResult !== 0) {
+		return revResult;
+	}
 
-		const devResult = compareValues(
-			isDevelopmentVersion(semverA),
-			isDevelopmentVersion(semverB),
-		);
-		if (devResult !== 0) {
-			return devResult * -1;
-		}
+	const devResult = compareValues(
+		isDevelopmentVersion(semverA),
+		isDevelopmentVersion(semverB),
+	);
+	if (devResult !== 0) {
+		return devResult * -1;
+	}
 
-		return versionA.localeCompare(versionB);
-	},
-	(a: string, b: string) => `${a} && ${b}`,
-);
+	return versionA.localeCompare(versionB);
+};
+
+/**
+ * @summary Enable memoization for the compare function
+ * @name enableMemoization
+ * @public
+ * @function
+ */
+export let enableMemoization: () => void | Promise<void> = async () => {
+	enableMemoization = () => {
+		// Convert to a noop so as to not enable memoization multiple times
+	};
+	const { memoize } = await import('lodash');
+	compare = memoize(compare, (a: string, b: string) => `${a}&${b}`);
+};
 
 /**
  * @summary Compare order of versions in reverse
