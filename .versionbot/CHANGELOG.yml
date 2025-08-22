@@ -1,4 +1,16 @@
 - commits:
+    - subject: Switch tsconfig module to `Node16`, remaining as commonjs
+      hash: 193ad5c913832a41b0b0ea366670c0c103e7a27d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+  version: 3.0.9
+  title: ""
+  date: 2025-08-22T16:43:46.005Z
+- commits:
     - subject: Update dependencies
       hash: 8ba9396324c1179bf89f210bef8c5979cb8fd7e5
       body: ""
