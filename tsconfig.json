@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "node16",
 		"target": "es5",
 		"outDir": "build",
 		"noImplicitAny": true,
@@ -10,7 +10,6 @@
 		"sourceMap": true,
 		"declaration": true,
 		"strictNullChecks": true,
-		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
 			"~/*": [ "./src/*" ]
