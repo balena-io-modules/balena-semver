@@ -29,30 +29,30 @@
     "lint": "balena-lint -t tsconfig.dev.json src/ test/",
     "docs": "node ./automation/docs.js",
     "ci": "npm run build && catch-uncommitted && npm test",
-    "prettify": "balena-lint -t tsconfig.dev.json --fix src/ test/",
+    "lint:fix": "balena-lint -t tsconfig.dev.json --fix src/ test/",
     "prepack": "npm run build",
     "prepare": "husky"
   },
   "author": "Balena Ltd. <hello@balena.io>",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/lodash": "^4.14.200",
-    "@types/semver": "^7.5.4",
+    "@types/lodash": "^4.17.20",
+    "@types/semver": "^7.7.0",
     "lodash": "^4.17.21",
-    "semver": "^7.5.4"
+    "semver": "^7.7.2"
   },
   "devDependencies": {
-    "@balena/lint": "^9.0.0",
-    "@types/chai": "^4.3.9",
-    "@types/mocha": "^10.0.3",
+    "@balena/lint": "^9.3.2",
+    "@types/chai": "^4.3.20",
+    "@types/mocha": "^10.0.10",
     "catch-uncommitted": "^2.0.0",
-    "chai": "^4.3.10",
-    "husky": "^9.0.0",
-    "jsdoc-to-markdown": "^9.0.0",
-    "lint-staged": "^16.0.0",
-    "mocha": "^11.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "chai": "^4.5.0",
+    "husky": "^9.1.7",
+    "jsdoc-to-markdown": "^9.1.2",
+    "lint-staged": "^16.1.5",
+    "mocha": "^11.7.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   },
   "versionist": {
     "publishedAt": "2025-06-07T23:25:27.502Z"
