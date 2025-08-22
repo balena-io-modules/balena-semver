@@ -25,12 +25,12 @@
     "semver"
   ],
   "scripts": {
-    "test": "npm run build && npm run lint && node ./automation/test.js",
+    "test": "npm run build && mocha && npm run lint",
     "build": "tsc && npm run docs",
-    "lint": "balena-lint -t tsconfig.dev.json src/ test/",
+    "lint": "balena-lint -e js -e ts -t tsconfig.dev.json src/ test/ automation/",
     "docs": "node ./automation/docs.js",
     "ci": "npm run build && catch-uncommitted && npm test",
-    "lint:fix": "balena-lint -t tsconfig.dev.json --fix src/ test/",
+    "lint:fix": "balena-lint -e js -e ts -t tsconfig.dev.json --fix src/ test/ automation/",
     "prepack": "npm run build",
     "prepare": "husky"
   },
@@ -54,6 +54,11 @@
     "mocha": "^11.7.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
+  },
+  "mocha": {
+    "require": "ts-node/register/transpile-only",
+    "recursive": true,
+    "_": "test/**/*.spec.ts"
   },
   "versionist": {
     "publishedAt": "2025-08-22T16:43:46.072Z"
