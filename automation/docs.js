@@ -33,7 +33,9 @@ const MAIN_FILE = path.join(baseDir, config.main);
 
 const buildDocs = (report) => {
 	// Prettify some parsed values
-	const testReport = report.replace(/chai_1/g, 'chai');
+	const testReport = report
+		.replace(/\(0, chai_1\.expect\)/g, 'chai.expect')
+		.replace(/versions_1\.versions/g, 'versions');
 
 	// Transform the report into an object keyed by the function name
 	const describe = testReport.split(/##\s\W/).reduce((carry, item) => {
