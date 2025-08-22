@@ -115,8 +115,8 @@ If both values are invalid semver values, then the values are compared alphabeti
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.compare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.compare(version, version)).to.not.throw();
 });
 ```
 
@@ -311,8 +311,8 @@ If both values are non-null invalid semver values, then the values are compared 
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.rcompare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.rcompare(version, version)).to.not.throw();
 });
 ```
 
