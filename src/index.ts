@@ -1,4 +1,4 @@
-import { memoize } from 'lodash';
+import _ from 'lodash';
 import * as semver from 'semver';
 
 type VersionInput = string | null | undefined;
@@ -108,7 +108,7 @@ const compareValues = <T>(valueA: T, valueB: T) => {
  * are sorted before valid semver values
  * If both values are invalid semver values, then the values are compared alphabetically.
  */
-export const compare = memoize(
+export const compare = _.memoize(
 	(versionA: VersionInput, versionB: VersionInput): number => {
 		if (versionA == null) {
 			return versionB == null ? 0 : -1;

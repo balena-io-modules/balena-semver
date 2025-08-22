@@ -3,7 +3,7 @@
   "version": "3.0.10",
   "description": "Balena specific semver utility methods",
   "main": "build/index.js",
-  "type": "commonjs",
+  "type": "module",
   "typings": "build/index.d.ts",
   "homepage": "https://github.com/balena-io-modules/balena-semver",
   "repository": {
@@ -56,7 +56,7 @@
     "typescript": "^5.9.2"
   },
   "mocha": {
-    "require": "ts-node/register/transpile-only",
+    "loader": "ts-node/esm",
     "recursive": true,
     "_": "test/**/*.spec.ts"
   },

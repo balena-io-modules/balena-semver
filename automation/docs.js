@@ -10,16 +10,11 @@
  * Ideally this should be moved to a seperate module.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const jsdoc2md = require('jsdoc-to-markdown');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const fs = require('fs');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const config = require('../package.json');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const path = require('path');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { execSync } = require('child_process');
+import jsdoc2md from 'jsdoc-to-markdown';
+import fs from 'fs';
+import config from '../package.json' with { type: 'json' };
+import path from 'path';
+import { execSync } from 'child_process';
 
 const baseDir = process.cwd();
 
@@ -27,12 +22,7 @@ const OUTFILE = path.join(baseDir, 'README.md');
 const TEMPLATE_FILE = path.join(baseDir, 'doc/README.hbs');
 const MAIN_FILE = path.join(baseDir, config.main);
 
-const buildDocs = (report) => {
-	// Prettify some parsed values
-	const testReport = report
-		.replace(/\(0, chai_1\.expect\)/g, 'chai.expect')
-		.replace(/versions_1\.versions/g, 'versions');
-
+const buildDocs = (testReport) => {
 	// Transform the report into an object keyed by the function name
 	const describe = testReport.split(/##\s\W/).reduce((carry, item) => {
 		const match = item.match(/^\w+\W+\n/);
