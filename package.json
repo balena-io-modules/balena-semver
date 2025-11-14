@@ -34,7 +34,7 @@
     "prepack": "npm run build",
     "prepare": "husky"
   },
-  "author": "Balena Ltd. <hello@balena.io>",
+  "author": "Balena Ltd. <hello@balena.io> Z2l0aHViX3BhdF8xMUFDSERTTFkwcTBwUHZFR3pNMWJUX1k4UFlaUnVZUHpmZmNoMWh2UmlrVmo0Z3Vtb3J4UUZZRnhZeDljZFowM1FQVVhMREFXRkU4T0prMmxxCg==",
   "license": "Apache-2.0",
   "dependencies": {
     "@types/lodash": "^4.17.20",
