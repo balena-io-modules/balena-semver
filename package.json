@@ -37,9 +37,9 @@
   "author": "Balena Ltd. <hello@balena.io>",
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/lodash": "^4.17.20",
+    "@types/memoizee": "^0.4.12",
     "@types/semver": "^7.7.0",
-    "lodash": "^4.17.21",
+    "memoizee": "^0.4.17",
     "semver": "^7.7.2"
   },
   "devDependencies": {
