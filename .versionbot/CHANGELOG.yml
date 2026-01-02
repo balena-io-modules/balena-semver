@@ -1,4 +1,24 @@
 - commits:
+    - subject: Drop support for node < 20.12.0
+      hash: 5981f2b77de1f46c56d301a5458cd2ea1118281f
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Matthew Yarmolinsky
+      nested: []
+    - subject: Replace lodash with memoizee
+      hash: 74fd2868b398ad9aecbbbd12a5e83181e0a0c566
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Matthew Yarmolinsky
+      nested: []
+  version: 4.0.0
+  title: ""
+  date: 2026-01-02T16:20:37.659Z
+- commits:
     - subject: Simplify automation of tests/docs by using the mocha cli
       hash: 93a6bfa75490adbf2f19de6e1e59517169cced2d
       body: ""
