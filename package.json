@@ -1,6 +1,6 @@
 {
   "name": "balena-semver",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Balena specific semver utility methods",
   "main": "build/index.js",
   "type": "commonjs",
@@ -61,6 +61,6 @@
     "_": "test/**/*.spec.ts"
   },
   "versionist": {
-    "publishedAt": "2026-01-02T16:45:05.005Z"
+    "publishedAt": "2026-02-19T01:34:24.338Z"
   }
 }

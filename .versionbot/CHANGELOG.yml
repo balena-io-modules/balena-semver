@@ -1,4 +1,18 @@
 - commits:
+    - subject: "Add id-token: write permission for NPM OIDC publishing"
+      hash: 5800df1472b010df1b82eabc738c8f903eeb9e8a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 4.0.2
+  title: ""
+  date: 2026-02-19T01:34:24.258Z
+- commits:
     - subject: Update tsconfig target to es2017
       hash: bb223613283189e4b887275a82008380e27428b8
       body: ""
