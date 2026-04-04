@@ -380,8 +380,9 @@ export const maxSatisfying = (versions: VersionInput[], range: string) => {
 };
 
 /*
- * @typedef {Object} SemverObject
+ * @typedef {Object} SemVer
  * @property {string} raw - The original version string
+ * @property {string} normalized - The normalized version string
  * @property {number} major - The major version number
  * @property {number} minor - The minor version number
  * @property {number} patch - The patch version number
@@ -390,6 +391,9 @@ export const maxSatisfying = (versions: VersionInput[], range: string) => {
  * @property {string} version - The version containing just major, minor, patch
  * and prerelease information
  */
+export interface SemVer extends semver.SemVer {
+	normalized: string;
+}
 
 /**
  * @summary Parse a version into an object
@@ -402,20 +406,25 @@ export const maxSatisfying = (versions: VersionInput[], range: string) => {
  *
  * @param {string|null|undefined} version
  *
- * @returns {SemverObject|null} - An object representing the version string, or
+ * @returns {SemVer|null} - An object representing the version string, or
  * null if a valid semver string could not be found
  */
-export const parse = (version: VersionInput) => {
+export const parse = (version: VersionInput): SemVer | null => {
 	if (version == null) {
 		return null;
 	}
 	const parsed = semver.parse(normalize(version));
-
-	if (parsed) {
-		parsed.raw = version;
+	if (parsed == null) {
+		return parsed;
 	}
 
-	return parsed;
+	const balenaParsed = parsed as typeof parsed & {
+		normalized: string;
+	};
+
+	balenaParsed.normalized = balenaParsed.raw;
+	balenaParsed.raw = version;
+	return balenaParsed;
 };
 
 /**

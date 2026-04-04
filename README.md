@@ -76,7 +76,7 @@ This method will always return false if the provided version doesn&#39;t contain
 If multiple versions are found that have equally high values, the last one in the array is returned.
 Note that only version that contain a valid semver string can satisfy a range.</p>
 </dd>
-<dt><a href="#parse">parse(version)</a> ⇒ <code>SemverObject</code> | <code>null</code></dt>
+<dt><a href="#parse">parse(version)</a> ⇒ <code>SemVer</code> | <code>null</code></dt>
 <dd><p>Returns an object representing the semver version. Returns null
 if a valid semver string can&#39;t be found.</p>
 </dd>
@@ -115,8 +115,8 @@ If both values are invalid semver values, then the values are compared alphabeti
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.compare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.compare(version, version)).to.not.throw();
 });
 ```
 
@@ -311,8 +311,8 @@ If both values are non-null invalid semver values, then the values are compared 
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.rcompare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.rcompare(version, version)).to.not.throw();
 });
 ```
 
@@ -1063,13 +1063,13 @@ chai.expect(semver.maxSatisfying(versions, 'Resin OS v1.1.*')).to.equal('Resin O
 
 <a name="parse"></a>
 
-## parse(version) ⇒ <code>SemverObject</code> \| <code>null</code>
+## parse(version) ⇒ <code>SemVer</code> \| <code>null</code>
 Returns an object representing the semver version. Returns null
 if a valid semver string can't be found.
 
 **Kind**: global function  
 **Summary**: Parse a version into an object  
-**Returns**: <code>SemverObject</code> \| <code>null</code> - - An object representing the version string, or
+**Returns**: <code>SemVer</code> \| <code>null</code> - - An object representing the version string, or
 null if a valid semver string could not be found  
 **Access**: public  
 
