@@ -1,4 +1,19 @@
 - commits:
+    - subject: Add the getRevision() helper
+      hash: 16b83f839743616de8981262ce03a5c4efbd4c04
+      body: |
+        Add a 'rev' property to the result SemVer object
+      footer:
+        Change-type: minor
+        change-type: minor
+        See: https://balena.fibery.io/Work/Project/2470
+        see: https://balena.fibery.io/Work/Project/2470
+      author: Thodoris Greasidis
+      nested: []
+  version: 4.1.0
+  title: ""
+  date: 2026-05-13T14:39:56.431Z
+- commits:
     - subject: Make the revision detection stricter
       hash: 35ab3e293610c07c25c1970c20f4f39fbe86bf38
       body: ""
