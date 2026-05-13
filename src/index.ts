@@ -51,23 +51,21 @@ const safeSemver = (version: string) => {
 const normalize = (version: string): string =>
 	trimOsText(safeSemver(version.trim()));
 
+const REVISION_REGEXP = /^rev(\d+)$/;
+
 const getRev = (parsedVersion: semver.SemVer | null) => {
 	if (parsedVersion === null) {
 		return 0;
 	}
 
-	const rev = parsedVersion.build
-		.map(function (metadataPart) {
-			const matches = /rev(\d+)/.exec(metadataPart);
-			return matches?.[1] ?? null;
-		})
-		.filter((x) => x != null)[0];
-
-	if (rev != null) {
-		return parseInt(rev, 10);
-	} else {
-		return 0;
+	for (const metadataPart of parsedVersion.build) {
+		const matches = REVISION_REGEXP.exec(metadataPart);
+		const rev = matches?.[1];
+		if (rev != null) {
+			return parseInt(rev, 10);
+		}
 	}
+	return 0;
 };
 
 const isDevelopmentVersion = (parsedVersion: semver.SemVer | null) => {
