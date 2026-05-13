@@ -798,6 +798,7 @@ describe('balena-semver', () => {
 				version: '2.0.5',
 				prerelease: [],
 				build: [],
+				rev: 0,
 			});
 		});
 
@@ -810,6 +811,7 @@ describe('balena-semver', () => {
 				version: '2.0.2',
 				prerelease: [],
 				build: ['rev2'],
+				rev: 2,
 			});
 
 			expect(semver.parse('Resin OS v2.0.2 (prod)')).to.deep.include({
@@ -820,6 +822,7 @@ describe('balena-semver', () => {
 				version: '2.0.2',
 				prerelease: [],
 				build: ['prod'],
+				rev: 0,
 			});
 
 			expect(semver.parse('Resin OS v2.0.2.prod')).to.deep.include({
@@ -830,6 +833,7 @@ describe('balena-semver', () => {
 				version: '2.0.2',
 				prerelease: [],
 				build: ['prod'],
+				rev: 0,
 			});
 
 			expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
@@ -840,6 +844,7 @@ describe('balena-semver', () => {
 				version: '2.0.0-rc5.rev1',
 				prerelease: ['rc5', 'rev1'],
 				build: [],
+				rev: 0,
 			});
 
 			expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
@@ -850,6 +855,7 @@ describe('balena-semver', () => {
 				version: '2.3.0',
 				prerelease: [],
 				build: ['rev1', 'prod'],
+				rev: 1,
 			});
 
 			expect(semver.parse('Resin OS v2.3.0-a.b.c (prod)')).to.deep.include({
@@ -860,6 +866,7 @@ describe('balena-semver', () => {
 				version: '2.3.0-a.b.c',
 				prerelease: ['a', 'b', 'c'],
 				build: ['prod'],
+				rev: 0,
 			});
 
 			expect(semver.parse('Resin OS 2.3.0-a.b.c+d.e.f (prod)')).to.deep.include(
@@ -871,6 +878,7 @@ describe('balena-semver', () => {
 					version: '2.3.0-a.b.c',
 					prerelease: ['a', 'b', 'c'],
 					build: ['d', 'e', 'f', 'prod'],
+					rev: 0,
 				},
 			);
 
@@ -882,6 +890,7 @@ describe('balena-semver', () => {
 				version: '2.3.0',
 				prerelease: [],
 				build: ['a', 'b', 'c', 'prod'],
+				rev: 0,
 			});
 		});
 
@@ -907,6 +916,7 @@ describe('balena-semver', () => {
 				patch: 1,
 				version: '6.0.1',
 				build: ['logstream'],
+				rev: 0,
 			});
 		});
 

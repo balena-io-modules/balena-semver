@@ -76,7 +76,7 @@ This method will always return false if the provided version doesn&#39;t contain
 If multiple versions are found that have equally high values, the last one in the array is returned.
 Note that only version that contain a valid semver string can satisfy a range.</p>
 </dd>
-<dt><a href="#parse">parse(version)</a> ⇒ <code>SemverObject</code> | <code>null</code></dt>
+<dt><a href="#parse">parse(version)</a> ⇒ <code>SemVer</code> | <code>null</code></dt>
 <dd><p>Returns an object representing the semver version. Returns null
 if a valid semver string can&#39;t be found.</p>
 </dd>
@@ -115,8 +115,8 @@ If both values are invalid semver values, then the values are compared alphabeti
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.compare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.compare(version, version)).to.not.throw();
 });
 ```
 
@@ -311,8 +311,8 @@ If both values are non-null invalid semver values, then the values are compared 
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.rcompare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.rcompare(version, version)).to.not.throw();
 });
 ```
 
@@ -1063,13 +1063,13 @@ chai.expect(semver.maxSatisfying(versions, 'Resin OS v1.1.*')).to.equal('Resin O
 
 <a name="parse"></a>
 
-## parse(version) ⇒ <code>SemverObject</code> \| <code>null</code>
+## parse(version) ⇒ <code>SemVer</code> \| <code>null</code>
 Returns an object representing the semver version. Returns null
 if a valid semver string can't be found.
 
 **Kind**: global function  
 **Summary**: Parse a version into an object  
-**Returns**: <code>SemverObject</code> \| <code>null</code> - - An object representing the version string, or
+**Returns**: <code>SemVer</code> \| <code>null</code> - - An object representing the version string, or
 null if a valid semver string could not be found  
 **Access**: public  
 
@@ -1089,6 +1089,7 @@ chai.expect(semver.parse('2.0.5')).to.deep.include({
     version: '2.0.5',
     prerelease: [],
     build: [],
+    rev: 0,
 });
 ```
 
@@ -1103,6 +1104,7 @@ chai.expect(semver.parse('Resin OS v2.0.2+rev2')).to.deep.include({
     version: '2.0.2',
     prerelease: [],
     build: ['rev2'],
+    rev: 2,
 });
 chai.expect(semver.parse('Resin OS v2.0.2 (prod)')).to.deep.include({
     raw: 'Resin OS v2.0.2 (prod)',
@@ -1112,6 +1114,7 @@ chai.expect(semver.parse('Resin OS v2.0.2 (prod)')).to.deep.include({
     version: '2.0.2',
     prerelease: [],
     build: ['prod'],
+    rev: 0,
 });
 chai.expect(semver.parse('Resin OS v2.0.2.prod')).to.deep.include({
     raw: 'Resin OS v2.0.2.prod',
@@ -1121,6 +1124,7 @@ chai.expect(semver.parse('Resin OS v2.0.2.prod')).to.deep.include({
     version: '2.0.2',
     prerelease: [],
     build: ['prod'],
+    rev: 0,
 });
 chai.expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
     raw: 'Resin OS 2.0.0-rc5.rev1',
@@ -1130,6 +1134,7 @@ chai.expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
     version: '2.0.0-rc5.rev1',
     prerelease: ['rc5', 'rev1'],
     build: [],
+    rev: 0,
 });
 chai.expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
     raw: 'Resin OS 2.3.0+rev1.prod',
@@ -1139,6 +1144,7 @@ chai.expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
     version: '2.3.0',
     prerelease: [],
     build: ['rev1', 'prod'],
+    rev: 1,
 });
 chai.expect(semver.parse('Resin OS v2.3.0-a.b.c (prod)')).to.deep.include({
     raw: 'Resin OS v2.3.0-a.b.c (prod)',
@@ -1148,6 +1154,7 @@ chai.expect(semver.parse('Resin OS v2.3.0-a.b.c (prod)')).to.deep.include({
     version: '2.3.0-a.b.c',
     prerelease: ['a', 'b', 'c'],
     build: ['prod'],
+    rev: 0,
 });
 chai.expect(semver.parse('Resin OS 2.3.0-a.b.c+d.e.f (prod)')).to.deep.include({
     raw: 'Resin OS 2.3.0-a.b.c+d.e.f (prod)',
@@ -1157,6 +1164,7 @@ chai.expect(semver.parse('Resin OS 2.3.0-a.b.c+d.e.f (prod)')).to.deep.include({
     version: '2.3.0-a.b.c',
     prerelease: ['a', 'b', 'c'],
     build: ['d', 'e', 'f', 'prod'],
+    rev: 0,
 });
 chai.expect(semver.parse('Resin OS 2.3.0+a.b.c (prod)')).to.deep.include({
     raw: 'Resin OS 2.3.0+a.b.c (prod)',
@@ -1166,6 +1174,7 @@ chai.expect(semver.parse('Resin OS 2.3.0+a.b.c (prod)')).to.deep.include({
     version: '2.3.0',
     prerelease: [],
     build: ['a', 'b', 'c', 'prod'],
+    rev: 0,
 });
 ```
 
@@ -1199,6 +1208,7 @@ chai.expect(semver.parse('6.0.1_logstream')).to.deep.include({
     patch: 1,
     version: '6.0.1',
     build: ['logstream'],
+    rev: 0,
 });
 ```
 
