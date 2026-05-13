@@ -935,6 +935,25 @@ describe('balena-semver', () => {
 		});
 	});
 
+	describe('.getRevision()', () => {
+		for (const [version, rev] of [
+			['2.0.5', null],
+			['Resin OS v2.0.2+rev2', 2],
+			['Resin OS v2.0.2 (prod)', null],
+			['Resin OS v2.0.2.prod', null],
+			['Resin OS 2.0.0-rc5.rev1', null],
+			['Resin OS 2.3.0+rev1.prod', 1],
+			['Resin OS v2.3.0-a.b.c (prod)', null],
+			['Resin OS 2.3.0-a.b.c+d.e.f (prod)', null],
+			['Resin OS 2.3.0+a.b.c (prod)', null],
+			['balenaOS 2.88.4+rev0.prod', 0],
+		] as const) {
+			it(`should correctly extract the revision of ${version} as ${rev}`, () => {
+				expect(semver.getRevision(semver.parse(version)!)).to.equal(rev);
+			});
+		}
+	});
+
 	describe('.valid()', () => {
 		it('should return null for invalid semver values', () => {
 			expect(semver.valid(null)).to.equal(null);

@@ -29,6 +29,10 @@ Documentation
 ## Functions
 
 <dl>
+<dt><a href="#getRevision">getRevision(version)</a> ⇒ <code>SemVer</code> | <code>null</code></dt>
+<dd><p>Returns the integer revision extracted from the build parts of the provided semver bject. Returns null
+when no revN part is found, which consumers might want to coalesce to 0.</p>
+</dd>
 <dt><a href="#compare">compare(versionA, versionB)</a> ⇒ <code>number</code></dt>
 <dd><p>Accepts string or null values and compares them, returning a number
 indicating sort order. Values are parsed for valid semver strings. Sorts an array
@@ -89,6 +93,85 @@ if a valid semver string can&#39;t be found.</p>
 if it&#39;s not valid.</p>
 </dd>
 </dl>
+
+<a name="getRevision"></a>
+
+## getRevision(version) ⇒ <code>SemVer</code> \| <code>null</code>
+Returns the integer revision extracted from the build parts of the provided semver bject. Returns null
+when no revN part is found, which consumers might want to coalesce to 0.
+
+**Kind**: global function  
+**Summary**: Get the version from a SemVer object  
+**Returns**: <code>SemVer</code> \| <code>null</code> - - The integer revision detected on the revN build part,
+or null if no matching revN part was found.  
+**Access**: public  
+
+| Param | Type |
+| --- | --- |
+| version | <code>string</code> | 
+
+**Example**  
+should correctly extract the revision of 2.0.5 as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS v2.0.2+rev2 as 2.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS v2.0.2 (prod) as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS v2.0.2.prod as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS 2.0.0-rc5.rev1 as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS 2.3.0+rev1.prod as 1.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS v2.3.0-a.b.c (prod) as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS 2.3.0-a.b.c+d.e.f (prod) as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of Resin OS 2.3.0+a.b.c (prod) as null.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+should correctly extract the revision of balenaOS 2.88.4+rev0.prod as 0.
+
+```js
+chai.expect(semver.getRevision(semver.parse(version))).to.equal(rev);
+```
+
+<a name="balena-semver-valid"></a>
 
 <a name="compare"></a>
 
@@ -1226,7 +1309,7 @@ should not parse versions with multiple underscores.
 chai.expect(semver.parse('7.0.1_logstream_test')).to.be.null;
 ```
 
-<a name="balena-semver-valid"></a>
+<a name="balena-semver-getrevision"></a>
 
 <a name="valid"></a>
 
