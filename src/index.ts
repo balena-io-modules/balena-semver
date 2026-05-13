@@ -53,11 +53,21 @@ const normalize = (version: string): string =>
 
 const REVISION_REGEXP = /^rev(\d+)$/;
 
-const getRev = (parsedVersion: semver.SemVer | null) => {
-	if (parsedVersion === null) {
-		return 0;
-	}
-
+/**
+ * @summary Get the version from a SemVer object
+ * @name getRevision
+ * @public
+ * @function
+ *
+ * @description Returns the integer revision extracted from the build parts of the provided semver bject. Returns null
+ * when no revN part is found, which consumers might want to coalesce to 0.
+ *
+ * @param {string} version
+ *
+ * @returns {SemVer|null} - The integer revision detected on the revN build part,
+ * or null if no matching revN part was found.
+ */
+export const getRevision = (parsedVersion: semver.SemVer) => {
 	for (const metadataPart of parsedVersion.build) {
 		const matches = REVISION_REGEXP.exec(metadataPart);
 		const rev = matches?.[1];
@@ -65,7 +75,7 @@ const getRev = (parsedVersion: semver.SemVer | null) => {
 			return parseInt(rev, 10);
 		}
 	}
-	return 0;
+	return null;
 };
 
 const isDevelopmentVersion = (parsedVersion: semver.SemVer | null) => {
@@ -137,7 +147,10 @@ export const compare = memoizee(
 			return semverResult;
 		}
 
-		const revResult = compareValues(getRev(semverA), getRev(semverB));
+		const revResult = compareValues(
+			getRevision(semverA) ?? 0,
+			getRevision(semverB) ?? 0,
+		);
 		if (revResult !== 0) {
 			return revResult;
 		}
