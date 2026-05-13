@@ -366,17 +366,17 @@ export const satisfies = (version: VersionInput, range: string) => {
  *
  */
 export const maxSatisfying = (versions: VersionInput[], range: string) => {
-	let max: VersionInput = null;
+	let maximum: VersionInput = null;
 
 	const normalizedRange = normalize(range);
 
 	versions.forEach((version) => {
-		if (satisfies(version, normalizedRange) && gt(version, max)) {
-			max = version;
+		if (satisfies(version, normalizedRange) && gt(version, maximum)) {
+			maximum = version;
 		}
 	});
 
-	return max;
+	return maximum;
 };
 
 /*
@@ -460,4 +460,56 @@ export const inc = (version: VersionInput, release: Release) => {
 		return null;
 	}
 	return semver.inc(normalize(version), release);
+};
+
+// Additional methods, not part of the 'semver' package.
+
+/**
+ * @summary Get the min version of a collection
+ * @name min
+ * @public
+ * @function
+ *
+ * @description Returns the minimum valid version of a collection or null.
+ *
+ * @param {Array<string|null|undefined>} values - values to be evaluated.
+ *
+ * @returns {string|null} - The minimum valid version among the provided ones or null.
+ */
+export const min = (values: VersionInput[]): string | null => {
+	let result: VersionInput | null = null;
+	for (const value of values) {
+		if (valid(value) && (result == null || lt(value, result))) {
+			result = value;
+		}
+	}
+	if (typeof result !== 'string') {
+		return null;
+	}
+	return result;
+};
+
+/**
+ * @summary Get the max version of a collection
+ * @name max
+ * @public
+ * @function
+ *
+ * @description Returns the maximum valid version of a collection or null.
+ *
+ * @param {Array<string|null|undefined>} values - values to be evaluated.
+ *
+ * @returns {string|null} - The maximum valid version among the provided ones or null.
+ */
+export const max = (values: VersionInput[]): string | null => {
+	let result: VersionInput | null = null;
+	for (const value of values) {
+		if (value != null && gt(value, result)) {
+			result = value;
+		}
+	}
+	if (result == null || !valid(result)) {
+		return null;
+	}
+	return result;
 };

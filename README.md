@@ -88,6 +88,12 @@ if a valid semver string can&#39;t be found.</p>
 (major, premajor, minor, preminor, patch, prepatch, or prerelease), or null
 if it&#39;s not valid.</p>
 </dd>
+<dt><a href="#min">min(values)</a> ⇒ <code>string</code> | <code>null</code></dt>
+<dd><p>Returns the minimum valid version of a collection or null.</p>
+</dd>
+<dt><a href="#max">max(values)</a> ⇒ <code>string</code> | <code>null</code></dt>
+<dd><p>Returns the maximum valid version of a collection or null.</p>
+</dd>
 </dl>
 
 <a name="compare"></a>
@@ -115,8 +121,8 @@ If both values are invalid semver values, then the values are compared alphabeti
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.compare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.compare(version, version)).to.not.throw();
 });
 ```
 
@@ -311,8 +317,8 @@ If both values are non-null invalid semver values, then the values are compared 
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.rcompare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.rcompare(version, version)).to.not.throw();
 });
 ```
 
@@ -1382,6 +1388,118 @@ chai.expect(semver.inc('14.1000.1000', 'minor')).to.equal('14.1001.0');
 chai.expect(semver.inc('14.1001.1001', 'minor')).to.equal('14.1002.0');
 chai.expect(semver.inc('1000.1000.1000', 'major')).to.equal('1001.0.0');
 chai.expect(semver.inc('1001.1001.1001', 'major')).to.equal('1002.0.0');
+```
+
+<a name="balena-semver-min"></a>
+
+<a name="min"></a>
+
+## min(values) ⇒ <code>string</code> \| <code>null</code>
+Returns the minimum valid version of a collection or null.
+
+**Kind**: global function  
+**Summary**: Get the min version of a collection  
+**Returns**: <code>string</code> \| <code>null</code> - - The minimum valid version among the provided ones or null.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| values | <code>Array.&lt;(string\|null\|undefined)&gt;</code> | values to be evaluated. |
+
+**Example**  
+should return null for invalid semver values.
+
+```js
+chai.expect(semver.min([null, undefined, '', 'foobar', '12345', '1.2.3.4.5'])).to.equal(null);
+```
+
+should return the minimum valid semver.
+
+```js
+const versionsToTest = [
+    null,
+    undefined,
+    '',
+    'foobar',
+    '12345',
+    '1.2.3.4.5',
+];
+for (const v of [
+    'balenaOS 2020.05.0',
+    'balenaOS 2019.05.0',
+    'balenaOS 2.90.0',
+    'balenaOS 2.13.2.prod',
+    'balenaOS 2.13.2.dev',
+    '2.0.6+rev3.dev',
+    'Resin OS 2.0.6+rev2',
+    'Resin OS 2.0.0+rev4 (dev)',
+    'Resin OS 2.0.0+rev3',
+    'Resin OS 2.0.0.rev1 (prod)',
+    'Resin OS 2.0.0-beta10.rev1',
+    'Resin OS 2.0.0-beta.8',
+    'Resin OS 1.0.5 (fido)',
+    'Resin OS 1.0.0-pre',
+]) {
+    versionsToTest.push(v);
+    shuffleArray(versionsToTest);
+    chai.expect(semver.min(versionsToTest)).to.equal(v);
+}
+```
+
+<a name="balena-semver-max"></a>
+
+<a name="max"></a>
+
+## max(values) ⇒ <code>string</code> \| <code>null</code>
+Returns the maximum valid version of a collection or null.
+
+**Kind**: global function  
+**Summary**: Get the max version of a collection  
+**Returns**: <code>string</code> \| <code>null</code> - - The maximum valid version among the provided ones or null.  
+**Access**: public  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| values | <code>Array.&lt;(string\|null\|undefined)&gt;</code> | values to be evaluated. |
+
+**Example**  
+should return null for invalid semver values.
+
+```js
+chai.expect(semver.max([null, undefined, '', 'foobar', '12345', '1.2.3.4.5'])).to.equal(null);
+```
+
+should return the maximum valid semver.
+
+```js
+const versionsToTest = [
+    null,
+    undefined,
+    '',
+    'foobar',
+    '12345',
+    '1.2.3.4.5',
+];
+for (const v of [
+    'Resin OS 1.0.0-pre',
+    'Resin OS 1.0.5 (fido)',
+    'Resin OS 2.0.0-beta.8',
+    'Resin OS 2.0.0-beta10.rev1',
+    'Resin OS 2.0.0.rev1 (prod)',
+    'Resin OS 2.0.0+rev3',
+    'Resin OS 2.0.0+rev4 (dev)',
+    'Resin OS 2.0.6+rev2',
+    '2.0.6+rev3.dev',
+    'balenaOS 2.13.2.dev',
+    'balenaOS 2.13.2.prod',
+    'balenaOS 2.90.0',
+    'balenaOS 2019.05.0',
+    'balenaOS 2020.05.0',
+]) {
+    versionsToTest.push(v);
+    shuffleArray(versionsToTest);
+    chai.expect(semver.max(versionsToTest)).to.equal(v);
+}
 ```
 
 

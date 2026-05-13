@@ -1099,4 +1099,92 @@ describe('balena-semver', () => {
 			expect(semver.inc('1001.1001.1001', 'major')).to.equal('1002.0.0');
 		});
 	});
+
+	function shuffleArray<T extends unknown[]>(array: T) {
+		for (let i = array.length - 1; i > 0; i--) {
+			// Generate a random index from 0 to i
+			const j = Math.floor(Math.random() * (i + 1));
+
+			// Swap elements array[i] and array[j]
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+	}
+
+	describe('.min()', () => {
+		it('should return null for invalid semver values', () => {
+			expect(
+				semver.min([null, undefined, '', 'foobar', '12345', '1.2.3.4.5']),
+			).to.equal(null);
+		});
+
+		it('should return the minimum valid semver', () => {
+			const versionsToTest = [
+				null,
+				undefined,
+				'',
+				'foobar',
+				'12345',
+				'1.2.3.4.5',
+			];
+			for (const v of [
+				'balenaOS 2020.05.0',
+				'balenaOS 2019.05.0',
+				'balenaOS 2.90.0',
+				'balenaOS 2.13.2.prod',
+				'balenaOS 2.13.2.dev',
+				'2.0.6+rev3.dev',
+				'Resin OS 2.0.6+rev2',
+				'Resin OS 2.0.0+rev4 (dev)',
+				'Resin OS 2.0.0+rev3',
+				'Resin OS 2.0.0.rev1 (prod)',
+				'Resin OS 2.0.0-beta10.rev1',
+				'Resin OS 2.0.0-beta.8',
+				'Resin OS 1.0.5 (fido)',
+				'Resin OS 1.0.0-pre',
+			]) {
+				versionsToTest.push(v);
+				shuffleArray(versionsToTest);
+				expect(semver.min(versionsToTest)).to.equal(v);
+			}
+		});
+	});
+
+	describe('.max()', () => {
+		it('should return null for invalid semver values', () => {
+			expect(
+				semver.max([null, undefined, '', 'foobar', '12345', '1.2.3.4.5']),
+			).to.equal(null);
+		});
+
+		it('should return the maximum valid semver', () => {
+			const versionsToTest = [
+				null,
+				undefined,
+				'',
+				'foobar',
+				'12345',
+				'1.2.3.4.5',
+			];
+			for (const v of [
+				'Resin OS 1.0.0-pre',
+				'Resin OS 1.0.5 (fido)',
+				'Resin OS 2.0.0-beta.8',
+				'Resin OS 2.0.0-beta10.rev1',
+				'Resin OS 2.0.0.rev1 (prod)',
+				'Resin OS 2.0.0+rev3',
+				'Resin OS 2.0.0+rev4 (dev)',
+				'Resin OS 2.0.6+rev2',
+				'2.0.6+rev3.dev',
+				'balenaOS 2.13.2.dev',
+				'balenaOS 2.13.2.prod',
+				'balenaOS 2.90.0',
+				'balenaOS 2019.05.0',
+				'balenaOS 2020.05.0',
+			]) {
+				versionsToTest.push(v);
+				shuffleArray(versionsToTest);
+				expect(semver.max(versionsToTest)).to.equal(v);
+			}
+		});
+	});
 });
