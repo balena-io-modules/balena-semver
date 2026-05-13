@@ -842,6 +842,26 @@ describe('balena-semver', () => {
 				build: [],
 			});
 
+			expect(semver.parse('Resin OS v2.0.2+prev1')).to.deep.include({
+				raw: 'Resin OS v2.0.2+prev1',
+				major: 2,
+				minor: 0,
+				patch: 2,
+				version: '2.0.2',
+				prerelease: [],
+				build: ['prev1'],
+			});
+
+			expect(semver.parse('Resin OS v2.0.2+rev1ve')).to.deep.include({
+				raw: 'Resin OS v2.0.2+rev1ve',
+				major: 2,
+				minor: 0,
+				patch: 2,
+				version: '2.0.2',
+				prerelease: [],
+				build: ['rev1ve'],
+			});
+
 			expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
 				raw: 'Resin OS 2.3.0+rev1.prod',
 				major: 2,

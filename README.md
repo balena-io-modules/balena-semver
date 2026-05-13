@@ -115,8 +115,8 @@ If both values are invalid semver values, then the values are compared alphabeti
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.compare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.compare(version, version)).to.not.throw();
 });
 ```
 
@@ -311,8 +311,8 @@ If both values are non-null invalid semver values, then the values are compared 
 should not throw when provided with a version.
 
 ```js
-versions.forEach(function (version) {
-    chai.expect(function () { return semver.rcompare(version, version); }).to.not.throw();
+versions.forEach((version) => {
+    chai.expect(() => semver.rcompare(version, version)).to.not.throw();
 });
 ```
 
@@ -1130,6 +1130,24 @@ chai.expect(semver.parse('Resin OS 2.0.0-rc5.rev1')).to.deep.include({
     version: '2.0.0-rc5.rev1',
     prerelease: ['rc5', 'rev1'],
     build: [],
+});
+chai.expect(semver.parse('Resin OS v2.0.2+prev1')).to.deep.include({
+    raw: 'Resin OS v2.0.2+prev1',
+    major: 2,
+    minor: 0,
+    patch: 2,
+    version: '2.0.2',
+    prerelease: [],
+    build: ['prev1'],
+});
+chai.expect(semver.parse('Resin OS v2.0.2+rev1ve')).to.deep.include({
+    raw: 'Resin OS v2.0.2+rev1ve',
+    major: 2,
+    minor: 0,
+    patch: 2,
+    version: '2.0.2',
+    prerelease: [],
+    build: ['rev1ve'],
 });
 chai.expect(semver.parse('Resin OS 2.3.0+rev1.prod')).to.deep.include({
     raw: 'Resin OS 2.3.0+rev1.prod',
