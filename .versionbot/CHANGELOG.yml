@@ -1,4 +1,17 @@
 - commits:
+    - subject: Rename .linstagedrc to .lintstagedrc.json
+      hash: 38b92646b4c94efe29e7158e7888339a864b0019
+      body: |
+        In preparation for lint-staged v17 which recommends this rename
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 4.1.2
+  title: ""
+  date: 2026-06-09T06:27:33.659Z
+- commits:
     - subject: Update dependency chai to v6
       hash: 6de2744924144fd7af1e0c24a5981a598386c1f2
       body: |
