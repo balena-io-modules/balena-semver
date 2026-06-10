@@ -1,4 +1,17 @@
 - commits:
+    - subject: Pin dependencies
+      hash: 79b181d155bf9d3206cc456897285a0635f97557
+      body: |
+        Update @types/chai
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 4.1.4
+  title: ""
+  date: 2026-06-10T14:04:46.185Z
+- commits:
     - subject: Update dependency lint-staged to v17
       hash: 8fd2ea28706e1575848f8d7be00d9d2f876c2a4a
       body: |
