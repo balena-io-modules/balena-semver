@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency @types/chai to v5
+      hash: 90734e895b45c77c57e123f854acfb435f333d3e
+      body: |
+        Update @types/chai from 4.3.20 to 5.2.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 4.1.6
+  title: ""
+  date: 2026-06-12T05:05:00.372Z
+- commits:
     - subject: Update typescript to v6
       hash: 14c529bafdd8add80613e07ce2a89b2f99343716
       body: ""
