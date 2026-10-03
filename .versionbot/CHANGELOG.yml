@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency chai to v6.3.0
+      hash: 5f1cff90d3a2d0c9409247f3ebd1c31a7886280e
+      body: |
+        Update chai from 6.2.2 to 6.3.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 4.1.19
+  title: ""
+  date: 2026-10-03T19:48:09.112Z
+- commits:
     - subject: Update dependency lint-staged to v17.6.0
       hash: ff611d05374dba540073e7b3d27a1cdf2fcb2176
       body: |
