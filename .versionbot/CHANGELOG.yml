@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency @balena/lint to v11
+      hash: 8c5bc59c20246ee4b75bbd458392010bc7608a35
+      body: |
+        Update @balena/lint from 9.4.15 to 11.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 4.1.21
+  title: ""
+  date: 2026-11-02T22:40:17.014Z
+- commits:
     - subject: Update dependency mocha to v12.0.3
       hash: 3dc8c24f49fe3b3db14a006e55ff88a054bdf95b
       body: |
